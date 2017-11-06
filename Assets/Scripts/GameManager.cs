@@ -9,27 +9,47 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-	private Vector2 pointToGo; // Ponto ate onde o personagem vai se mover
-	public GameObject personagem; // Referencia ao personagem, o objeto que sera movido
+	private Vector2 pointToGo; // Ponto ate onde o character vai se mover
+	public GameObject character; // Referencia ao character, o objeto que sera movido
+	public GameObject enemy;
+	public GameObject battleUI;
+
+	private Component playerBehaviour;
+	private Component enemyBehaviour;
 
 	// Use this for initialization
 	void Start () {
-		
+		battleUI.SetActive(false);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
+		
 		if (Input.GetMouseButtonDown(0)) {
-			if (personagem.GetComponent<PlayerBehaviour> ().State == PlayerBehaviour.STATE.SELECTED) {
+			RaycastHit hit;
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+
+			// Verify if a character was selected BEFORE, and not exactly now. 
+			// We need to do it to obtain a good synchronization with the OnMouseDown() method from PlayerBehaviour. 
+			if ((character.GetComponent<PlayerBehaviour> ().State == PlayerBehaviour.STATE.SELECTED) && 
+				(!Physics2D.Raycast(new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, 
+					Camera.main.ScreenToWorldPoint(Input.mousePosition).y), Vector2.zero, 0f))) {
 				pointToGo = (Vector2)Camera.main.ScreenToWorldPoint (Input.mousePosition);
-				personagem.GetComponent<PlayerBehaviour> ().FinalPosition = pointToGo;
-				personagem.GetComponent<PlayerBehaviour> ().State = State.MOVING;
+				character.GetComponent<PlayerBehaviour> ().FinalPosition = pointToGo;
+				character.GetComponent<PlayerBehaviour> ().State = PlayerBehaviour.STATE.MOVING;
+				print ("Entrou");
+				battleUI.SetActive(false);
+			}
+				
+			if (enemy.GetComponent<EnemyBehaviour> ().State == EnemyBehaviour.STATE.SELECTED) {		// Se um inimigo foi selecionado
+				if (character.GetComponent<PlayerBehaviour> ().State == PlayerBehaviour.STATE.ATTACKING)  // Se um character está atacando
+					character.GetComponent<PlayerBehaviour> ().Attack();
+			 	else 
+					enemy.GetComponent<EnemyBehaviour> ().State = EnemyBehaviour.STATE.NOTSELECTED;
 			}
 		}
 
 	}
-
-
-
+		
 }

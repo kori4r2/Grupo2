@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour {
 
-	public enum STATE {NOTSELECTED, SELECTED, MOVING} // possiveis estados do personagem
+	public enum STATE {NOTSELECTED, SELECTED, MOVING, ATTACKING} // possiveis estados do personagem
 
 	public float teste;
  
@@ -17,10 +17,15 @@ public class PlayerBehaviour : MonoBehaviour {
 	private Vector2 currentPosition; // posicao inicial do personagem
 	private Vector2 finalPosition; // posicao para a qual o personagem vai se mover
 	private STATE state; // determina o estado do personagem
+	private float attackValue = 10f;
 
 	public GameObject battleUI;			// GameObject that contains all UI Battle components
 	public GameObject attackButton;		
 	public GameObject specialButton;
+
+	public GameObject enemy;
+
+	private float life = 100f;
 
 
 	public Vector2 FinalPosition {
@@ -41,27 +46,31 @@ public class PlayerBehaviour : MonoBehaviour {
 		}
 	}
 
+	public float Life{
+		get{
+			return life;
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
 		currentPosition = gameObject.transform.position; // pega a posicao inicial do personagem
 		state = STATE.NOTSELECTED;
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
 		if (state == STATE.MOVING) {
-			speed = 1f;
+			speed = 2f;
 			teste += Time.deltaTime / 1f;
-			transform.position = Vector2.Lerp (currentPosition, finalPosition, teste);
+			transform.position = Vector3.MoveTowards(transform.position, finalPosition, speed * Time.deltaTime);
 		}
 
 	}
 
 	public void OnClickAttack(){
 		print ("Attack");
-		if (state == STATE.SELECTED) {
-
-		}
+		state = STATE.ATTACKING;
+		battleUI.SetActive(false);
 	}
 
 	public void OnClickSpecial(){
@@ -80,6 +89,12 @@ public class PlayerBehaviour : MonoBehaviour {
 
 		teste = 0;
 		currentPosition = transform.position;
+	}
+
+	public void Attack(){
+		float attack = enemy.GetComponent<EnemyBehaviour> ().Life - attackValue;
+		enemy.GetComponent<EnemyBehaviour> ().Life = attack;
+		print ("Vida enemy = " + enemy.GetComponent<EnemyBehaviour> ().Life);
 	}
 
 }

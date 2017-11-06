@@ -11,7 +11,11 @@ public class GameManager : MonoBehaviour {
 
 	private Vector2 pointToGo; // Ponto ate onde o character vai se mover
 	public GameObject character; // Referencia ao character, o objeto que sera movido
+	public GameObject enemy;
 	public GameObject battleUI;
+
+	private Component playerBehaviour;
+	private Component enemyBehaviour;
 
 	// Use this for initialization
 	void Start () {
@@ -36,6 +40,13 @@ public class GameManager : MonoBehaviour {
 				character.GetComponent<PlayerBehaviour> ().State = PlayerBehaviour.STATE.MOVING;
 				print ("Entrou");
 				battleUI.SetActive(false);
+			}
+				
+			if (enemy.GetComponent<EnemyBehaviour> ().State == EnemyBehaviour.STATE.SELECTED) {		// Se um inimigo foi selecionado
+				if (character.GetComponent<PlayerBehaviour> ().State == PlayerBehaviour.STATE.ATTACKING)  // Se um character está atacando
+					character.GetComponent<PlayerBehaviour> ().Attack();
+			 	else 
+					enemy.GetComponent<EnemyBehaviour> ().State = EnemyBehaviour.STATE.NOTSELECTED;
 			}
 		}
 
