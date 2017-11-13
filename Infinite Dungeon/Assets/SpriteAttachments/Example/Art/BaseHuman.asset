@@ -1,0 +1,444 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21960229f23f4d5459c84b26a1729bb1, type: 3}
+  m_Name: BaseHuman
+  m_EditorClassIdentifier: 
+  Texture: {fileID: 2800000, guid: b8e6269b5c985474198103ff2d09b614, type: 3}
+  AttachmentSprites:
+  - Name: BaseHuman_0
+    pivot: {x: 5, y: 6.5}
+    textureRect:
+      serializedVersion: 2
+      x: 0
+      y: 31
+      width: 10
+      height: 13
+    Attachments:
+    - Name: Hat
+      NormalizedPosition: {x: 0.050830908, y: 0.38758555}
+      EditorPosition: {x: 229, y: 49}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: Torso
+      NormalizedPosition: {x: 0.032844596, y: -0.070719585}
+      EditorPosition: {x: 221, y: 314}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftShoe
+      NormalizedPosition: {x: -0.30215052, y: -0.38548008}
+      EditorPosition: {x: 72, y: 496}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightShoe
+      NormalizedPosition: {x: 0.3071359, y: -0.3768328}
+      EditorPosition: {x: 343, y: 491}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftHand
+      NormalizedPosition: {x: -0.29990223, y: -0.19869913}
+      EditorPosition: {x: 73, y: 388}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightHand
+      NormalizedPosition: {x: 0.36109486, y: -0.17967515}
+      EditorPosition: {x: 367, y: 377}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+  - Name: BaseHuman_1
+    pivot: {x: 5, y: 7}
+    textureRect:
+      serializedVersion: 2
+      x: 16
+      y: 31
+      width: 10
+      height: 14
+    Attachments:
+    - Name: Hat
+      NormalizedPosition: {x: 0.04858262, y: 0.4020388}
+      EditorPosition: {x: 228, y: 45}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: Torso
+      NormalizedPosition: {x: 0.03958946, y: -0.03477171}
+      EditorPosition: {x: 224, y: 317}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftShoe
+      NormalizedPosition: {x: -0.30215052, y: -0.35916775}
+      EditorPosition: {x: 72, y: 519}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightShoe
+      NormalizedPosition: {x: 0.29814273, y: -0.35756183}
+      EditorPosition: {x: 339, y: 518}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftHand
+      NormalizedPosition: {x: -0.30439883, y: -0.1407625}
+      EditorPosition: {x: 71, y: 383}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightHand
+      NormalizedPosition: {x: 0.35210168, y: -0.14718619}
+      EditorPosition: {x: 363, y: 387}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+  - Name: BaseHuman_2
+    pivot: {x: 5, y: 6.5}
+    textureRect:
+      serializedVersion: 2
+      x: 32
+      y: 31
+      width: 10
+      height: 13
+    Attachments:
+    - Name: Hat
+      NormalizedPosition: {x: 0.05532749, y: 0.38758555}
+      EditorPosition: {x: 231, y: 49}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: Torso
+      NormalizedPosition: {x: 0.050830908, y: -0.074178495}
+      EditorPosition: {x: 229, y: 316}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftShoe
+      NormalizedPosition: {x: -0.29765394, y: -0.388939}
+      EditorPosition: {x: 74, y: 498}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightShoe
+      NormalizedPosition: {x: 0.30263934, y: -0.38375065}
+      EditorPosition: {x: 341, y: 495}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftHand
+      NormalizedPosition: {x: -0.30439883, y: -0.11914428}
+      EditorPosition: {x: 71, y: 342}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightHand
+      NormalizedPosition: {x: 0.3498534, y: -0.117414825}
+      EditorPosition: {x: 362, y: 341}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+  - Name: BaseHuman_3
+    pivot: {x: 5, y: 6.5}
+    textureRect:
+      serializedVersion: 2
+      x: 48
+      y: 31
+      width: 10
+      height: 13
+    Attachments:
+    - Name: Hat
+      NormalizedPosition: {x: 0.050830908, y: 0.3858561}
+      EditorPosition: {x: 229, y: 50}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: Torso
+      NormalizedPosition: {x: 0.04858262, y: -0.08974358}
+      EditorPosition: {x: 228, y: 325}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftShoe
+      NormalizedPosition: {x: -0.29315737, y: -0.38720953}
+      EditorPosition: {x: 76, y: 497}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightShoe
+      NormalizedPosition: {x: 0.29814273, y: -0.38375065}
+      EditorPosition: {x: 339, y: 495}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftHand
+      NormalizedPosition: {x: -0.29990223, y: -0.19178131}
+      EditorPosition: {x: 73, y: 384}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightHand
+      NormalizedPosition: {x: 0.3476051, y: -0.19524023}
+      EditorPosition: {x: 361, y: 386}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+  - Name: BaseHuman_4
+    pivot: {x: 6.5, y: 6.5}
+    textureRect:
+      serializedVersion: 2
+      x: 63
+      y: 32
+      width: 13
+      height: 13
+    Attachments:
+    - Name: Hat
+      NormalizedPosition: {x: 0.005000362, y: 0.38412663}
+      EditorPosition: {x: 276, y: 51}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: Torso
+      NormalizedPosition: {x: -0.0019174512, y: -0.084555216}
+      EditorPosition: {x: 272, y: 322}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftShoe
+      NormalizedPosition: {x: -0.30457178, y: -0.3474321}
+      EditorPosition: {x: 97, y: 474}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightShoe
+      NormalizedPosition: {x: 0.30073687, y: -0.3474321}
+      EditorPosition: {x: 447, y: 474}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftHand
+      NormalizedPosition: {x: -0.34780812, y: -0.043048333}
+      EditorPosition: {x: 72, y: 298}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightHand
+      NormalizedPosition: {x: 0.34397322, y: -0.04477779}
+      EditorPosition: {x: 472, y: 299}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+  - Name: BaseHuman_5
+    pivot: {x: 4.5, y: 6.5}
+    textureRect:
+      serializedVersion: 2
+      x: 1
+      y: 15
+      width: 9
+      height: 13
+    Attachments:
+    - Name: Hat
+      NormalizedPosition: {x: -0.0028782499, y: 0.38412663}
+      EditorPosition: {x: 183, y: 51}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: Torso
+      NormalizedPosition: {x: 0.0021179488, y: -0.08974358}
+      EditorPosition: {x: 185, y: 325}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftShoe
+      NormalizedPosition: {x: 0.044585638, y: -0.38720953}
+      EditorPosition: {x: 202, y: 497}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightShoe
+      NormalizedPosition: {x: 0.13451721, y: -0.38375065}
+      EditorPosition: {x: 238, y: 495}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftHand
+      NormalizedPosition: {x: -0.1652547, y: -0.19005187}
+      EditorPosition: {x: 118, y: 383}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightHand
+      NormalizedPosition: {x: 0.07706092, y: -0.14162718}
+      EditorPosition: {x: 215, y: 355}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+  - Name: BaseHuman_6
+    pivot: {x: 5.5, y: 6.5}
+    textureRect:
+      serializedVersion: 2
+      x: 16
+      y: 16
+      width: 11
+      height: 13
+    Attachments:
+    - Name: Hat
+      NormalizedPosition: {x: -0.0053763385, y: 0.38239717}
+      EditorPosition: {x: 226, y: 52}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: Torso
+      NormalizedPosition: {x: -0.0012885398, y: -0.084555216}
+      EditorPosition: {x: 228, y: 322}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftShoe
+      NormalizedPosition: {x: -0.36101484, y: -0.3405143}
+      EditorPosition: {x: 52, y: 470}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightShoe
+      NormalizedPosition: {x: 0.25419888, y: -0.3474321}
+      EditorPosition: {x: 353, y: 474}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftHand
+      NormalizedPosition: {x: -0.32626855, y: -0.20388749}
+      EditorPosition: {x: 69, y: 391}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightHand
+      NormalizedPosition: {x: 0.32164758, y: -0.19696967}
+      EditorPosition: {x: 386, y: 387}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+  - Name: BaseHuman_7
+    pivot: {x: 4.5, y: 6.5}
+    textureRect:
+      serializedVersion: 2
+      x: 33
+      y: 15
+      width: 9
+      height: 13
+    Attachments:
+    - Name: Hat
+      NormalizedPosition: {x: -0.022863043, y: 0.38412663}
+      EditorPosition: {x: 175, y: 51}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: Torso
+      NormalizedPosition: {x: 0.014608445, y: -0.08801412}
+      EditorPosition: {x: 190, y: 324}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftShoe
+      NormalizedPosition: {x: -0.35011405, y: -0.2367471}
+      EditorPosition: {x: 44, y: 410}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightShoe
+      NormalizedPosition: {x: 0.27940696, y: -0.38548008}
+      EditorPosition: {x: 296, y: 496}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftHand
+      NormalizedPosition: {x: -0.28016725, y: -0.19351077}
+      EditorPosition: {x: 72, y: 385}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightHand
+      NormalizedPosition: {x: 0.27191266, y: -0.17621624}
+      EditorPosition: {x: 293, y: 375}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+  - Name: BaseHuman_8
+    pivot: {x: 7, y: 6.5}
+    textureRect:
+      serializedVersion: 2
+      x: 46
+      y: 16
+      width: 14
+      height: 13
+    Attachments:
+    - Name: Hat
+      NormalizedPosition: {x: 0.029953947, y: 0.39104444}
+      EditorPosition: {x: 314, y: 47}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: Torso
+      NormalizedPosition: {x: 0.03477171, y: -0.079366855}
+      EditorPosition: {x: 317, y: 319}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftShoe
+      NormalizedPosition: {x: -0.24947631, y: -0.34570265}
+      EditorPosition: {x: 140, y: 473}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightShoe
+      NormalizedPosition: {x: 0.24354145, y: -0.34916157}
+      EditorPosition: {x: 447, y: 475}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftHand
+      NormalizedPosition: {x: -0.31371316, y: -0.1035792}
+      EditorPosition: {x: 100, y: 333}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightHand
+      NormalizedPosition: {x: 0.3398967, y: -0.08801412}
+      EditorPosition: {x: 507, y: 324}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+  - Name: BaseHuman_9
+    pivot: {x: 5.5, y: 6.5}
+    textureRect:
+      serializedVersion: 2
+      x: 64
+      y: 16
+      width: 11
+      height: 13
+    Attachments:
+    - Name: Hat
+      NormalizedPosition: {x: -0.0033324393, y: 0.37202045}
+      EditorPosition: {x: 227, y: 58}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: Torso
+      NormalizedPosition: {x: -0.017639736, y: -0.09493193}
+      EditorPosition: {x: 220, y: 328}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftShoe
+      NormalizedPosition: {x: -0.36714655, y: -0.3474321}
+      EditorPosition: {x: 49, y: 474}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightShoe
+      NormalizedPosition: {x: 0.2623745, y: -0.34570265}
+      EditorPosition: {x: 357, y: 473}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftHand
+      NormalizedPosition: {x: -0.1423176, y: -0.19524023}
+      EditorPosition: {x: 159, y: 386}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightHand
+      NormalizedPosition: {x: 0.2807696, y: -0.20388749}
+      EditorPosition: {x: 366, y: 391}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+  - Name: BaseHuman_10
+    pivot: {x: 5.5, y: 6.5}
+    textureRect:
+      serializedVersion: 2
+      x: 1
+      y: 0
+      width: 11
+      height: 13
+    Attachments:
+    - Name: Hat
+      NormalizedPosition: {x: -0.10552741, y: 0.39104444}
+      EditorPosition: {x: 177, y: 47}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: Torso
+      NormalizedPosition: {x: -0.08713231, y: -0.08628467}
+      EditorPosition: {x: 186, y: 323}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftShoe
+      NormalizedPosition: {x: -0.068737224, y: -0.38548008}
+      EditorPosition: {x: 195, y: 496}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightShoe
+      NormalizedPosition: {x: -0.046254326, y: -0.38548008}
+      EditorPosition: {x: 206, y: 496}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftHand
+      NormalizedPosition: {x: 0.35639387, y: -0.09147303}
+      EditorPosition: {x: 403, y: 326}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightHand
+      NormalizedPosition: {x: 0.35434997, y: -0.08974358}
+      EditorPosition: {x: 402, y: 325}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+  - Name: BaseHuman_11
+    pivot: {x: 6, y: 6.5}
+    textureRect:
+      serializedVersion: 2
+      x: 16
+      y: 1
+      width: 12
+      height: 13
+    Attachments:
+    - Name: Hat
+      NormalizedPosition: {x: -0.061583582, y: 0.3858561}
+      EditorPosition: {x: 218, y: 50}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: Torso
+      NormalizedPosition: {x: -0.039100688, y: -0.079366855}
+      EditorPosition: {x: 230, y: 319}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftShoe
+      NormalizedPosition: {x: -0.37821767, y: -0.34916157}
+      EditorPosition: {x: 49, y: 475}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightShoe
+      NormalizedPosition: {x: 0.19884327, y: -0.3405143}
+      EditorPosition: {x: 357, y: 470}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftHand
+      NormalizedPosition: {x: 0.33936134, y: -0.10012029}
+      EditorPosition: {x: 432, y: 331}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightHand
+      NormalizedPosition: {x: 0.33936134, y: -0.10012029}
+      EditorPosition: {x: 432, y: 331}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+  - Name: BaseHuman_12
+    pivot: {x: 5.5, y: 6.5}
+    textureRect:
+      serializedVersion: 2
+      x: 33
+      y: 0
+      width: 11
+      height: 13
+    Attachments:
+    - Name: Hat
+      NormalizedPosition: {x: -0.10552741, y: 0.38066772}
+      EditorPosition: {x: 177, y: 53}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: Torso
+      NormalizedPosition: {x: -0.09122012, y: -0.08109631}
+      EditorPosition: {x: 184, y: 320}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftShoe
+      NormalizedPosition: {x: -0.36510265, y: -0.26614782}
+      EditorPosition: {x: 50, y: 427}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightShoe
+      NormalizedPosition: {x: 0.13769662, y: -0.38548008}
+      EditorPosition: {x: 296, y: 496}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: LeftHand
+      NormalizedPosition: {x: 0.32982317, y: -0.08974358}
+      EditorPosition: {x: 390, y: 325}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
+    - Name: RightHand
+      NormalizedPosition: {x: 0.32982317, y: -0.08801412}
+      EditorPosition: {x: 390, y: 324}
+      Rotation: {x: 0, y: 0, z: 0, w: 1}
