@@ -995,7 +995,9 @@ GameObject:
   - component: {fileID: 1793038892}
   - component: {fileID: 1793038891}
   - component: {fileID: 1793038890}
+  - component: {fileID: 1793038893}
   - component: {fileID: 1793038889}
+  - component: {fileID: 1793038894}
   m_Layer: 0
   m_Name: Character
   m_TagString: Player
@@ -1014,12 +1016,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d39b382ec10aea4bba1156614a1e135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teste: 0
   speed: 0
   battleUI: {fileID: 956428189}
   attackButton: {fileID: 1048647451}
   specialButton: {fileID: 1550319165}
   gameManager: {fileID: 1607474097}
+  anim: {fileID: 1793038894}
 --- !u!61 &1793038890
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1102,3 +1104,40 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &1793038893
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1793038888}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!95 &1793038894
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1793038888}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3bb04ccca9f5b434c88362a8908cbee1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1

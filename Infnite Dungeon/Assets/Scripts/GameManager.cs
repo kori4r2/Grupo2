@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-	public enum TURN {CHECK, PLAYERTURN, ENEMYTURN} // possiveis estados do jogo
+	public enum TURN {CHECK, PLAYERTURN, WAITTURN, ENEMYTURN} // possiveis estados do jogo
 
 	private Vector2 pointToGo; // Ponto ate onde o character vai se mover
 	private Vector2 initialPosition; // Posicao inicial do clique do mouse fora do player
@@ -18,8 +18,6 @@ public class GameManager : MonoBehaviour {
 	public GameObject battleUI;
 
 	private TURN turn; // determina o estado do turno
-	//private Component playerBehaviour;
-	//private Component enemyBehaviour;
 
 	public List<GameObject> players;
 	public List<GameObject> enemies;
@@ -46,7 +44,6 @@ public class GameManager : MonoBehaviour {
 
 		battleUI.SetActive(false);
 		offset = new Vector2 (1f, 1f);
-		//turn = TURN.CHARACTER;
 	}
 
 	// Update is called once per frame
@@ -68,24 +65,23 @@ public class GameManager : MonoBehaviour {
 				for (i = 0; i < players.Count; i++) {
 					playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
 					// MOVIMENTAÇÃO DO PLAYER
-					if ((playerBehaviour.State == PlayerBehaviour.STATE.SELECTED) &&		// Se há um player selecionado e não tocou em um colisor
-						((!Physics2D.Raycast (new Vector2 (Camera.main.ScreenToWorldPoint (Input.mousePosition).x, 
-							Camera.main.ScreenToWorldPoint (Input.mousePosition).y), Vector2.zero, 0f)))) {
+					if ((playerBehaviour.State == PlayerBehaviour.STATE.SELECTED) && // Se há um player selecionado e não tocou em um colisor
+					    ((!Physics2D.Raycast (new Vector2 (Camera.main.ScreenToWorldPoint (Input.mousePosition).x, 
+						    Camera.main.ScreenToWorldPoint (Input.mousePosition).y), Vector2.zero, 0f)))) {
 						pointToGo = (Vector2)Camera.main.ScreenToWorldPoint (Input.mousePosition);
 						playerBehaviour.FinalPosition = pointToGo;
 						playerBehaviour.State = PlayerBehaviour.STATE.MOVING;
+						playerBehaviour.anim.SetInteger ("State", 1);
 						battleUI.SetActive (false);
 						break;
-						//turn = TURN.ENEMY;
 					} else {
 						initialPosition = (Vector2)Camera.main.ScreenToWorldPoint (Input.mousePosition);
 						if (playerBehaviour.State == PlayerBehaviour.STATE.ATTACKING) {		// Se o player vai atacar
 							for (j = 0; j < enemies.Count; j++) {
 								enemyBehaviour = enemies [j].GetComponent<EnemyBehaviour> ();
 								//ATAQUE DO PLAYER
-								if (enemyBehaviour.State == EnemyBehaviour.STATE.SELECTED) {		// Se um inimigo foi selecionado
+								if (enemyBehaviour.IsSelected) {		// Se um inimigo foi selecionado
 									playerBehaviour.Attack (enemyBehaviour);
-									enemyBehaviour.State = EnemyBehaviour.STATE.NOTSELECTED;
 								}
 							}
 						}
@@ -98,7 +94,25 @@ public class GameManager : MonoBehaviour {
 					break;
 				counter++;
 			}
-			if (counter == enemies.Count) { 		// Se todos os inimigos estão esperando, entra no turno do inimigo
+			if (counter == enemies.Count) { 		// Se todos os inimigos estão esperando, entra no turno de espera
+				turn = TURN.WAITTURN;
+				for (i = 0; i < players.Count; i++) {		// Verifica se há um player prestes a agir
+					playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+					if (playerBehaviour.State == PlayerBehaviour.STATE.SELECTED) {
+						playerBehaviour.State = PlayerBehaviour.STATE.NOTSELECTED;
+						battleUI.SetActive (false);
+					}
+				}
+				for (i = 0; i < enemies.Count; i++)
+					enemies [i].GetComponent<EnemyBehaviour> ().IsSelected = false;
+			}
+		} else if (turn == TURN.WAITTURN) { 		// Se estão no turno de espera
+			for (i = 0; i < players.Count; i++) {
+				if (players [i].GetComponent<PlayerBehaviour> ().State != PlayerBehaviour.STATE.NOTSELECTED)
+					break;
+				counter++;
+			}
+			if (counter == players.Count) {		// Se todos os players pararam de agir, vai para o turno do inimigo
 				turn = TURN.ENEMYTURN;
 				for (i = 0; i < enemies.Count; i++) {
 					enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
@@ -106,7 +120,7 @@ public class GameManager : MonoBehaviour {
 					enemyBehaviour.Attack ();
 				}
 			}
-		} else if (turn == TURN.ENEMYTURN) {
+		}else if (turn == TURN.ENEMYTURN) {
 			// Checa se todos os inimigos ainda estão atacando
 			for (i = 0; i < enemies.Count; i++) {
 				enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
@@ -117,8 +131,7 @@ public class GameManager : MonoBehaviour {
 			if (counter == enemies.Count) {
 				CheckCollisions ();
 			}
-		} 
-
+		}
 	}
 
 	// Estado de checagem: pode terminar o jogo, chamar a nova sala, ou iniciar o PLAYERTURN
@@ -152,26 +165,37 @@ public class GameManager : MonoBehaviour {
 		for (i = 0; i < players.Count; i++) {
 			PlayerBehaviour playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
 			if (playerBehaviour.IsColliding) {
-				setLifePlayer (playerBehaviour.Collider, playerBehaviour);
+				print ("Colide");
+				SetLifePlayer (playerBehaviour.Collider, playerBehaviour);
 				playerBehaviour.IsColliding = false;
 			}
 		}
 		// Destrói todos os objetos de ataque
 		for (i = 0; i < enemies.Count; i++) {
 			EnemyBehaviour enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
-			//Destroy (enemyBehaviour.AttackObject);
+			Destroy (enemyBehaviour.AttackObject);
+			print ("Destruiu");
 		}
 		Check ();	// Vai para o estado de checagem
 	}
 
 	// Diminui a vida do player baseada nos atributos de ataque do inimigo que gerou o ataque com Collider coll
-	public void setLifePlayer(Collider2D coll, PlayerBehaviour player){
+	public void SetLifePlayer(Collider2D coll, PlayerBehaviour player){
 		EnemyBehaviour enemyBehaviour;
 		for (int i = 0; i < enemies.Count; i++) {
 			enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 			if (enemyBehaviour.AttackObject == coll.gameObject) { 
 				player.Life -= enemyBehaviour.AttackValue;
 				print ("player life = " + player.Life);
+			}
+		}
+	}
+
+	public void EnemySelected(EnemyBehaviour enemyBehaviour){
+		for (int i = 0; i < players.Count; i++) {
+			if (players [i].GetComponent<PlayerBehaviour> ().State == PlayerBehaviour.STATE.ATTACKING) {
+				enemyBehaviour.IsSelected = true;
+				return;
 			}
 		}
 	}

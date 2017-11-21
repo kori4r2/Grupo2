@@ -9,15 +9,14 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour {
 
-	public enum STATE {NOTSELECTED, SELECTED, MOVING, ATTACKING, SPECIAL} // possiveis estados do personagem
+	public enum STATE {NOTSELECTED, SELECTED, MOVING, WAITATTACK, ATTACKING, SPECIAL} // possiveis estados do personagem
 
-	public float teste;
- 
-	public float speed; // velocidade da movimentacao do personagem
 	private Vector2 currentPosition; // posicao inicial do personagem
 	private Vector2 finalPosition; // posicao para a qual o personagem vai se mover
 	private STATE state; // determina o estado do personagem
+	public float speed; // velocidade da movimentacao do personagem
 	private float attackValue = 10f;
+	private float life = 100f;
 
 	public GameObject battleUI;			// GameObject that contains all UI Battle components
 	public GameObject attackButton;		
@@ -28,8 +27,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	private bool isColliding = false;
 	private Collider2D collider;
 
-	private float life = 100f;
-
+	public Animator anim;
 
 	public Vector2 FinalPosition {
 		get {
@@ -76,14 +74,19 @@ public class PlayerBehaviour : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		currentPosition = gameObject.transform.position; // pega a posicao inicial do personagem
+		//anim = GetComponent<Animator>();
 		state = STATE.NOTSELECTED;
 	}
 
 	void Update () {
 		if (state == STATE.MOVING) {
-			speed = 2f;
-			teste += Time.deltaTime / 1f;
-			transform.position = Vector3.MoveTowards(transform.position, finalPosition, speed * Time.deltaTime);
+			if (finalPosition.x != transform.position.x || finalPosition.y != transform.position.y) {
+				speed = 2f;
+				transform.position = Vector3.MoveTowards (transform.position, finalPosition, speed * Time.deltaTime);
+			} else {
+				state = STATE.NOTSELECTED;
+				anim.SetInteger ("State", 0);
+			}
 		}
 
 	}
@@ -101,26 +104,34 @@ public class PlayerBehaviour : MonoBehaviour {
 	// Funcao que detecta a colisao entre um objeto com colisor e o mouse
 	void OnMouseDown() {
 		//if (gameManager.Turn == GameManager.TURN.CHARACTER) {	// Se o turno é do character
+		if (gameManager.Turn == GameManager.TURN.PLAYERTURN) {
 			battleUI.transform.position = gameObject.transform.position;
 			battleUI.SetActive (true);
 			state = STATE.SELECTED;
 
-			teste = 0;
 			currentPosition = transform.position;
+		}
 		//}
 	}
 
 	public void Attack(EnemyBehaviour enemy){
 		float attack = enemy.Life - attackValue;
 		enemy.Life = attack;
-		state = STATE.NOTSELECTED;
+		anim.SetInteger ("State", 3);
 		print ("Vida enemy = " + enemy.GetComponent<EnemyBehaviour> ().Life);
 	}
 
 	void OnTriggerEnter2D(Collider2D coll){
-		if (coll.gameObject.tag == "EnemyAttack")
+		if (coll.gameObject.tag == "EnemyAttack") {
 			isColliding = true;
-			//gameManager.setLifePlayer (coll, this);
+			collider = coll;
+		}
+	}
+
+	public void SetNotSelected(){
+		state = STATE.NOTSELECTED;
+		anim.SetInteger ("State", 0);
+		print ("Not selected");
 	}
 		
 

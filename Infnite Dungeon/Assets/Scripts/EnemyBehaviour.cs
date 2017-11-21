@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour {
 
-	public enum STATE {NOTSELECTED, SELECTED, MOVING, WAITATTACK, ATTACKING} // possiveis estados do personagem
+	public enum STATE {NOTSELECTED, MOVING, WAITATTACK, ATTACKING} // possiveis estados do personagem
 
 
 	public float speed; // velocidade da movimentacao do personagem
@@ -20,6 +20,8 @@ public class EnemyBehaviour : MonoBehaviour {
 	public GameObject prefabAttack;	//-3,23
 	private GameObject attackObject;
 	public GameManager gameManager;
+
+	private bool isSelected = false;
 
 	public STATE State {
 		get {
@@ -51,6 +53,15 @@ public class EnemyBehaviour : MonoBehaviour {
 		}
 	}
 
+	public bool IsSelected{
+		get{
+			return isSelected;
+		}
+		set{
+			isSelected = value;
+		}
+	}
+
 
 	// Use this for initialization
 	void Start () {
@@ -71,7 +82,7 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	// Funcao que detecta a colisao entre um objeto com colisor e o mouse
 	void OnMouseDown() {
-		state = STATE.SELECTED;
+		gameManager.EnemySelected (this);
 	}
 
 	// Gera o objeto de ataque
@@ -81,7 +92,6 @@ public class EnemyBehaviour : MonoBehaviour {
 
 		attackObject = Instantiate (prefabAttack, transform.position, transform.rotation);
 		print ("Instanciou");
-		//WaitForSeconds (0.05);
 		state = EnemyBehaviour.STATE.NOTSELECTED;
 
 		/*
