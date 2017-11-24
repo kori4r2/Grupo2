@@ -14,9 +14,13 @@ public class PlayerBehaviour : MonoBehaviour {
 	private Vector2 currentPosition; // posicao inicial do personagem
 	private Vector2 finalPosition; // posicao para a qual o personagem vai se mover
 	private STATE state; // determina o estado do personagem
-	public float speed; // velocidade da movimentacao do personagem
+
+	private float speed; // velocidade da movimentacao do personagem
 	private float attackValue = 10f;
 	private float life = 100f;
+	private float defense = 5f;
+	private int level;
+	private float secondary = 100f;
 
 	public GameObject battleUI;			// GameObject that contains all UI Battle components
 	public GameObject attackButton;		
@@ -56,6 +60,15 @@ public class PlayerBehaviour : MonoBehaviour {
 		}
 	}
 
+	public float Defense{
+		get{
+			return defense;
+		}
+		set{
+			defense = value;
+		}
+	}
+
 	public bool IsColliding{
 		get{
 			return isColliding;
@@ -74,12 +87,18 @@ public class PlayerBehaviour : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		currentPosition = gameObject.transform.position; // pega a posicao inicial do personagem
-		//anim = GetComponent<Animator>();
+		//anim = gameObject.GetComponent<Animator>();
+		/*battleUI = GameObject.Find ("UIBattle");
+		attackButton = GameObject.Find ("ButtonAttack");
+		specialButton = GameObject.Find ("ButtonSpecial");
+		*/
+		//anim = gameObject.GetComponent<Animator>();
 		state = STATE.NOTSELECTED;
 	}
 
 	void Update () {
 		if (state == STATE.MOVING) {
+			print ("moving");
 			if (finalPosition.x != transform.position.x || finalPosition.y != transform.position.y) {
 				speed = 2f;
 				transform.position = Vector3.MoveTowards (transform.position, finalPosition, speed * Time.deltaTime);
@@ -87,12 +106,13 @@ public class PlayerBehaviour : MonoBehaviour {
 				state = STATE.NOTSELECTED;
 				anim.SetInteger ("State", 0);
 			}
-		}
+		} else
+			print ("state = " + state.ToString ());
 
 	}
 
 	public void OnClickAttack(){
-		state = STATE.ATTACKING;
+		state = STATE.WAITATTACK;
 		battleUI.SetActive(false);
 	}
 
@@ -115,10 +135,11 @@ public class PlayerBehaviour : MonoBehaviour {
 	}
 
 	public void Attack(EnemyBehaviour enemy){
+		state = STATE.ATTACKING;
+		anim.SetInteger ("State", 3);
 		float attack = enemy.Life - attackValue;
 		enemy.Life = attack;
-		anim.SetInteger ("State", 3);
-		print ("Vida enemy = " + enemy.GetComponent<EnemyBehaviour> ().Life);
+		print ("Vida enemy = " + enemy.Life);
 	}
 
 	void OnTriggerEnter2D(Collider2D coll){

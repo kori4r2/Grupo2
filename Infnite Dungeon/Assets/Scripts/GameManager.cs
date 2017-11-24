@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour {
 		}
 
 		battleUI.SetActive(false);
-		offset = new Vector2 (1f, 1f);
+		//offset = new Vector2 (1f, 1f);
 	}
 
 	// Update is called once per frame
@@ -71,12 +71,13 @@ public class GameManager : MonoBehaviour {
 						pointToGo = (Vector2)Camera.main.ScreenToWorldPoint (Input.mousePosition);
 						playerBehaviour.FinalPosition = pointToGo;
 						playerBehaviour.State = PlayerBehaviour.STATE.MOVING;
+						print ("State moving");
 						playerBehaviour.anim.SetInteger ("State", 1);
 						battleUI.SetActive (false);
 						break;
 					} else {
 						initialPosition = (Vector2)Camera.main.ScreenToWorldPoint (Input.mousePosition);
-						if (playerBehaviour.State == PlayerBehaviour.STATE.ATTACKING) {		// Se o player vai atacar
+						if (playerBehaviour.State == PlayerBehaviour.STATE.WAITATTACK) {		// Se o player vai atacar
 							for (j = 0; j < enemies.Count; j++) {
 								enemyBehaviour = enemies [j].GetComponent<EnemyBehaviour> ();
 								//ATAQUE DO PLAYER
@@ -98,7 +99,7 @@ public class GameManager : MonoBehaviour {
 				turn = TURN.WAITTURN;
 				for (i = 0; i < players.Count; i++) {		// Verifica se há um player prestes a agir
 					playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
-					if (playerBehaviour.State == PlayerBehaviour.STATE.SELECTED) {
+					if (playerBehaviour.State == PlayerBehaviour.STATE.SELECTED || playerBehaviour.State == PlayerBehaviour.STATE.WAITATTACK) {
 						playerBehaviour.State = PlayerBehaviour.STATE.NOTSELECTED;
 						battleUI.SetActive (false);
 					}
@@ -107,6 +108,7 @@ public class GameManager : MonoBehaviour {
 					enemies [i].GetComponent<EnemyBehaviour> ().IsSelected = false;
 			}
 		} else if (turn == TURN.WAITTURN) { 		// Se estão no turno de espera
+			print ("Turno de espera");
 			for (i = 0; i < players.Count; i++) {
 				if (players [i].GetComponent<PlayerBehaviour> ().State != PlayerBehaviour.STATE.NOTSELECTED)
 					break;
@@ -117,10 +119,17 @@ public class GameManager : MonoBehaviour {
 				for (i = 0; i < enemies.Count; i++) {
 					enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 					enemyBehaviour.State = EnemyBehaviour.STATE.ATTACKING;
-					enemyBehaviour.Attack ();
+					enemyBehaviour.anim.SetInteger ("State", 2);
+					print ("Setou estado 2");
+					//enemyBehaviour.Attack ();
+				}
+				for (i = 0; i < players.Count; i++) {
+					playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+					if (playerBehaviour is WarriorBehaviour && playerBehaviour.State == PlayerBehaviour.STATE.SPECIAL)
+						playerBehaviour.anim.SetInteger ("State", 2);
 				}
 			}
-		}else if (turn == TURN.ENEMYTURN) {
+		} else if (turn == TURN.ENEMYTURN) {
 			// Checa se todos os inimigos ainda estão atacando
 			for (i = 0; i < enemies.Count; i++) {
 				enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
@@ -131,17 +140,27 @@ public class GameManager : MonoBehaviour {
 			if (counter == enemies.Count) {
 				CheckCollisions ();
 			}
-		}
+		} else if (turn == TURN.CHECK)
+			Check ();
 	}
 
 	// Estado de checagem: pode terminar o jogo, chamar a nova sala, ou iniciar o PLAYERTURN
 	void Check(){
+		EnemyBehaviour enemyBehaviour;
 		if (players.Count > 0) {
 			if (enemies.Count > 0) {
 				int i;
 				turn = TURN.PLAYERTURN;
-				for (i = 0; i < enemies.Count; i++)
-					enemies [i].GetComponent<EnemyBehaviour> ().Move ();
+				for (i = 0; i < enemies.Count; i++) {
+					enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
+					// O inimigo inicia o turno se ele não estiver congelado ou se estiver congelado mas já tenha ficado 1 turno assim
+					if ((enemyBehaviour.State == EnemyBehaviour.STATE.FROZEN && enemyBehaviour.TurnsFrozen == 1) ||
+					    enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN) {
+						enemyBehaviour.Move ();
+						enemyBehaviour.TurnsFrozen = 0;
+					} else
+						enemyBehaviour.TurnsFrozen = 1;
+				}
 				for (i = 0; i < players.Count; i++)
 					players [i].GetComponent<PlayerBehaviour> ().State = PlayerBehaviour.STATE.NOTSELECTED;
 			}
@@ -159,41 +178,78 @@ public class GameManager : MonoBehaviour {
 
 	}
 
-	// Checa se, nesse turno, algum player foi atacado
-	public void CheckCollisions(){
-		int i;
-		for (i = 0; i < players.Count; i++) {
-			PlayerBehaviour playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
-			if (playerBehaviour.IsColliding) {
+	/*
+	 * 
 				print ("Colide");
 				SetLifePlayer (playerBehaviour.Collider, playerBehaviour);
 				playerBehaviour.IsColliding = false;
-			}
+		*/
+
+	// Checa se, nesse turno, algum player foi atacado
+	public void CheckCollisions(){
+		List<PlayerBehaviour> playersColliding = new List<PlayerBehaviour>();
+		int i;
+		// Verifica quais os players que estão colidindo
+		for (i = 0; i < players.Count; i++) {
+			PlayerBehaviour playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+			if (playerBehaviour.IsColliding) 
+				playersColliding.Add (playerBehaviour);			
 		}
+		/*
+		if (playersColliding.Count > 0) {
+			// Ordena pelo maior y
+			playersColliding.Sort (delegate(PlayerBehaviour x, PlayerBehaviour y) {
+				return(x.transform.position.y).CompareTo (y.transform.position.y);
+			});
+
+			// Verifica se há um warrior no meio do caminho
+			for(i = 0; i < playersColliding.Count; i++){
+				if (playersColliding [i] is WarriorBehaviour && playersColliding [i].State == PlayerBehaviour.STATE.SPECIAL) {
+					FreezeOgre (playersColliding [i].Collider);
+					break;
+				}
+				// Se não é um warrior, recebe dano
+				print ("Colide");
+				SetLifePlayer (playersColliding[i].Collider, playersColliding[i]);
+				playersColliding[i].IsColliding = false;
+			}
+
+		}
+*/			
+
 		// Destrói todos os objetos de ataque
 		for (i = 0; i < enemies.Count; i++) {
 			EnemyBehaviour enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 			Destroy (enemyBehaviour.AttackObject);
 			print ("Destruiu");
 		}
-		Check ();	// Vai para o estado de checagem
+		turn = TURN.CHECK;	// Vai para o estado de checagem
 	}
 
 	// Diminui a vida do player baseada nos atributos de ataque do inimigo que gerou o ataque com Collider coll
-	public void SetLifePlayer(Collider2D coll, PlayerBehaviour player){
+	void SetLifePlayer(Collider2D coll, PlayerBehaviour player){
 		EnemyBehaviour enemyBehaviour;
 		for (int i = 0; i < enemies.Count; i++) {
 			enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 			if (enemyBehaviour.AttackObject == coll.gameObject) { 
-				player.Life -= enemyBehaviour.AttackValue;
+				player.Life -= enemyBehaviour.AttackValue + player.Defense;
 				print ("player life = " + player.Life);
 			}
 		}
 	}
 
+	void FreezeOgre(Collider2D coll){
+		EnemyBehaviour enemyBehaviour;
+		for (int i = 0; i < enemies.Count; i++) {
+			enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
+			if (enemyBehaviour.AttackObject == coll.gameObject)
+				enemyBehaviour.State = EnemyBehaviour.STATE.FROZEN;
+		}
+	}
+
 	public void EnemySelected(EnemyBehaviour enemyBehaviour){
 		for (int i = 0; i < players.Count; i++) {
-			if (players [i].GetComponent<PlayerBehaviour> ().State == PlayerBehaviour.STATE.ATTACKING) {
+			if (players [i].GetComponent<PlayerBehaviour> ().State == PlayerBehaviour.STATE.WAITATTACK) {
 				enemyBehaviour.IsSelected = true;
 				return;
 			}

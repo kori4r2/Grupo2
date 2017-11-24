@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour {
 
-	public enum STATE {NOTSELECTED, MOVING, WAITATTACK, ATTACKING} // possiveis estados do personagem
+	public enum STATE {NOTSELECTED, FROZEN, MOVING, WAITATTACK, ATTACKING} // possiveis estados do personagem
 
 
 	public float speed; // velocidade da movimentacao do personagem
@@ -22,6 +22,10 @@ public class EnemyBehaviour : MonoBehaviour {
 	public GameManager gameManager;
 
 	private bool isSelected = false;
+
+	public Animator anim;
+
+	private int turnsFrozen = 0;
 
 	public STATE State {
 		get {
@@ -62,6 +66,14 @@ public class EnemyBehaviour : MonoBehaviour {
 		}
 	}
 
+	public int TurnsFrozen{
+		get{
+			return turnsFrozen;
+		}
+		set{
+			turnsFrozen = value;
+		}
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -75,8 +87,12 @@ public class EnemyBehaviour : MonoBehaviour {
 		if (state == STATE.MOVING) { 
 			if (finalPosition.x != transform.position.x || finalPosition.y != transform.position.y)
 				transform.position = Vector3.MoveTowards (transform.position, finalPosition, speed * Time.deltaTime);
-			else
+			else {
+				//print ("Wait attack");
 				state = STATE.WAITATTACK;
+				anim.SetInteger ("State", 0);
+				print ("Setou estado 0");
+			}
 		}
 	}
 
@@ -92,6 +108,7 @@ public class EnemyBehaviour : MonoBehaviour {
 
 		attackObject = Instantiate (prefabAttack, transform.position, transform.rotation);
 		print ("Instanciou");
+		anim.SetInteger ("State", 0);
 		state = EnemyBehaviour.STATE.NOTSELECTED;
 
 		/*
@@ -109,6 +126,7 @@ public class EnemyBehaviour : MonoBehaviour {
 		finalPosition.y = Random.Range (1.21f, 4.28f);
 		float distance = Mathf.Sqrt (Mathf.Pow (initialPosition.x - finalPosition.x, 2) + Mathf.Pow (initialPosition.y - finalPosition.y, 2));
 		speed = distance / time;
+		anim.SetInteger ("State", 1);
 		state = STATE.MOVING;
 	}
 }

@@ -449,7 +449,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1793038889}
+      - m_Target: {fileID: 0}
         m_MethodName: OnClickAttack
         m_Mode: 1
         m_Arguments:
@@ -625,6 +625,7 @@ GameObject:
   - component: {fileID: 1461021433}
   - component: {fileID: 1461021432}
   - component: {fileID: 1461021435}
+  - component: {fileID: 1461021436}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -730,6 +731,24 @@ MonoBehaviour:
   prefabAttack: {fileID: 1138591773508862, guid: 8e0c03cfc6ce0f642b7785d75ede7fba,
     type: 2}
   gameManager: {fileID: 1607474097}
+  anim: {fileID: 1461021436}
+--- !u!95 &1461021436
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1461021431}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3c54c3a47e96b134db38c971f00b7165, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &1550319165
 GameObject:
   m_ObjectHideFlags: 0
@@ -807,7 +826,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1793038889}
+      - m_Target: {fileID: 0}
         m_MethodName: OnClickSpecial
         m_Mode: 1
         m_Arguments:
@@ -999,7 +1018,7 @@ GameObject:
   - component: {fileID: 1793038889}
   - component: {fileID: 1793038894}
   m_Layer: 0
-  m_Name: Character
+  m_Name: Warrior
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1013,10 +1032,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1793038888}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d39b382ec10aea4bba1156614a1e135, type: 3}
+  m_Script: {fileID: 11500000, guid: 370dfd7b7e4f4184e8e6f9022118ed0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
   battleUI: {fileID: 956428189}
   attackButton: {fileID: 1048647451}
   specialButton: {fileID: 1550319165}
