@@ -16,6 +16,7 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	private float life = 100f;
 	private float attackValue = 10f;
+	private float defense = 5f;
 
 	public GameObject prefabAttack;	//-3,23
 	private GameObject attackObject;
@@ -42,6 +43,15 @@ public class EnemyBehaviour : MonoBehaviour {
 		}
 		set{
 			life = value;
+		}
+	}
+
+	public float Defense{
+		get{
+			return defense;
+		}
+		set{
+			defense = value;
 		}
 	}
 

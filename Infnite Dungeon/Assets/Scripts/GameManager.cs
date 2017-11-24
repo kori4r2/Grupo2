@@ -22,6 +22,10 @@ public class GameManager : MonoBehaviour {
 	public List<GameObject> players;
 	public List<GameObject> enemies;
 
+	private float timerFrozen = 0.0f;
+	private bool allEnemiesFrozen = false;
+
+
 	public TURN Turn {
 		get {
 			return turn;
@@ -52,9 +56,12 @@ public class GameManager : MonoBehaviour {
 		PlayerBehaviour playerBehaviour;
 		EnemyBehaviour enemyBehaviour;
 
+		if (allEnemiesFrozen)
+			timerFrozen += Time.deltaTime;
+		
 		if (turn == TURN.CHECK)
 			Check ();
-		else if (turn == TURN.PLAYERTURN) {		// Sé é o turno do player e houve um toque na tela
+		else if (turn == TURN.PLAYERTURN || (allEnemiesFrozen && timerFrozen < enemies[0].GetComponent<EnemyBehaviour>().time)) {		// Sé é o turno do player e houve um toque na tela
 			if (Input.GetMouseButtonDown (0)) {
 				RaycastHit hit;
 				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
@@ -74,6 +81,7 @@ public class GameManager : MonoBehaviour {
 						print ("State moving");
 						playerBehaviour.anim.SetInteger ("State", 1);
 						battleUI.SetActive (false);
+
 						break;
 					} else {
 						initialPosition = (Vector2)Camera.main.ScreenToWorldPoint (Input.mousePosition);
@@ -91,7 +99,8 @@ public class GameManager : MonoBehaviour {
 			}
 			// Verifica quantos enemies estão em espera para atacar
 			for (i = 0; i < enemies.Count; i++) {
-				if (enemies [i].GetComponent<EnemyBehaviour> ().State != EnemyBehaviour.STATE.WAITATTACK)
+				enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
+				if (enemyBehaviour.State != EnemyBehaviour.STATE.WAITATTACK && enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN)
 					break;
 				counter++;
 			}
@@ -99,7 +108,8 @@ public class GameManager : MonoBehaviour {
 				turn = TURN.WAITTURN;
 				for (i = 0; i < players.Count; i++) {		// Verifica se há um player prestes a agir
 					playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
-					if (playerBehaviour.State == PlayerBehaviour.STATE.SELECTED || playerBehaviour.State == PlayerBehaviour.STATE.WAITATTACK) {
+					if (playerBehaviour.State == PlayerBehaviour.STATE.SELECTED || playerBehaviour.State == PlayerBehaviour.STATE.WAITATTACK ||
+						playerBehaviour.State == PlayerBehaviour.STATE.FROZEN) {
 						playerBehaviour.State = PlayerBehaviour.STATE.NOTSELECTED;
 						battleUI.SetActive (false);
 					}
@@ -110,7 +120,8 @@ public class GameManager : MonoBehaviour {
 		} else if (turn == TURN.WAITTURN) { 		// Se estão no turno de espera
 			print ("Turno de espera");
 			for (i = 0; i < players.Count; i++) {
-				if (players [i].GetComponent<PlayerBehaviour> ().State != PlayerBehaviour.STATE.NOTSELECTED)
+				playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+				if (playerBehaviour.State != PlayerBehaviour.STATE.NOTSELECTED && playerBehaviour.State != PlayerBehaviour.STATE.SPECIAL)
 					break;
 				counter++;
 			}
@@ -133,7 +144,7 @@ public class GameManager : MonoBehaviour {
 			// Checa se todos os inimigos ainda estão atacando
 			for (i = 0; i < enemies.Count; i++) {
 				enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
-				if (enemyBehaviour.State != EnemyBehaviour.STATE.NOTSELECTED)
+				if (enemyBehaviour.State != EnemyBehaviour.STATE.NOTSELECTED && enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN)
 					break;
 				counter++;
 			}
@@ -146,6 +157,8 @@ public class GameManager : MonoBehaviour {
 
 	// Estado de checagem: pode terminar o jogo, chamar a nova sala, ou iniciar o PLAYERTURN
 	void Check(){
+		timerFrozen = 0f;
+		int counterEnemiesFrozen = 0;
 		EnemyBehaviour enemyBehaviour;
 		if (players.Count > 0) {
 			if (enemies.Count > 0) {
@@ -158,11 +171,21 @@ public class GameManager : MonoBehaviour {
 					    enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN) {
 						enemyBehaviour.Move ();
 						enemyBehaviour.TurnsFrozen = 0;
-					} else
+					} else {
+						counterEnemiesFrozen++;
 						enemyBehaviour.TurnsFrozen = 1;
+						print ("Setou 1");
+					}
 				}
-				for (i = 0; i < players.Count; i++)
+				if (counterEnemiesFrozen == enemies.Count) {
+					allEnemiesFrozen = true;
+					print ("All enemies frozen");
+				}
+				else
+					allEnemiesFrozen = false;
+				for (i = 0; i < players.Count; i++) {
 					players [i].GetComponent<PlayerBehaviour> ().State = PlayerBehaviour.STATE.NOTSELECTED;
+				}
 			}
 			else
 				NextRoom ();
@@ -195,32 +218,32 @@ public class GameManager : MonoBehaviour {
 			if (playerBehaviour.IsColliding) 
 				playersColliding.Add (playerBehaviour);			
 		}
-		/*
+
 		if (playersColliding.Count > 0) {
 			// Ordena pelo maior y
 			playersColliding.Sort (delegate(PlayerBehaviour x, PlayerBehaviour y) {
 				return(x.transform.position.y).CompareTo (y.transform.position.y);
 			});
 
-			// Verifica se há um warrior no meio do caminho
+			// Verifica se há um warrior no meio do caminho usando special
 			for(i = 0; i < playersColliding.Count; i++){
 				if (playersColliding [i] is WarriorBehaviour && playersColliding [i].State == PlayerBehaviour.STATE.SPECIAL) {
 					FreezeOgre (playersColliding [i].Collider);
 					break;
 				}
-				// Se não é um warrior, recebe dano
+				// Se não é um warrior usando special, recebe dano
 				print ("Colide");
 				SetLifePlayer (playersColliding[i].Collider, playersColliding[i]);
 				playersColliding[i].IsColliding = false;
 			}
 
-		}
-*/			
+		}			
 
 		// Destrói todos os objetos de ataque
 		for (i = 0; i < enemies.Count; i++) {
 			EnemyBehaviour enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
-			Destroy (enemyBehaviour.AttackObject);
+			if(enemyBehaviour.AttackObject != null)
+				Destroy (enemyBehaviour.AttackObject);
 			print ("Destruiu");
 		}
 		turn = TURN.CHECK;	// Vai para o estado de checagem
@@ -232,7 +255,7 @@ public class GameManager : MonoBehaviour {
 		for (int i = 0; i < enemies.Count; i++) {
 			enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 			if (enemyBehaviour.AttackObject == coll.gameObject) { 
-				player.Life -= enemyBehaviour.AttackValue + player.Defense;
+				player.Life -= enemyBehaviour.AttackValue - player.Defense;
 				print ("player life = " + player.Life);
 			}
 		}
@@ -242,8 +265,10 @@ public class GameManager : MonoBehaviour {
 		EnemyBehaviour enemyBehaviour;
 		for (int i = 0; i < enemies.Count; i++) {
 			enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
-			if (enemyBehaviour.AttackObject == coll.gameObject)
+			if (enemyBehaviour.AttackObject == coll.gameObject) {
 				enemyBehaviour.State = EnemyBehaviour.STATE.FROZEN;
+				print ("Congelou");
+			}
 		}
 	}
 
