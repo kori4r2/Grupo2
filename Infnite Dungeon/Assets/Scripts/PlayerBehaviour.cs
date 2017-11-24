@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour {
 
-	public enum STATE {NOTSELECTED, SELECTED, MOVING, WAITATTACK, ATTACKING, SPECIAL} // possiveis estados do personagem
+	public enum STATE {NOTSELECTED, SELECTED, MOVING, WAITATTACK, ATTACKING, SPECIAL, FROZEN} // possiveis estados do personagem
 
 	private Vector2 currentPosition; // posicao inicial do personagem
 	private Vector2 finalPosition; // posicao para a qual o personagem vai se mover
@@ -21,6 +21,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	private float defense = 5f;
 	private int level;
 	private float secondary = 100f;
+	private int actionsOnTurn = 0;
 
 	public GameObject battleUI;			// GameObject that contains all UI Battle components
 	public GameObject attackButton;		
@@ -103,7 +104,7 @@ public class PlayerBehaviour : MonoBehaviour {
 				speed = 2f;
 				transform.position = Vector3.MoveTowards (transform.position, finalPosition, speed * Time.deltaTime);
 			} else {
-				state = STATE.NOTSELECTED;
+				state = STATE.FROZEN;
 				anim.SetInteger ("State", 0);
 			}
 		} else
@@ -112,6 +113,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	}
 
 	public void OnClickAttack(){
+		
 		state = STATE.WAITATTACK;
 		battleUI.SetActive(false);
 	}
@@ -124,7 +126,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	// Funcao que detecta a colisao entre um objeto com colisor e o mouse
 	void OnMouseDown() {
 		//if (gameManager.Turn == GameManager.TURN.CHARACTER) {	// Se o turno é do character
-		if (gameManager.Turn == GameManager.TURN.PLAYERTURN) {
+		if (gameManager.Turn == GameManager.TURN.PLAYERTURN && state == STATE.NOTSELECTED) {
 			battleUI.transform.position = gameObject.transform.position;
 			battleUI.SetActive (true);
 			state = STATE.SELECTED;
@@ -137,7 +139,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	public void Attack(EnemyBehaviour enemy){
 		state = STATE.ATTACKING;
 		anim.SetInteger ("State", 3);
-		float attack = enemy.Life - attackValue;
+		float attack = enemy.Life - attackValue + enemy.Defense;
 		enemy.Life = attack;
 		print ("Vida enemy = " + enemy.Life);
 	}
@@ -150,7 +152,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	}
 
 	public void SetNotSelected(){
-		state = STATE.NOTSELECTED;
+		state = STATE.FROZEN;
 		anim.SetInteger ("State", 0);
 		print ("Not selected");
 	}
