@@ -36,3 +36,6 @@ sysinfo.txt
 # Krita files
 *.kra
 *.kra~
+
+# .gif examples
+*.gif
