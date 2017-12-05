@@ -34,7 +34,7 @@ sysinfo.txt
 *.unitypackage
 
 # Krita files
-*.kra
+#*.kra
 *.kra~
 
 # .gif examples
