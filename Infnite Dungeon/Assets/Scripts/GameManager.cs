@@ -35,6 +35,15 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	public bool AllEnemiesFrozen {
+		get {
+			return allEnemiesFrozen;
+		}
+		set { 
+			allEnemiesFrozen = value; 
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
 		EnemyBehaviour enemyBehaviour;
@@ -61,7 +70,7 @@ public class GameManager : MonoBehaviour {
 		
 		if (turn == TURN.CHECK)
 			Check ();
-		else if (turn == TURN.PLAYERTURN || (allEnemiesFrozen && timerFrozen < enemies[0].GetComponent<EnemyBehaviour>().time)) {		// Sé é o turno do player e houve um toque na tela
+		else if (turn == TURN.PLAYERTURN) {		// Sé é o turno do player e houve um toque na tela
 			if (Input.GetMouseButtonDown (0)) {
 				RaycastHit hit;
 				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
@@ -74,11 +83,11 @@ public class GameManager : MonoBehaviour {
 					// MOVIMENTAÇÃO DO PLAYER
 					if ((playerBehaviour.State == PlayerBehaviour.STATE.SELECTED) && // Se há um player selecionado e não tocou em um colisor
 					    ((!Physics2D.Raycast (new Vector2 (Camera.main.ScreenToWorldPoint (Input.mousePosition).x, 
-						    Camera.main.ScreenToWorldPoint (Input.mousePosition).y), Vector2.zero, 0f)))) {
+							Camera.main.ScreenToWorldPoint (Input.mousePosition).y), Vector2.zero, 0f)))) {
 						pointToGo = (Vector2)Camera.main.ScreenToWorldPoint (Input.mousePosition);
 						playerBehaviour.FinalPosition = pointToGo;
 						playerBehaviour.State = PlayerBehaviour.STATE.MOVING;
-						print ("State moving");
+						//print ("State moving");
 						playerBehaviour.anim.SetInteger ("State", 1);
 						battleUI.SetActive (false);
 
@@ -100,11 +109,12 @@ public class GameManager : MonoBehaviour {
 			// Verifica quantos enemies estão em espera para atacar
 			for (i = 0; i < enemies.Count; i++) {
 				enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
-				if (enemyBehaviour.State != EnemyBehaviour.STATE.WAITATTACK && enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN)
+				if ((enemyBehaviour.State != EnemyBehaviour.STATE.WAITATTACK && enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN)
+					|| enemyBehaviour.State == EnemyBehaviour.STATE.FROZEN)
 					break;
 				counter++;
 			}
-			if (counter == enemies.Count) { 		// Se todos os inimigos estão esperando, entra no turno de espera
+			if (counter == enemies.Count || (allEnemiesFrozen && timerFrozen > enemies[0].GetComponent<EnemyBehaviour>().time)) { 		// Se todos os inimigos estão esperando, entra no turno de espera
 				turn = TURN.WAITTURN;
 				for (i = 0; i < players.Count; i++) {		// Verifica se há um player prestes a agir
 					playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
@@ -118,7 +128,7 @@ public class GameManager : MonoBehaviour {
 					enemies [i].GetComponent<EnemyBehaviour> ().IsSelected = false;
 			}
 		} else if (turn == TURN.WAITTURN) { 		// Se estão no turno de espera
-			print ("Turno de espera");
+			//print ("Turno de espera");
 			for (i = 0; i < players.Count; i++) {
 				playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
 				if (playerBehaviour.State != PlayerBehaviour.STATE.NOTSELECTED && playerBehaviour.State != PlayerBehaviour.STATE.SPECIAL)
@@ -131,7 +141,7 @@ public class GameManager : MonoBehaviour {
 					enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 					enemyBehaviour.State = EnemyBehaviour.STATE.ATTACKING;
 					enemyBehaviour.anim.SetInteger ("State", 2);
-					print ("Setou estado 2");
+					//print ("Setou estado 2");
 					//enemyBehaviour.Attack ();
 				}
 				for (i = 0; i < players.Count; i++) {
@@ -174,7 +184,7 @@ public class GameManager : MonoBehaviour {
 					} else {
 						counterEnemiesFrozen++;
 						enemyBehaviour.TurnsFrozen = 1;
-						print ("Setou 1");
+						//print ("Setou 1");
 					}
 				}
 				if (counterEnemiesFrozen == enemies.Count) {
@@ -184,7 +194,11 @@ public class GameManager : MonoBehaviour {
 				else
 					allEnemiesFrozen = false;
 				for (i = 0; i < players.Count; i++) {
-					players [i].GetComponent<PlayerBehaviour> ().State = PlayerBehaviour.STATE.NOTSELECTED;
+					PlayerBehaviour playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+					playerBehaviour.State = PlayerBehaviour.STATE.NOTSELECTED;
+					print ("Not selected state on check");
+					playerBehaviour.IsColliding = false;
+					playerBehaviour.anim.SetInteger ("State", 0);
 				}
 			}
 			else
@@ -215,8 +229,10 @@ public class GameManager : MonoBehaviour {
 		// Verifica quais os players que estão colidindo
 		for (i = 0; i < players.Count; i++) {
 			PlayerBehaviour playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
-			if (playerBehaviour.IsColliding) 
-				playersColliding.Add (playerBehaviour);			
+			if (playerBehaviour.IsColliding) {
+				playersColliding.Add (playerBehaviour);
+				print ("Colision checked");
+			}
 		}
 
 		if (playersColliding.Count > 0) {
@@ -244,7 +260,7 @@ public class GameManager : MonoBehaviour {
 			EnemyBehaviour enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 			if(enemyBehaviour.AttackObject != null)
 				Destroy (enemyBehaviour.AttackObject);
-			print ("Destruiu");
+			//print ("Destruiu");
 		}
 		turn = TURN.CHECK;	// Vai para o estado de checagem
 	}
@@ -267,7 +283,7 @@ public class GameManager : MonoBehaviour {
 			enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 			if (enemyBehaviour.AttackObject == coll.gameObject) {
 				enemyBehaviour.State = EnemyBehaviour.STATE.FROZEN;
-				print ("Congelou");
+				//print ("Congelou");
 			}
 		}
 	}

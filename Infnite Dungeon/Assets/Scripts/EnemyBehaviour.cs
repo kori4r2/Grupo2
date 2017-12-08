@@ -101,7 +101,7 @@ public class EnemyBehaviour : MonoBehaviour {
 				//print ("Wait attack");
 				state = STATE.WAITATTACK;
 				anim.SetInteger ("State", 0);
-				print ("Setou estado 0");
+				//print ("Setou estado 0");
 			}
 		}
 	}

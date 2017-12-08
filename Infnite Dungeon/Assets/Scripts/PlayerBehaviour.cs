@@ -99,7 +99,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
 	void Update () {
 		if (state == STATE.MOVING) {
-			print ("moving");
+			//print ("moving");
 			if (finalPosition.x != transform.position.x || finalPosition.y != transform.position.y) {
 				speed = 2f;
 				transform.position = Vector3.MoveTowards (transform.position, finalPosition, speed * Time.deltaTime);
@@ -107,8 +107,8 @@ public class PlayerBehaviour : MonoBehaviour {
 				state = STATE.FROZEN;
 				anim.SetInteger ("State", 0);
 			}
-		} else
-			print ("state = " + state.ToString ());
+		} //else
+			//print ("state = " + state.ToString ());
 
 	}
 
@@ -126,7 +126,10 @@ public class PlayerBehaviour : MonoBehaviour {
 	// Funcao que detecta a colisao entre um objeto com colisor e o mouse
 	void OnMouseDown() {
 		//if (gameManager.Turn == GameManager.TURN.CHARACTER) {	// Se o turno é do character
-		if (gameManager.Turn == GameManager.TURN.PLAYERTURN && state == STATE.NOTSELECTED) {
+		print("State = " + state);
+		print ("game manager turn = " + gameManager.Turn);
+		print ("Enemies frozen " + gameManager.AllEnemiesFrozen);
+		if ((gameManager.Turn == GameManager.TURN.PLAYERTURN || gameManager.AllEnemiesFrozen) && state == STATE.NOTSELECTED) {
 			battleUI.transform.position = gameObject.transform.position;
 			battleUI.SetActive (true);
 			state = STATE.SELECTED;
@@ -154,7 +157,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	public void SetNotSelected(){
 		state = STATE.FROZEN;
 		anim.SetInteger ("State", 0);
-		print ("Not selected");
+		//print ("Not selected");
 	}
 		
 
