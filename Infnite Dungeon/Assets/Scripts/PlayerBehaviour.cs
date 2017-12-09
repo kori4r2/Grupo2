@@ -9,25 +9,26 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour {
 
-	public enum STATE {NOTSELECTED, SELECTED, MOVING, WAITATTACK, ATTACKING, SPECIAL, FROZEN} // possiveis estados do personagem
+	public enum STATE {NOTSELECTED, SELECTED, MOVING, WAITATTACK, ATTACKING, SPECIAL, ONSPECIAL, FROZEN} // possiveis estados do personagem
 
 	private Vector2 currentPosition; // posicao inicial do personagem
 	private Vector2 finalPosition; // posicao para a qual o personagem vai se mover
-	private STATE state; // determina o estado do personagem
+	protected STATE state; // determina o estado do personagem
 
 	private float speed; // velocidade da movimentacao do personagem
-	private float attackValue = 10f;
+	protected float attackValue = 10f;
 	private float life = 100f;
 	private float defense = 5f;
 	private int level;
 	private float secondary = 100f;
 	private int actionsOnTurn = 0;
 
+	/*
 	public GameObject battleUI;			// GameObject that contains all UI Battle components
 	public GameObject attackButton;		
 	public GameObject specialButton;
-
-	public GameManager gameManager;
+*/
+	public BattleManager battleManager;
 
 	private bool isColliding = false;
 	private Collider2D collider;
@@ -95,6 +96,7 @@ public class PlayerBehaviour : MonoBehaviour {
 		*/
 		//anim = gameObject.GetComponent<Animator>();
 		state = STATE.NOTSELECTED;
+		battleManager = GameObject.Find ("BattleManager").GetComponent<BattleManager> ();
 	}
 
 	void Update () {
@@ -111,29 +113,14 @@ public class PlayerBehaviour : MonoBehaviour {
 			//print ("state = " + state.ToString ());
 
 	}
-
-	public void OnClickAttack(){
 		
-		state = STATE.WAITATTACK;
-		battleUI.SetActive(false);
-	}
-
-	public void OnClickSpecial(){
-		state = STATE.SPECIAL;
-		battleUI.SetActive (false);
-	}
-
 	// Funcao que detecta a colisao entre um objeto com colisor e o mouse
 	void OnMouseDown() {
 		//if (gameManager.Turn == GameManager.TURN.CHARACTER) {	// Se o turno é do character
-		print("State = " + state);
-		print ("game manager turn = " + gameManager.Turn);
-		print ("Enemies frozen " + gameManager.AllEnemiesFrozen);
-		if ((gameManager.Turn == GameManager.TURN.PLAYERTURN || gameManager.AllEnemiesFrozen) && state == STATE.NOTSELECTED) {
-			battleUI.transform.position = gameObject.transform.position;
-			battleUI.SetActive (true);
-			state = STATE.SELECTED;
 
+		if ((battleManager.Turn == BattleManager.TURN.PLAYERTURN || battleManager.AllEnemiesFrozen) && state == STATE.NOTSELECTED) {
+			battleManager.ShowBattleUI (this.gameObject);
+			state = STATE.SELECTED;
 			currentPosition = transform.position;
 		}
 		//}

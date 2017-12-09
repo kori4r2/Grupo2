@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class MageBehaviour : PlayerBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+	public float specialValue = 20f;
 
+	public void Special(EnemyBehaviour enemy){
+		state = STATE.ONSPECIAL;
+		anim.SetInteger ("State", 2);
+		float attack = enemy.Life - specialValue + enemy.Defense;
+		enemy.Life = attack;
+		print ("enemy life = " + enemy.Life);
+	}
 
 }
