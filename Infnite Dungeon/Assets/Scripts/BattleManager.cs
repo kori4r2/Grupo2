@@ -6,7 +6,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class BattleManager : MonoBehaviour {
 
 	public enum TURN {CHECK, PLAYERTURN, WAITTURN, ENEMYTURN} // possiveis estados do jogo
@@ -26,6 +26,8 @@ public class BattleManager : MonoBehaviour {
 
 	private float timerFrozen = 0.0f;
 	private bool allEnemiesFrozen = false;
+
+	public Text potionTxt;
 
 
 	public TURN Turn {
@@ -60,6 +62,8 @@ public class BattleManager : MonoBehaviour {
 		//GameManager gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 		GameObject[] playersScene = GameObject.FindGameObjectsWithTag ("Player");
 		GameObject[] enemiesScene = GameObject.FindGameObjectsWithTag ("Enemy");
+		potionTxt = GameObject.Find("TxtPotion").GetComponent<Text>();
+		potionTxt.text = GameManager.potions + "x";
 
 		for (i = 0; i < playersScene.Length; i++) {
 			//playerBehaviour = playersScene [i].GetComponent<PlayerBehaviour> ();

@@ -117,8 +117,13 @@ public class PlayerBehaviour : MonoBehaviour {
 	// Funcao que detecta a colisao entre um objeto com colisor e o mouse
 	void OnMouseDown() {
 		//if (gameManager.Turn == GameManager.TURN.CHARACTER) {	// Se o turno é do character
-
-		if ((battleManager.Turn == BattleManager.TURN.PLAYERTURN || battleManager.AllEnemiesFrozen) && state == STATE.NOTSELECTED) {
+		if (GameManager.isPotionSelected) {
+			life += 15;
+			print("Life player after potion= " + life);
+			GameManager.isPotionSelected = false;
+			GameManager.potions--;
+			battleManager.potionTxt.text = GameManager.potions + "x";
+		}else if ((battleManager.Turn == BattleManager.TURN.PLAYERTURN || battleManager.AllEnemiesFrozen) && state == STATE.NOTSELECTED) {
 			battleManager.ShowBattleUI (this.gameObject);
 			state = STATE.SELECTED;
 			currentPosition = transform.position;
