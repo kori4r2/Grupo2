@@ -18,6 +18,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	private float speed; // velocidade da movimentacao do personagem
 	protected float attackValue = 10f;
 	private float life = 100f;
+	private float special = 100f;
 	private float defense = 5f;
 	private int level;
 	private float secondary = 100f;
@@ -59,6 +60,15 @@ public class PlayerBehaviour : MonoBehaviour {
 		}
 		set{
 			life = value;
+		}
+	}
+
+	public float Special{
+		get{
+			return special;
+		}
+		set{
+			special = value;
 		}
 	}
 
@@ -125,6 +135,8 @@ public class PlayerBehaviour : MonoBehaviour {
 			battleManager.potionTxt.text = GameManager.potions + "x";
 		}else if ((battleManager.Turn == BattleManager.TURN.PLAYERTURN || battleManager.AllEnemiesFrozen) && state == STATE.NOTSELECTED) {
 			battleManager.ShowBattleUI (this.gameObject);
+			if (special <= 0)
+				battleManager.specialButton.SetActive (false);
 			state = STATE.SELECTED;
 			currentPosition = transform.position;
 		}
@@ -136,7 +148,11 @@ public class PlayerBehaviour : MonoBehaviour {
 		anim.SetInteger ("State", 3);
 		float attack = enemy.Life - attackValue + enemy.Defense;
 		enemy.Life = attack;
-		print ("Vida enemy = " + enemy.Life);
+		enemy.IsSelected = false;
+		if (enemy.Life <= 0)
+			battleManager.DestroyEnemy (enemy);
+		else
+			print ("Vida enemy = " + enemy.Life);
 	}
 
 	void OnTriggerEnter2D(Collider2D coll){

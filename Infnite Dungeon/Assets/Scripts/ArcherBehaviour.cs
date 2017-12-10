@@ -6,15 +6,20 @@ public class ArcherBehaviour : PlayerBehaviour {
 
 	private float specialValue = 5f;
 
-	public void Special(List<GameObject> enemies){
+	public void SpecialCommand(List<GameObject> enemies){
 		int i;
 		EnemyBehaviour enemy;
 		State = STATE.ONSPECIAL;
+		Special = Special - specialValue;
+		battleManager.archerSpecialSlider.value = Special;
 		for (i = 0; i < enemies.Count; i++) {
 			enemy = enemies [i].GetComponent<EnemyBehaviour> ();
 			float attack = enemy.Life - attackValue + enemy.Defense - specialValue;
 			enemy.Life = attack;
-			print ("Vida enemy = " + enemy.Life);
+			if (enemy.Life <= 0)
+				battleManager.DestroyEnemy (enemy);
+			else
+				print ("enemy life = " + enemy.Life);
 		}
 	}
 }

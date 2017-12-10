@@ -9,6 +9,10 @@ using UnityEngine;
 using UnityEngine.UI;
 public class BattleManager : MonoBehaviour {
 
+	//TODO
+	//	Checar o campo de batalha, ou seja, não deixar os personagens andarem pra onde não devem
+	//
+
 	public enum TURN {CHECK, PLAYERTURN, WAITTURN, ENEMYTURN} // possiveis estados do jogo
 
 	private Vector2 pointToGo; // Ponto ate onde o character vai se mover
@@ -26,6 +30,17 @@ public class BattleManager : MonoBehaviour {
 
 	private float timerFrozen = 0.0f;
 	private bool allEnemiesFrozen = false;
+
+	public Slider warriorLifeSlider;
+	public Slider warriorSpecialSlider;
+	public Slider mageLifeSlider;
+	public Slider mageSpecialSlider;
+	public Slider archerLifeSlider;
+	public Slider archerSpecialSlider;
+
+	public GameObject warriorUI;
+	public GameObject mageUI;
+	public GameObject archerUI;
 
 	public Text potionTxt;
 
@@ -59,11 +74,33 @@ public class BattleManager : MonoBehaviour {
 		int i;
 		EnemyBehaviour enemyBehaviour;
 		PlayerBehaviour playerBehaviour;
-		//GameManager gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
+		//	TODO 
+		// Instanciar cada personagem da batalha -> pegar de game manager
+		// Instanciar cada elemento de UI de cada personagem da batalha -> pegar as infos de cada personagem instanciado
+		//
+
 		GameObject[] playersScene = GameObject.FindGameObjectsWithTag ("Player");
 		GameObject[] enemiesScene = GameObject.FindGameObjectsWithTag ("Enemy");
 		potionTxt = GameObject.Find("TxtPotion").GetComponent<Text>();
 		potionTxt.text = GameManager.potions + "x";
+
+		if(GameObject.Find("Warrior") != null){
+			warriorLifeSlider = GameObject.Find ("WarriorLifeSlider").GetComponent<Slider> ();
+			warriorSpecialSlider = GameObject.Find ("WarriorSpecialSlider").GetComponent<Slider> ();
+			warriorUI = GameObject.Find ("WarriorUI");
+		}
+
+		if(GameObject.Find("Mage") != null){
+			mageLifeSlider = GameObject.Find ("MageLifeSlider").GetComponent<Slider> ();
+			mageSpecialSlider = GameObject.Find ("MageSpecialSlider").GetComponent<Slider> ();
+			mageUI = GameObject.Find ("MageUI");
+		}
+
+		if(GameObject.Find("Archer") != null){
+			archerLifeSlider = GameObject.Find ("ArcherLifeSlider").GetComponent<Slider> ();
+			archerSpecialSlider = GameObject.Find ("ArcherSpecialSlider").GetComponent<Slider> ();
+			archerUI = GameObject.Find ("ArcherUI");
+		}
 
 		for (i = 0; i < playersScene.Length; i++) {
 			//playerBehaviour = playersScene [i].GetComponent<PlayerBehaviour> ();
@@ -135,14 +172,14 @@ public class BattleManager : MonoBehaviour {
 						} else if (playerBehaviour.State == PlayerBehaviour.STATE.SPECIAL) {	// Se o player está em special
 							if (playerBehaviour is ArcherBehaviour) {		// Se é o special do archer
 								ArcherBehaviour archerBehaviour = (ArcherBehaviour) playerBehaviour;
-								archerBehaviour.Special (enemies);
+								archerBehaviour.SpecialCommand (enemies);
 							} else if (playerBehaviour is MageBehaviour) {	// Se é o special do mage
 								MageBehaviour mageBehaviour = (MageBehaviour) playerBehaviour;
 								for (j = 0; j < enemies.Count; j++) {
 									enemyBehaviour = enemies [j].GetComponent<EnemyBehaviour> ();
 									//SPECIAL DO MAGO
 									if (enemyBehaviour.IsSelected) {		// Se um inimigo foi selecionado
-										mageBehaviour.Special (enemyBehaviour);
+										mageBehaviour.SpecialCommand (enemyBehaviour);
 									}
 								}
 							}
@@ -191,8 +228,12 @@ public class BattleManager : MonoBehaviour {
 				}
 				for (i = 0; i < players.Count; i++) {
 					playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
-					if (playerBehaviour is WarriorBehaviour && playerBehaviour.State == PlayerBehaviour.STATE.SPECIAL)
-						playerBehaviour.anim.SetInteger ("State", 2);
+					if (playerBehaviour is WarriorBehaviour && playerBehaviour.State == PlayerBehaviour.STATE.SPECIAL) {
+						WarriorBehaviour warrior = (WarriorBehaviour)playerBehaviour;
+						warrior.anim.SetInteger ("State", 2);
+						warrior.Special = warrior.Special - warrior.SpecialValue;
+						warriorSpecialSlider.value = warrior.Special;
+					}
 				}
 			}
 		} else if (turn == TURN.ENEMYTURN) {
@@ -311,6 +352,24 @@ public class BattleManager : MonoBehaviour {
 			if (enemyBehaviour.AttackObject == coll.gameObject) { 
 				player.Life -= enemyBehaviour.AttackValue - player.Defense;
 				print ("player life = " + player.Life);
+				if (player.Life > 0) {
+					if (player is WarriorBehaviour)
+						warriorLifeSlider.value = player.Life;
+					else if (player is MageBehaviour)
+						mageLifeSlider.value = player.Life;
+					else if (player is ArcherBehaviour)
+						archerLifeSlider.value = player.Life;
+				} else {		// MATA O PLAYER
+					if (player is WarriorBehaviour)
+						Destroy (warriorUI);
+					else if (player is MageBehaviour)
+						Destroy (mageUI);
+					else if (player is ArcherBehaviour)
+						Destroy (archerUI);
+					// GameManager.players.Remove (player.gameObject);	TIRA O COMENTÁRIO QUANDO TIVER AS REFERÊNCIAS PRONTAS
+					players.Remove (player.gameObject);
+					Destroy(player.gameObject);
+				}
 			}
 		}
 	}
@@ -365,6 +424,7 @@ public class BattleManager : MonoBehaviour {
 		}
 	}
 
+	// Evento de clique no btnSpecial. Verifica qual player que tá selecionado e desencadeia seu special.
 	public void OnClickSpecial(){
 		int i;
 		PlayerBehaviour playerBehaviour;
@@ -376,6 +436,12 @@ public class BattleManager : MonoBehaviour {
 				return;
 			}
 		}
+	}
+
+	public void DestroyEnemy(EnemyBehaviour enemyBehaviour){
+		// GameManager.enemies.Remove (enemyBehaviour.gameObject);	TIRA O COMENTÁRIO QUANDO TIVER AS REFERÊNCIAS PRONTAS
+		enemies.Remove (enemyBehaviour.gameObject);
+		Destroy(enemyBehaviour.gameObject);
 	}
 
 }
