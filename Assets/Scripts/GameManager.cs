@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour {
 	void Awake () {
 		DontDestroyOnLoad (this.gameObject);
 		potions = 2;	//teste
-		state = STATE.BATTLE;
+		state = STATE.EXPLORATION;
 	}
 
 	public void OnClickPotion(){
@@ -40,8 +40,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	// Instancia um warrior, com DontDestroyOnLoad
-	public void InstantiateWarrior(){
-		float x = -2.23f, y = -2.64f, z = 0f;
+	public void InstantiateWarrior(float x, float y, float z){
+		//float x = x1, y = y1, z = z1;
 		GameObject warrior = Instantiate (prefabWarrior, new Vector3 (x, y, z), Quaternion.identity);
 		warrior.name = "Warrior";
 		players.Add (warrior);
@@ -49,8 +49,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	// Instancia um mage, com DontDestroyOnLoad
-	public void InstantiateMage(){
-		float x = -2.23f, y = -2.64f, z = 0f;
+	public void InstantiateMage(float x, float y, float z){
+		//float x = -2.23f, y = -2.64f, z = 0f;
 		GameObject mage = Instantiate (prefabMage, new Vector3 (x, y, z), Quaternion.identity);
 		mage.name = "Mage";
 		players.Add (mage);
@@ -58,8 +58,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	// Instancia um archer, com DontDestroyOnLoad
-	public void InstantiateArcher(){
-		float x = -2.23f, y = -2.64f, z = 0f;
+	public void InstantiateArcher(float x, float y, float z){
+		//float x = -2.23f, y = -2.64f, z = 0f;
 		GameObject archer = Instantiate (prefabArcher, new Vector3 (x, y, z), Quaternion.identity);
 		archer.name = "Archer";
 		players.Add (archer);

@@ -22,6 +22,7 @@ public class RoomManager : MonoBehaviour {
 
 	public List<Sprite> rooms;
 	public List<GameObject> heros;
+	public GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
@@ -80,12 +81,23 @@ public class RoomManager : MonoBehaviour {
 		dieRoom = (int) Random.Range (0f, 2.9f);
 		this.GetComponent<SpriteRenderer> ().sprite = rooms[dieRoom];
 
-		if (dieRoom == 1) {
-			//Application.LoadLevel ("BattleScene");
-		} else if (dieRoom == 0) {
+		if (dieRoom == 1) { // cena de batalha
+			heroText.text = "";
+			//gameObject.GetComponent<Collider> ().enabled = !gameObject.GetComponent<Collider> ().enabled;
+			Application.LoadLevel ("BattleScene");
+		} else if (dieRoom == 0) { // cena de encontrar aventureiro
 			dieHero = (int)Random.Range (0f, 2.9f);
-			string heroName = heros[dieHero].GetComponent<PlayerBehaviour> ().Name;
-			heroText.text = "Qualquer coisa " + heroName;
+			string heroName = heros [dieHero].GetComponent<PlayerBehaviour> ().Name;
+			heroText.text = "Parabéns! Você encontrou um novo aventureiro para a sua equipe da classe " + heroName;
+			if (heroName == "Arqueiro") {
+				gameManager.InstantiateArcher (-1f ,0f ,0f);
+			} else if (heroName == "Mago") {
+				gameManager.InstantiateMage (1f, 0f, 0f);
+			} else {
+				gameManager.InstantiateWarrior (0f, 0f, 0f);
+			}
+		} else { // cena de exploração
+			heroText.text = "";
 		}
 
 		initialPosition = new Vector2 (0f, 0f);

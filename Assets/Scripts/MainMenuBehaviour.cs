@@ -35,17 +35,17 @@ public class MainMenuBehaviour : MonoBehaviour {
 	// Instancia o personagem selecionado e chama a cena de batalha
 
 	public void OnClickWarrior(){
-		gameManager.InstantiateWarrior ();
-		Application.LoadLevel ("BattleScene");
+		gameManager.InstantiateWarrior (0f, 0f, 0f);
+		Application.LoadLevel ("ExplorationScene");
 	}
 
 	public void OnClickMage(){
-		gameManager.InstantiateMage ();
-		Application.LoadLevel ("BattleScene");
+		gameManager.InstantiateMage (1f, 0f, 0f);
+		Application.LoadLevel ("ExplorationScene");
 	}
 
 	public void OnClickArcher(){
-		gameManager.InstantiateArcher ();
-		Application.LoadLevel ("BattleScene");
+		gameManager.InstantiateArcher (-1f, 0f, 0f);
+		Application.LoadLevel ("ExplorationScene");
 	}
 }
