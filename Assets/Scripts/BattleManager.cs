@@ -29,6 +29,7 @@ public class BattleManager : MonoBehaviour {
 	public List<GameObject> players;
 	public List<GameObject> enemies;
 
+	private float timerShockwave = 0.0f;
 	private float timerFrozen = 0.0f;
 	private bool allEnemiesFrozen = false;
 
@@ -139,15 +140,16 @@ public class BattleManager : MonoBehaviour {
 		for (i = 0; i < playersScene.Length; i++) {
 			//playerBehaviour = playersScene [i].GetComponent<PlayerBehaviour> ();
 			players.Add (playersScene[i]);
-		}
-*/
-		turn = TURN.ENEMYTURN;
+		}*/
 		for (i = 0; i < enemiesScene.Length; i++) {
 			enemyBehaviour = enemiesScene [i].GetComponent<EnemyBehaviour> ();
 			enemies.Add (enemiesScene[i]);
-			enemyBehaviour.State = EnemyBehaviour.STATE.ATTACKING;
-			enemyBehaviour.Attack ();
 		}
+		
+		turn = TURN.WAITTURN;
+
+		
+
 			
 		/*
 		for (i = 0; i < enemies.Count; i++) {
@@ -184,7 +186,8 @@ public class BattleManager : MonoBehaviour {
 					// MOVIMENTAÇÃO DO PLAYER
 					if ((playerBehaviour.State == PlayerBehaviour.STATE.SELECTED) && // Se há um player selecionado e não tocou em um colisor
 					    ((!Physics2D.Raycast (new Vector2 (Camera.main.ScreenToWorldPoint (Input.mousePosition).x, 
-							Camera.main.ScreenToWorldPoint (Input.mousePosition).y), Vector2.zero, 0f)))) {
+							Camera.main.ScreenToWorldPoint (Input.mousePosition).y), Vector2.zero, 0f))) &&
+						(Input.mousePosition.y <= -0.26f && Input.mousePosition.y >= 3.75f )) {
 						pointToGo = (Vector2)Camera.main.ScreenToWorldPoint (Input.mousePosition);
 						playerBehaviour.FinalPosition = pointToGo;
 						playerBehaviour.State = PlayerBehaviour.STATE.MOVING;
@@ -248,14 +251,18 @@ public class BattleManager : MonoBehaviour {
 			//print ("Turno de espera");
 			for (i = 0; i < players.Count; i++) {
 				playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
-				if (playerBehaviour.State != PlayerBehaviour.STATE.NOTSELECTED && playerBehaviour.State != PlayerBehaviour.STATE.SPECIAL && 
-					playerBehaviour.State != PlayerBehaviour.STATE.FROZEN)
+				if (playerBehaviour.State != PlayerBehaviour.STATE.NOTSELECTED && playerBehaviour.State != PlayerBehaviour.STATE.SPECIAL &&
+				    playerBehaviour.State != PlayerBehaviour.STATE.FROZEN) {
 					break;
+					print ("Wait turn");
+				}
 				counter++;
 			}
 			if (counter == players.Count) {		// Se todos os players pararam de agir, vai para o turno do inimigo
+				print("counter");
 				turn = TURN.ENEMYTURN;
 				for (i = 0; i < enemies.Count; i++) {
+					print ("Loop");
 					enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 					enemyBehaviour.State = EnemyBehaviour.STATE.ATTACKING;
 					enemyBehaviour.anim.SetInteger ("State", 2);
@@ -273,6 +280,7 @@ public class BattleManager : MonoBehaviour {
 				}
 			}
 		} else if (turn == TURN.ENEMYTURN) {
+			timerShockwave += Time.deltaTime;
 			// Checa se todos os inimigos ainda estão atacando
 			for (i = 0; i < enemies.Count; i++) {
 				enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
@@ -280,8 +288,9 @@ public class BattleManager : MonoBehaviour {
 					break;
 				counter++;
 			}
-			if (counter == enemies.Count) {
+			if (counter == enemies.Count && timerShockwave >= 1f) {
 				CheckCollisions ();
+				timerShockwave = 0f;
 			}
 		} else if (turn == TURN.CHECK)
 			Check ();
@@ -371,12 +380,18 @@ public class BattleManager : MonoBehaviour {
 		}			
 
 		// Destrói todos os objetos de ataque
+
 		for (i = 0; i < enemies.Count; i++) {
 			EnemyBehaviour enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 			if(enemyBehaviour.AttackObject != null)
 				Destroy (enemyBehaviour.AttackObject);
-			//print ("Destruiu");
+			print ("Destruiu");
 		}
+		/*
+		GameObject attackObject;
+		while ((attackObject = GameObject.Find ("StraightLineAttack")) != null)
+			Destroy (attackObject);
+		*/
 		turn = TURN.CHECK;	// Vai para o estado de checagem
 	}
 

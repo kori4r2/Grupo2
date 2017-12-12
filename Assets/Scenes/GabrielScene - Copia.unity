@@ -112,12 +112,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &19519087 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114189892351088864, guid: b319b1029173bbf4095eef5f1cb28705,
-    type: 2}
-  m_PrefabInternal: {fileID: 1954648111}
-  m_Script: {fileID: 11500000, guid: 370dfd7b7e4f4184e8e6f9022118ed0b, type: 3}
 --- !u!1 &93497399
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,12 +385,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &234989896 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114528018812173038, guid: 0987a9b1203efcd46b48b5deb309aa28,
-    type: 2}
-  m_PrefabInternal: {fileID: 635463421}
-  m_Script: {fileID: 11500000, guid: 7106cc588ba67f74e806f1bd24240c02, type: 3}
 --- !u!1 &249390972
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,7 +616,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 234989896}
+      - m_Target: {fileID: 0}
         m_MethodName: set_Special
         m_Mode: 0
         m_Arguments:
@@ -675,12 +663,6 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &323874127 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114010256885877856, guid: f7b3996344fa1104788bb4dae124b380,
-    type: 2}
-  m_PrefabInternal: {fileID: 338707796}
-  m_Script: {fileID: 11500000, guid: 5783c339a25e9474f98cb2e0da67eed3, type: 3}
 --- !u!1 &332481712
 GameObject:
   m_ObjectHideFlags: 0
@@ -3114,7 +3096,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 323874127}
+      - m_Target: {fileID: 0}
         m_MethodName: set_Special
         m_Mode: 0
         m_Arguments:
@@ -3305,7 +3287,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 19519087}
+      - m_Target: {fileID: 0}
         m_MethodName: set_Special
         m_Mode: 0
         m_Arguments:
@@ -3475,7 +3457,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 323874127}
+      - m_Target: {fileID: 0}
         m_MethodName: set_Life
         m_Mode: 0
         m_Arguments:
@@ -3571,7 +3553,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 234989896}
+      - m_Target: {fileID: 0}
         m_MethodName: set_Life
         m_Mode: 0
         m_Arguments:
@@ -3742,8 +3724,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleUI: {fileID: 956428189}
-  attackButton: {fileID: 0}
   specialButton: {fileID: 0}
+  potionTxt: {fileID: 0}
+  playerUI: {fileID: 0}
   players: []
   enemies: []
   warriorLifeSlider: {fileID: 0}
@@ -3755,7 +3738,9 @@ MonoBehaviour:
   warriorUI: {fileID: 0}
   mageUI: {fileID: 0}
   archerUI: {fileID: 0}
-  potionTxt: {fileID: 0}
+  prefabWarriorUI: {fileID: 0}
+  prefabMageUI: {fileID: 0}
+  prefabArcherUI: {fileID: 0}
 --- !u!4 &1607474098
 Transform:
   m_ObjectHideFlags: 0
@@ -4384,7 +4369,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 19519087}
+      - m_Target: {fileID: 0}
         m_MethodName: set_Life
         m_Mode: 0
         m_Arguments:
@@ -4492,6 +4477,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb555cf72ec92e94db718c93ecdd8d18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  players: []
+  enemies: []
+  prefabWarrior: {fileID: 0}
+  prefabMage: {fileID: 0}
+  prefabArcher: {fileID: 0}
 --- !u!4 &2092704075
 Transform:
   m_ObjectHideFlags: 0

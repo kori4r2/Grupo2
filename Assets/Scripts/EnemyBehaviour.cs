@@ -114,20 +114,11 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	// Gera o objeto de ataque
 	public void Attack(){
-		//Transform positionAttack = new GameObject ().transform;
-		//positionAttack = (transform.position.x, transform.position.y - 3.23f);
-
-		attackObject = Instantiate (prefabAttack, transform.position, transform.rotation);
+		attackObject = Instantiate (prefabAttack, new Vector3(transform.position.x, transform.position.y - 3f, transform.position.z), transform.rotation);
+		attackObject.name = "StraightLineAttack";
 		print ("Instanciou");
 		anim.SetInteger ("State", 0);
 		state = EnemyBehaviour.STATE.NOTSELECTED;
-
-		/*
-		float attack = character.GetComponent<PlayerBehaviour> ().Life - attackValue;
-		character.GetComponent<PlayerBehaviour> ().Life = attack;
-		state = STATE.NOTSELECTED;
-		print ("Vida character = " + character.GetComponent<PlayerBehaviour> ().Life);
-		*/
 	}
 
 	// Define o próximo destino do inimigo
