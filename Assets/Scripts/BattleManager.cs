@@ -213,7 +213,9 @@ public class BattleManager : MonoBehaviour {
 									enemyBehaviour = enemies [j].GetComponent<EnemyBehaviour> ();
 									//SPECIAL DO MAGO
 									if (enemyBehaviour.IsSelected) {		// Se um inimigo foi selecionado
-										mageBehaviour.SpecialCommand (enemyBehaviour);
+										List<GameObject> list = new List<GameObject>();
+										list.Add (enemyBehaviour.gameObject);
+										mageBehaviour.SpecialCommand (list);
 									}
 								}
 							}

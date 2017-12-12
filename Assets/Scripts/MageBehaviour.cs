@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MageBehaviour : PlayerBehaviour {
-
+		
 	public float specialValue = 20f;
 
-	public void SpecialCommand(EnemyBehaviour enemy){
+	void Start () {
+	}
+
+	public override void SpecialCommand(List<GameObject> enemies){
+		EnemyBehaviour enemy = enemies [0].GetComponent<EnemyBehaviour> ();
 		state = STATE.ONSPECIAL;
 		anim.SetInteger ("State", 2);
 		float attack = enemy.Life - specialValue + enemy.Defense;
@@ -20,4 +24,8 @@ public class MageBehaviour : PlayerBehaviour {
 			print ("enemy life = " + enemy.Life);
 	}
 
+	public override string Name{
+		get{ return "Mago";}
+		set{}
+	}
 }
