@@ -106,7 +106,8 @@ public class PlayerBehaviour : MonoBehaviour {
 		*/
 		//anim = gameObject.GetComponent<Animator>();
 		state = STATE.NOTSELECTED;
-		battleManager = GameObject.Find ("BattleManager").GetComponent<BattleManager> ();
+		//battleManager = GameObject.Find ("BattleManager").GetComponent<BattleManager> ();
+		anim = gameObject.GetComponent<Animator> ();
 	}
 
 	void Update () {

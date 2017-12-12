@@ -20,8 +20,9 @@ public class BattleManager : MonoBehaviour {
 	private Vector2 offset;
 
 	public GameObject battleUI;			// GameObject that contains all UI Battle components
-	public GameObject attackButton;		
 	public GameObject specialButton;
+	public Text potionTxt;
+	public GameObject playerUI;
 
 	private TURN turn; // determina o estado do turno
 
@@ -42,8 +43,11 @@ public class BattleManager : MonoBehaviour {
 	public GameObject mageUI;
 	public GameObject archerUI;
 
-	public Text potionTxt;
+	public GameObject prefabWarriorUI;
+	public GameObject prefabMageUI;
+	public GameObject prefabArcherUI;
 
+	private GameManager gameManager;
 
 	public TURN Turn {
 		get {
@@ -72,18 +76,47 @@ public class BattleManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		int i;
+		float x = -2.23f, y = -2.64f, z = 0f;
 		EnemyBehaviour enemyBehaviour;
 		PlayerBehaviour playerBehaviour;
-		//	TODO 
-		// Instanciar cada personagem da batalha -> pegar de game manager
-		// Instanciar cada elemento de UI de cada personagem da batalha -> pegar as infos de cada personagem instanciado
-		//
 
+		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
+
+
+		// Para cada player no gameManager, instancia-o na cena de batalha, bem como seus elementos de UI.
+		for (i = 0; i < gameManager.players.Count; i++) {
+			players.Add(gameManager.players[i]);
+			players [i].transform.position = new Vector3 (x, y, z);
+			playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+			playerBehaviour.battleManager = GameObject.Find ("BattleManager").GetComponent<BattleManager> ();
+			if(playerBehaviour is WarriorBehaviour){
+				warriorUI = Instantiate (prefabWarriorUI, transform.position, Quaternion.identity);
+				warriorUI.transform.parent = playerUI.transform;
+				warriorLifeSlider = GameObject.Find ("WarriorLifeSlider").GetComponent<Slider> ();
+				warriorSpecialSlider = GameObject.Find ("WarriorSpecialSlider").GetComponent<Slider> ();
+			}
+			else if(playerBehaviour is MageBehaviour){
+				mageUI = Instantiate (prefabMageUI, transform.position, Quaternion.identity);
+				mageUI.transform.parent = playerUI.transform;
+				mageLifeSlider = GameObject.Find ("MageLifeSlider").GetComponent<Slider> ();
+				mageSpecialSlider = GameObject.Find ("MageSpecialSlider").GetComponent<Slider> ();
+			}
+			else if(playerBehaviour is ArcherBehaviour){
+				archerUI = Instantiate (prefabArcherUI, transform.position, Quaternion.identity);
+				archerUI.transform.parent = playerUI.transform;
+				archerLifeSlider = GameObject.Find ("ArcherLifeSlider").GetComponent<Slider> ();
+				archerSpecialSlider = GameObject.Find ("ArcherSpecialSlider").GetComponent<Slider> ();
+			}
+			x += 2.23f;
+		}
+
+		// Provavelmente vai virar lixo
 		GameObject[] playersScene = GameObject.FindGameObjectsWithTag ("Player");
 		GameObject[] enemiesScene = GameObject.FindGameObjectsWithTag ("Enemy");
-		potionTxt = GameObject.Find("TxtPotion").GetComponent<Text>();
-		potionTxt.text = GameManager.potions + "x";
+		//potionTxt = GameObject.Find("TxtPotion").GetComponent<Text>();
+		//potionTxt.text = GameManager.potions + "x";
 
+		/*
 		if(GameObject.Find("Warrior") != null){
 			warriorLifeSlider = GameObject.Find ("WarriorLifeSlider").GetComponent<Slider> ();
 			warriorSpecialSlider = GameObject.Find ("WarriorSpecialSlider").GetComponent<Slider> ();
@@ -102,11 +135,12 @@ public class BattleManager : MonoBehaviour {
 			archerUI = GameObject.Find ("ArcherUI");
 		}
 
+
 		for (i = 0; i < playersScene.Length; i++) {
 			//playerBehaviour = playersScene [i].GetComponent<PlayerBehaviour> ();
 			players.Add (playersScene[i]);
 		}
-
+*/
 		turn = TURN.ENEMYTURN;
 		for (i = 0; i < enemiesScene.Length; i++) {
 			enemyBehaviour = enemiesScene [i].GetComponent<EnemyBehaviour> ();

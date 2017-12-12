@@ -208,7 +208,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 112423164}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.049999952, y: -4.475, z: 0}
+  m_LocalPosition: {x: -0.049999952, y: -4.2389994, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 614826966}
@@ -218,8 +218,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.05, y: -4.475}
-  m_SizeDelta: {x: 5.646, y: 0.975}
+  m_AnchoredPosition: {x: -0.05, y: -4.239}
+  m_SizeDelta: {x: 5.646, y: 1.447}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &150628991
 GameObject:
@@ -555,7 +555,7 @@ GameObject:
   - component: {fileID: 293009823}
   - component: {fileID: 293009824}
   m_Layer: 5
-  m_Name: SliderSpecial
+  m_Name: MageSpecialSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3041,7 +3041,7 @@ GameObject:
   - component: {fileID: 1365108108}
   - component: {fileID: 1365108109}
   m_Layer: 5
-  m_Name: SliderSpecial
+  m_Name: ArcherSpecialSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3232,7 +3232,7 @@ GameObject:
   - component: {fileID: 1473463277}
   - component: {fileID: 1473463278}
   m_Layer: 5
-  m_Name: SliderSpecial
+  m_Name: WarriorSpecialSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3402,7 +3402,7 @@ GameObject:
   - component: {fileID: 1494360730}
   - component: {fileID: 1494360731}
   m_Layer: 5
-  m_Name: SliderLife
+  m_Name: ArcherLifeSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3498,7 +3498,7 @@ GameObject:
   - component: {fileID: 1517838735}
   - component: {fileID: 1517838736}
   m_Layer: 5
-  m_Name: SliderLife
+  m_Name: MageLifeSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3746,6 +3746,15 @@ MonoBehaviour:
   specialButton: {fileID: 0}
   players: []
   enemies: []
+  warriorLifeSlider: {fileID: 0}
+  warriorSpecialSlider: {fileID: 0}
+  mageLifeSlider: {fileID: 0}
+  mageSpecialSlider: {fileID: 0}
+  archerLifeSlider: {fileID: 0}
+  archerSpecialSlider: {fileID: 0}
+  warriorUI: {fileID: 0}
+  mageUI: {fileID: 0}
+  archerUI: {fileID: 0}
   potionTxt: {fileID: 0}
 --- !u!4 &1607474098
 Transform:
@@ -4302,7 +4311,7 @@ GameObject:
   - component: {fileID: 2001367147}
   - component: {fileID: 2001367148}
   m_Layer: 5
-  m_Name: SliderLife
+  m_Name: WarriorLifeSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

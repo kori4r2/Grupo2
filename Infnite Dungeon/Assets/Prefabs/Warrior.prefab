@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4630948997196162}
   - component: {fileID: 212379329104036988}
   - component: {fileID: 61686751205488484}
-  - component: {fileID: 114189892351088864}
   - component: {fileID: 95577010146502424}
+  - component: {fileID: 114734624620727354}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Player
@@ -85,7 +85,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114189892351088864
+--- !u!114 &114734624620727354
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleManager: {fileID: 0}
-  anim: {fileID: 95577010146502424}
+  anim: {fileID: 0}
 --- !u!212 &212379329104036988
 SpriteRenderer:
   m_ObjectHideFlags: 1

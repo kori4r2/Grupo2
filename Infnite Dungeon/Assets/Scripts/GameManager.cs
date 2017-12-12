@@ -6,11 +6,8 @@ public class GameManager : MonoBehaviour {
 
 	public enum STATE {BATTLE, EXPLORATION} // possiveis estados do jogo
 
-	//TODO
-	// Mudar pra lista de PlayerBehaviour e EnemyBehaviour. Quando for instanciar em uma cena, instancia primeiro o prefab sem 
-	// o componente, e depois adiciona o componente
-	public static List<GameObject> players;
-	public static List<GameObject> enemies;
+	public List<GameObject> players;
+	public List<GameObject> enemies;
 
 	public static GameObject warriorPrefab;
 	public static GameObject archerPrefab;
@@ -19,6 +16,10 @@ public class GameManager : MonoBehaviour {
 
 	public static int potions;
 	public static bool isPotionSelected = false;
+
+	public GameObject prefabWarrior;
+	public GameObject prefabMage;
+	public GameObject prefabArcher;
 
 	public static STATE state;
 
@@ -36,6 +37,33 @@ public class GameManager : MonoBehaviour {
 			else
 				isPotionSelected = false;
 		}
+	}
+
+	// Instancia um warrior, com DontDestroyOnLoad
+	public void InstantiateWarrior(){
+		float x = -2.23f, y = -2.64f, z = 0f;
+		GameObject warrior = Instantiate (prefabWarrior, new Vector3 (x, y, z), Quaternion.identity);
+		warrior.name = "Warrior";
+		players.Add (warrior);
+		DontDestroyOnLoad (warrior);
+	}
+
+	// Instancia um mage, com DontDestroyOnLoad
+	public void InstantiateMage(){
+		float x = -2.23f, y = -2.64f, z = 0f;
+		GameObject mage = Instantiate (prefabMage, new Vector3 (x, y, z), Quaternion.identity);
+		mage.name = "Mage";
+		players.Add (mage);
+		DontDestroyOnLoad (mage);
+	}
+
+	// Instancia um archer, com DontDestroyOnLoad
+	public void InstantiateArcher(){
+		float x = -2.23f, y = -2.64f, z = 0f;
+		GameObject archer = Instantiate (prefabArcher, new Vector3 (x, y, z), Quaternion.identity);
+		archer.name = "Archer";
+		players.Add (archer);
+		DontDestroyOnLoad (archer);
 	}
 
 }
