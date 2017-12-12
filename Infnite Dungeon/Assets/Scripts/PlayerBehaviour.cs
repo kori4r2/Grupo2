@@ -9,25 +9,27 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour {
 
-	public enum STATE {NOTSELECTED, SELECTED, MOVING, WAITATTACK, ATTACKING, SPECIAL, FROZEN} // possiveis estados do personagem
+	public enum STATE {NOTSELECTED, SELECTED, MOVING, WAITATTACK, ATTACKING, SPECIAL, ONSPECIAL, FROZEN} // possiveis estados do personagem
 
 	private Vector2 currentPosition; // posicao inicial do personagem
 	private Vector2 finalPosition; // posicao para a qual o personagem vai se mover
-	private STATE state; // determina o estado do personagem
+	protected STATE state; // determina o estado do personagem
 
 	private float speed; // velocidade da movimentacao do personagem
-	private float attackValue = 10f;
+	protected float attackValue = 10f;
 	private float life = 100f;
+	private float special = 100f;
 	private float defense = 5f;
 	private int level;
 	private float secondary = 100f;
 	private int actionsOnTurn = 0;
 
+	/*
 	public GameObject battleUI;			// GameObject that contains all UI Battle components
 	public GameObject attackButton;		
 	public GameObject specialButton;
-
-	public GameManager gameManager;
+*/
+	public BattleManager battleManager;
 
 	private bool isColliding = false;
 	private Collider2D collider;
@@ -58,6 +60,15 @@ public class PlayerBehaviour : MonoBehaviour {
 		}
 		set{
 			life = value;
+		}
+	}
+
+	public float Special{
+		get{
+			return special;
+		}
+		set{
+			special = value;
 		}
 	}
 
@@ -95,11 +106,13 @@ public class PlayerBehaviour : MonoBehaviour {
 		*/
 		//anim = gameObject.GetComponent<Animator>();
 		state = STATE.NOTSELECTED;
+		//battleManager = GameObject.Find ("BattleManager").GetComponent<BattleManager> ();
+		anim = gameObject.GetComponent<Animator> ();
 	}
 
 	void Update () {
 		if (state == STATE.MOVING) {
-			print ("moving");
+			//print ("moving");
 			if (finalPosition.x != transform.position.x || finalPosition.y != transform.position.y) {
 				speed = 2f;
 				transform.position = Vector3.MoveTowards (transform.position, finalPosition, speed * Time.deltaTime);
@@ -107,30 +120,25 @@ public class PlayerBehaviour : MonoBehaviour {
 				state = STATE.FROZEN;
 				anim.SetInteger ("State", 0);
 			}
-		} else
-			print ("state = " + state.ToString ());
+		} //else
+			//print ("state = " + state.ToString ());
 
 	}
-
-	public void OnClickAttack(){
 		
-		state = STATE.WAITATTACK;
-		battleUI.SetActive(false);
-	}
-
-	public void OnClickSpecial(){
-		state = STATE.SPECIAL;
-		battleUI.SetActive (false);
-	}
-
 	// Funcao que detecta a colisao entre um objeto com colisor e o mouse
 	void OnMouseDown() {
 		//if (gameManager.Turn == GameManager.TURN.CHARACTER) {	// Se o turno é do character
-		if (gameManager.Turn == GameManager.TURN.PLAYERTURN && state == STATE.NOTSELECTED) {
-			battleUI.transform.position = gameObject.transform.position;
-			battleUI.SetActive (true);
+		if (GameManager.isPotionSelected) {
+			life += 15;
+			print("Life player after potion= " + life);
+			GameManager.isPotionSelected = false;
+			GameManager.potions--;
+			battleManager.potionTxt.text = GameManager.potions + "x";
+		}else if ((battleManager.Turn == BattleManager.TURN.PLAYERTURN || battleManager.AllEnemiesFrozen) && state == STATE.NOTSELECTED) {
+			battleManager.ShowBattleUI (this.gameObject);
+			if (special <= 0)
+				battleManager.specialButton.SetActive (false);
 			state = STATE.SELECTED;
-
 			currentPosition = transform.position;
 		}
 		//}
@@ -141,7 +149,11 @@ public class PlayerBehaviour : MonoBehaviour {
 		anim.SetInteger ("State", 3);
 		float attack = enemy.Life - attackValue + enemy.Defense;
 		enemy.Life = attack;
-		print ("Vida enemy = " + enemy.Life);
+		enemy.IsSelected = false;
+		if (enemy.Life <= 0)
+			battleManager.DestroyEnemy (enemy);
+		else
+			print ("Vida enemy = " + enemy.Life);
 	}
 
 	void OnTriggerEnter2D(Collider2D coll){
@@ -154,7 +166,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	public void SetNotSelected(){
 		state = STATE.FROZEN;
 		anim.SetInteger ("State", 0);
-		print ("Not selected");
+		//print ("Not selected");
 	}
 		
 
