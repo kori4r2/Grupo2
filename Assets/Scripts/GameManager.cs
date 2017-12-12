@@ -1,69 +1,69 @@
-﻿/* Universidade de Sao Paulo - ICMC - Outubro de 2017
-   Autores: Klinsmann Hengles, Felipe Torres e Gabriel Carvalho
-   Script desenvolvido para o jogo Infinite Dungeon
-   Descrição: Script que comanda as ações principais do jogo, como quando surgem os inimigos, os personagens, distribui a experiencia, etc.*/ 
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-	private Vector2 pointToGo; // Ponto ate onde o character vai se mover
-	private Vector2 initialPosition; // Posicao inicial do clique do mouse fora do player
-	private Vector2 offset;
-	public GameObject character; // Referencia ao character, o objeto que sera movido
-	public GameObject enemy;
-	public GameObject battleUI;
+	public enum STATE {BATTLE, EXPLORATION} // possiveis estados do jogo
 
-	private Component playerBehaviour;
-	private Component enemyBehaviour;
+	public List<GameObject> players;
+	public List<GameObject> enemies;
+
+	public static GameObject warriorPrefab;
+	public static GameObject archerPrefab;
+	public static GameObject magePrefab;
+	public static GameObject ogrePrefab;
+
+	public static int potions;
+	public static bool isPotionSelected = false;
+
+	public GameObject prefabWarrior;
+	public GameObject prefabMage;
+	public GameObject prefabArcher;
+
+	public static STATE state;
 
 	// Use this for initialization
-	void Start () {
-		battleUI.SetActive(false);
-		offset = new Vector2 (1f, 1f);
+	void Awake () {
+		DontDestroyOnLoad (this.gameObject);
+		potions = 2;	//teste
+		state = STATE.BATTLE;
 	}
 
-	// Update is called once per frame
-	void Update () {
-
-		if (Input.GetMouseButtonDown(0)) {
-			RaycastHit hit;
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-
-			// Verify if a character was selected BEFORE, and not exactly now. 
-			// We need to do it to obtain a good synchronization with the OnMouseDown() method from PlayerBehaviour. 
-			if ((character.GetComponent<PlayerBehaviour> ().State == PlayerBehaviour.STATE.SELECTED) &&
-				(!Physics2D.Raycast (new Vector2 (Camera.main.ScreenToWorldPoint (Input.mousePosition).x, 
-					Camera.main.ScreenToWorldPoint (Input.mousePosition).y), Vector2.zero, 0f))) {
-				pointToGo = (Vector2)Camera.main.ScreenToWorldPoint (Input.mousePosition);
-				character.GetComponent<PlayerBehaviour> ().FinalPosition = pointToGo;
-				character.GetComponent<PlayerBehaviour> ().State = PlayerBehaviour.STATE.MOVING;
-				print ("Entrou");
-				battleUI.SetActive (false);
-			} else {
-				Vector2 initialPosition = (Vector2)Camera.main.ScreenToWorldPoint (Input.mousePosition);
-			}
-
-			if (enemy.GetComponent<EnemyBehaviour> ().State == EnemyBehaviour.STATE.SELECTED) {		// Se um inimigo foi selecionado
-				if (character.GetComponent<PlayerBehaviour> ().State == PlayerBehaviour.STATE.ATTACKING)  // Se um character está atacando
-					character.GetComponent<PlayerBehaviour> ().Attack();
-				else 
-					enemy.GetComponent<EnemyBehaviour> ().State = EnemyBehaviour.STATE.NOTSELECTED;
-			}
+	public void OnClickPotion(){
+		if (potions > 0) {
+			if (!isPotionSelected)
+				isPotionSelected = true;
+			else
+				isPotionSelected = false;
 		}
-
 	}
 
-	void OnMouseDrag() {
-		Vector2 cursorPoint = new Vector2 (Input.mousePosition.x, Input.mousePosition.y);
-		Vector2 cursorPosition = (Vector2)Camera.main.ScreenToWorldPoint (cursorPoint.x) + offset;
-		Vector2 heading = cursorPosition - initialPosition;
-		Vector2 direction = heading / heading.magnitude;
-		print (heading);
+	// Instancia um warrior, com DontDestroyOnLoad
+	public void InstantiateWarrior(){
+		float x = -2.23f, y = -2.64f, z = 0f;
+		GameObject warrior = Instantiate (prefabWarrior, new Vector3 (x, y, z), Quaternion.identity);
+		warrior.name = "Warrior";
+		players.Add (warrior);
+		DontDestroyOnLoad (warrior);
+	}
 
+	// Instancia um mage, com DontDestroyOnLoad
+	public void InstantiateMage(){
+		float x = -2.23f, y = -2.64f, z = 0f;
+		GameObject mage = Instantiate (prefabMage, new Vector3 (x, y, z), Quaternion.identity);
+		mage.name = "Mage";
+		players.Add (mage);
+		DontDestroyOnLoad (mage);
+	}
+
+	// Instancia um archer, com DontDestroyOnLoad
+	public void InstantiateArcher(){
+		float x = -2.23f, y = -2.64f, z = 0f;
+		GameObject archer = Instantiate (prefabArcher, new Vector3 (x, y, z), Quaternion.identity);
+		archer.name = "Archer";
+		players.Add (archer);
+		DontDestroyOnLoad (archer);
 	}
 
 }
