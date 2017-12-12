@@ -261,6 +261,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb555cf72ec92e94db718c93ecdd8d18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  players: []
+  enemies: []
   prefabWarrior: {fileID: 1978702917511140, guid: b319b1029173bbf4095eef5f1cb28705,
     type: 2}
   prefabMage: {fileID: 1741925292282274, guid: 0987a9b1203efcd46b48b5deb309aa28, type: 2}
