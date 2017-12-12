@@ -15,12 +15,12 @@ public class EnemyBehaviour : MonoBehaviour {
 	private STATE state; // determina o estado do personagem
 
 	private float life = 100f;
-	private float attackValue = 10f;
+	private float attackValue = 60f;
 	private float defense = 5f;
 
 	public GameObject prefabAttack;	//-3,23
 	private GameObject attackObject;
-	public GameManager gameManager;
+	public BattleManager battleManager;
 
 	private bool isSelected = false;
 
@@ -90,6 +90,7 @@ public class EnemyBehaviour : MonoBehaviour {
 		//state = STATE.NOTSELECTED;
 		initialPosition = transform.position;
 		time = 5f;
+		battleManager = GameObject.Find ("BattleManager").GetComponent<BattleManager> ();
 	}
 	
 	// Update is called once per frame
@@ -101,14 +102,14 @@ public class EnemyBehaviour : MonoBehaviour {
 				//print ("Wait attack");
 				state = STATE.WAITATTACK;
 				anim.SetInteger ("State", 0);
-				print ("Setou estado 0");
+				//print ("Setou estado 0");
 			}
 		}
 	}
 
 	// Funcao que detecta a colisao entre um objeto com colisor e o mouse
 	void OnMouseDown() {
-		gameManager.EnemySelected (this);
+		battleManager.EnemySelected (this);
 	}
 
 	// Gera o objeto de ataque
