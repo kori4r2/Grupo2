@@ -6,7 +6,10 @@ public class ArcherBehaviour : PlayerBehaviour {
 
 	private float specialValue = 5f;
 
-	public void SpecialCommand(List<GameObject> enemies){
+	void Start () {
+	}
+
+	public override void SpecialCommand(List<GameObject> enemies){
 		int i;
 		EnemyBehaviour enemy;
 		State = STATE.ONSPECIAL;
@@ -21,5 +24,10 @@ public class ArcherBehaviour : PlayerBehaviour {
 			else
 				print ("enemy life = " + enemy.Life);
 		}
+	}
+
+	public override string Name{
+		get{ return "Arqueiro";}
+		set{}
 	}
 }

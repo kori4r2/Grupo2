@@ -7,13 +7,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBehaviour : MonoBehaviour {
+public abstract class PlayerBehaviour : MonoBehaviour {
 
 	public enum STATE {NOTSELECTED, SELECTED, MOVING, WAITATTACK, ATTACKING, SPECIAL, ONSPECIAL, FROZEN} // possiveis estados do personagem
 
 	private Vector2 currentPosition; // posicao inicial do personagem
 	private Vector2 finalPosition; // posicao para a qual o personagem vai se mover
 	protected STATE state; // determina o estado do personagem
+
+	public abstract void SpecialCommand(List<GameObject> enemies);
+	public abstract string Name{ get; set;}
 
 	private float speed; // velocidade da movimentacao do personagem
 	protected float attackValue = 10f;
@@ -168,6 +171,5 @@ public class PlayerBehaviour : MonoBehaviour {
 		anim.SetInteger ("State", 0);
 		//print ("Not selected");
 	}
-		
 
 }

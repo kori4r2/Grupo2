@@ -6,6 +6,8 @@ public class WarriorBehaviour : PlayerBehaviour {
 
 	private float specialValue = 10f;
 
+	void Start () {
+	}
 
 	public float SpecialValue{
 		get{
@@ -17,5 +19,11 @@ public class WarriorBehaviour : PlayerBehaviour {
 	}
 	// Use this for initialization
 
+	public override void SpecialCommand(List<GameObject> enemies){
+	}
 		
+	public override string Name{
+		get{ return "Guerreiro";}
+		set{}
+	}
 }

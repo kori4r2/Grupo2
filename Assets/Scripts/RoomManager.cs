@@ -6,9 +6,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoomManager : MonoBehaviour {
 
+	public Text heroText; // nome do heroi
+	private int dieHero; // variavel randomica que determina de que classe sera o heroi encontrado
+	private int dieRoom; // variavel randomica que determina se a proxima sala sera de batalha, pocao ou heroi
 	private Vector2 initialPosition; // posicao inicial do pegar e arrastar
 	private Vector2 finalPosition; // posicao final do clicar e arrastar
 	private float distanceX; // distancia entre dois pontos no eixo X
@@ -17,11 +21,15 @@ public class RoomManager : MonoBehaviour {
 	private float totalDistanceY; // distancia percorrida total em Y
 
 	public List<Sprite> rooms;
+	public List<GameObject> heros;
+	public GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
 		initialPosition = new Vector2 (0f, 0f);
 		this.gameObject.GetComponent<SpriteRenderer> ().sprite = rooms[0];
+		dieRoom = (int) Random.Range (0f, 2.9f);
+
 	}
 	
 	// Update is called once per frame
@@ -30,7 +38,6 @@ public class RoomManager : MonoBehaviour {
 	}
 
 	void OnMouseDrag() {
-		print ("ENTROUENTROUENTROUENTROUENTROUENTROU");
 		if (initialPosition == new Vector2(0f, 0f)) {
 			initialPosition = new Vector2 (Camera.main.ScreenToWorldPoint (Input.mousePosition).x, Camera.main.ScreenToWorldPoint (Input.mousePosition).y);
 		}
@@ -38,7 +45,7 @@ public class RoomManager : MonoBehaviour {
 		finalPosition = new Vector2 (Camera.main.ScreenToWorldPoint (Input.mousePosition).x, Camera.main.ScreenToWorldPoint (Input.mousePosition).y);
 	}
 
-	void OnMouseExit() {
+	void OnMouseUp() {
 		distanceX = finalPosition.x - initialPosition.x;
 		distanceY = finalPosition.y - initialPosition.y;
 		totalDistanceX = Mathf.Sqrt (Mathf.Pow (initialPosition.x - finalPosition.x, 2));
@@ -68,6 +75,29 @@ public class RoomManager : MonoBehaviour {
 			else {
 				print ("BAIXO");
 			}
+				
+		}
+			
+		dieRoom = (int) Random.Range (0f, 2.9f);
+		this.GetComponent<SpriteRenderer> ().sprite = rooms[dieRoom];
+
+		if (dieRoom == 1) { // cena de batalha
+			heroText.text = "";
+			//gameObject.GetComponent<Collider> ().enabled = !gameObject.GetComponent<Collider> ().enabled;
+			Application.LoadLevel ("BattleScene");
+		} else if (dieRoom == 0) { // cena de encontrar aventureiro
+			dieHero = (int)Random.Range (0f, 2.9f);
+			string heroName = heros [dieHero].GetComponent<PlayerBehaviour> ().Name;
+			heroText.text = "Parabéns! Você encontrou um novo aventureiro para a sua equipe da classe " + heroName;
+			if (heroName == "Arqueiro") {
+				gameManager.InstantiateArcher (-1f ,0f ,0f);
+			} else if (heroName == "Mago") {
+				gameManager.InstantiateMage (1f, 0f, 0f);
+			} else {
+				gameManager.InstantiateWarrior (0f, 0f, 0f);
+			}
+		} else { // cena de exploração
+			heroText.text = "";
 		}
 
 		initialPosition = new Vector2 (0f, 0f);
