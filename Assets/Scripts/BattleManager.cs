@@ -187,7 +187,7 @@ public class BattleManager : MonoBehaviour {
 					if ((playerBehaviour.State == PlayerBehaviour.STATE.SELECTED) && // Se há um player selecionado e não tocou em um colisor
 					    ((!Physics2D.Raycast (new Vector2 (Camera.main.ScreenToWorldPoint (Input.mousePosition).x, 
 							Camera.main.ScreenToWorldPoint (Input.mousePosition).y), Vector2.zero, 0f))) &&
-						(Input.mousePosition.y <= -0.26f && Input.mousePosition.y >= 3.75f )) {
+						(Camera.main.ScreenToWorldPoint (Input.mousePosition).y <= -0.26f && Camera.main.ScreenToWorldPoint (Input.mousePosition).y >= -3.75f )) {
 						pointToGo = (Vector2)Camera.main.ScreenToWorldPoint (Input.mousePosition);
 						playerBehaviour.FinalPosition = pointToGo;
 						playerBehaviour.State = PlayerBehaviour.STATE.MOVING;
@@ -203,23 +203,19 @@ public class BattleManager : MonoBehaviour {
 								enemyBehaviour = enemies [j].GetComponent<EnemyBehaviour> ();
 								//ATAQUE DO PLAYER
 								if (enemyBehaviour.IsSelected) {		// Se um inimigo foi selecionado
-									playerBehaviour.Attack (enemyBehaviour);
+									playerBehaviour.Attack (enemies[j]);
 								}
 							}
 						} else if (playerBehaviour.State == PlayerBehaviour.STATE.SPECIAL) {	// Se o player está em special
-							if (playerBehaviour is ArcherBehaviour) {		// Se é o special do archer
-								ArcherBehaviour archerBehaviour = (ArcherBehaviour) playerBehaviour;
-								archerBehaviour.SpecialCommand (enemies);
-							} else if (playerBehaviour is MageBehaviour) {	// Se é o special do mage
-								MageBehaviour mageBehaviour = (MageBehaviour) playerBehaviour;
-								for (j = 0; j < enemies.Count; j++) {
-									enemyBehaviour = enemies [j].GetComponent<EnemyBehaviour> ();
-									//SPECIAL DO MAGO
-									if (enemyBehaviour.IsSelected) {		// Se um inimigo foi selecionado
-										List<GameObject> list = new List<GameObject>();
-										list.Add (enemyBehaviour.gameObject);
-										mageBehaviour.SpecialCommand (list);
-									}
+							 //else if (playerBehaviour is MageBehaviour) {	// Se é o special do mage
+							MageBehaviour mageBehaviour = (MageBehaviour) playerBehaviour;
+							for (j = 0; j < enemies.Count; j++) {
+								enemyBehaviour = enemies [j].GetComponent<EnemyBehaviour> ();
+								//SPECIAL DO MAGO
+								if (enemyBehaviour.IsSelected) {		// Se um inimigo foi selecionado
+									List<GameObject> list = new List<GameObject>();
+									list.Add (enemyBehaviour.gameObject);
+									mageBehaviour.SpecialCommand (list);
 								}
 							}
 						}
@@ -482,7 +478,11 @@ public class BattleManager : MonoBehaviour {
 		for (i = 0; i < players.Count; i++) {
 			playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
 			if (playerBehaviour.State == PlayerBehaviour.STATE.SELECTED) {
-				playerBehaviour.State = PlayerBehaviour.STATE.SPECIAL;
+				if (playerBehaviour is ArcherBehaviour) {		// Se é o special do archer
+					ArcherBehaviour archerBehaviour = (ArcherBehaviour)playerBehaviour;
+					archerBehaviour.SpecialCommand (enemies);
+				} else 
+					playerBehaviour.State = PlayerBehaviour.STATE.SPECIAL;
 				battleUI.SetActive (false);
 				return;
 			}

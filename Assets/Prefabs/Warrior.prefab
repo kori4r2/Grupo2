@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4630948997196162}
   - component: {fileID: 212379329104036988}
   - component: {fileID: 61686751205488484}
-  - component: {fileID: 95577010146502424}
   - component: {fileID: 114734624620727354}
+  - component: {fileID: 95577010146502424}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Player
@@ -59,7 +59,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5.12, y: 5.12}
+    oldSize: {x: 10.24, y: 10.24}
     newSize: {x: 5.12, y: 5.12}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -97,7 +97,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleManager: {fileID: 0}
-  anim: {fileID: 0}
+  anim: {fileID: 95577010146502424}
+  enemiesAttacking: []
+  prefabAttack: {fileID: 1208756932953564, guid: beeb91e096850dd47a1719fd7bf63888,
+    type: 2}
 --- !u!212 &212379329104036988
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -132,7 +135,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 28af8adb2943494479de76d541e6594f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9ed5a87f8d0004d42a1a9a711408a5c9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
