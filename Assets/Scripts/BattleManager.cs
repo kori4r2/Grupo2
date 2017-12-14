@@ -356,13 +356,14 @@ public class BattleManager : MonoBehaviour {
 		}
 
 		if (playersColliding.Count > 0) {
-			// Ordena pelo maior y
+			// Ordena pelo menor y
 			playersColliding.Sort (delegate(PlayerBehaviour x, PlayerBehaviour y) {
 				return(x.transform.position.y).CompareTo (y.transform.position.y);
 			});
 
+
 			// Verifica se há um warrior no meio do caminho usando special
-			for(i = 0; i < playersColliding.Count; i++){
+			for(i = playersColliding.Count - 1; i >= 0; i--){
 				if (playersColliding [i] is WarriorBehaviour && playersColliding [i].State == PlayerBehaviour.STATE.SPECIAL) {
 					FreezeOgre (playersColliding [i].Collider);
 					break;
