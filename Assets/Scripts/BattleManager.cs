@@ -159,10 +159,8 @@ public class BattleManager : MonoBehaviour {
 			//playerBehaviour = playersScene [i].GetComponent<PlayerBehaviour> ();
 			players.Add (playersScene[i]);
 		}*/
-		for (i = 0; i < enemiesScene.Length; i++) {
-			enemyBehaviour = enemiesScene [i].GetComponent<EnemyBehaviour> ();
-			enemies.Add (enemiesScene[i]);
-		}
+
+
 		
 		turn = TURN.WAITTURN;
 
@@ -230,7 +228,7 @@ public class BattleManager : MonoBehaviour {
 									playerBehaviour.Attack (enemies[j]);
 								}
 							}
-						} else if (playerBehaviour.State == PlayerBehaviour.STATE.SPECIAL) {	// Se o player está em special
+						} else if (playerBehaviour.State == PlayerBehaviour.STATE.SPECIAL && playerBehaviour is MageBehaviour) {	// Se o player está em special
 							 //else if (playerBehaviour is MageBehaviour) {	// Se é o special do mage
 							MageBehaviour mageBehaviour = (MageBehaviour) playerBehaviour;
 							for (j = 0; j < enemies.Count; j++) {
@@ -248,9 +246,10 @@ public class BattleManager : MonoBehaviour {
 			}
 			// Verifica quantos enemies estão em espera para atacar
 			for (i = 0; i < enemies.Count; i++) {
+				print ("Preso aqui");
 				enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 				if ((enemyBehaviour.State != EnemyBehaviour.STATE.WAITATTACK && enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN)
-					|| enemyBehaviour.State == EnemyBehaviour.STATE.FROZEN)
+					/*|| enemyBehaviour.State == EnemyBehaviour.STATE.FROZEN*/)
 					break;
 				counter++;
 			}
@@ -281,17 +280,6 @@ public class BattleManager : MonoBehaviour {
 			if (counter == players.Count) {		// Se todos os players pararam de agir, vai para o turno do inimigo
 				print("counter");
 				turn = TURN.ENEMYTURN;
-				for (i = 0; i < enemies.Count; i++) {
-					print ("Loop");
-					enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
-					enemyBehaviour.State = EnemyBehaviour.STATE.ATTACKING;
-					if(enemyBehaviour.AttackType == 1)
-						enemyBehaviour.anim.SetInteger ("State", 2);
-					else
-						enemyBehaviour.anim.SetInteger ("State", 3);
-					//print ("Setou estado 2");
-					//enemyBehaviour.Attack ();
-				}
 				for (i = 0; i < players.Count; i++) {
 					playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
 					if (playerBehaviour is WarriorBehaviour && playerBehaviour.State == PlayerBehaviour.STATE.SPECIAL) {
@@ -299,8 +287,20 @@ public class BattleManager : MonoBehaviour {
 						warrior.anim.SetInteger ("State", 2);
 						warrior.Special = warrior.Special - warrior.SpecialValue;
 						warriorSpecialSlider.value = warrior.Special;
-
 					}
+				}
+				for (i = 0; i < enemies.Count; i++) {
+					print ("Loop");
+					enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
+					if (enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN) {
+						enemyBehaviour.State = EnemyBehaviour.STATE.ATTACKING;
+						if (enemyBehaviour.AttackType == 1)
+							enemyBehaviour.anim.SetInteger ("State", 2);
+						else
+							enemyBehaviour.anim.SetInteger ("State", 3);
+					}
+					//print ("Setou estado 2");
+					//enemyBehaviour.Attack ();
 				}
 			}
 		} else if (turn == TURN.ENEMYTURN) {
@@ -308,7 +308,8 @@ public class BattleManager : MonoBehaviour {
 			// Checa se todos os inimigos ainda estão atacando
 			for (i = 0; i < enemies.Count; i++) {
 				enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
-				if (enemyBehaviour.State != EnemyBehaviour.STATE.NOTSELECTED && enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN)
+				//if (enemyBehaviour.State != EnemyBehaviour.STATE.NOTSELECTED && enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN)
+				if(enemyBehaviour.State == EnemyBehaviour.STATE.ATTACKING)
 					break;
 				counter++;
 			}
@@ -316,8 +317,7 @@ public class BattleManager : MonoBehaviour {
 				CheckCollisions ();
 				timerShockwave = 0f;
 			}
-		} else if (turn == TURN.CHECK)
-			Check ();
+		} 
 	}
 
 	// Estado de checagem: pode terminar o jogo, chamar a nova sala, ou iniciar o PLAYERTURN
@@ -329,16 +329,20 @@ public class BattleManager : MonoBehaviour {
 			if (enemies.Count > 0) {
 				int i;
 				turn = TURN.PLAYERTURN;
+
 				for (i = 0; i < enemies.Count; i++) {
 					enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 					// O inimigo inicia o turno se ele não estiver congelado ou se estiver congelado mas já tenha ficado 1 turno assim
 					if ((enemyBehaviour.State == EnemyBehaviour.STATE.FROZEN && enemyBehaviour.TurnsFrozen == 1) ||
 					    enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN) {
+						print ("State no move = " + enemyBehaviour.State);
+						print ("Turns frozen = " + enemyBehaviour.TurnsFrozen);
 						enemyBehaviour.Move ();
 						enemyBehaviour.TurnsFrozen = 0;
-					} else {
+					} else if(enemyBehaviour.State == EnemyBehaviour.STATE.FROZEN && enemyBehaviour.TurnsFrozen == 0){
 						counterEnemiesFrozen++;
 						enemyBehaviour.TurnsFrozen = 1;
+						print ("Aqui turns frozen 11111");
 						//print ("Setou 1");
 					}
 				}
@@ -393,6 +397,8 @@ public class BattleManager : MonoBehaviour {
 			// Verifica se há um warrior no meio do caminho usando special
 			for(i = playersColliding.Count - 1; i >= 0; i--){
 				if (playersColliding [i] is WarriorBehaviour && playersColliding [i].State == PlayerBehaviour.STATE.SPECIAL) {
+					WarriorBehaviour warrior = (WarriorBehaviour)playersColliding [i];
+					warrior.ShieldAnim ();
 					FreezeOgre (playersColliding [i].Collider);
 					break;
 				}
@@ -456,7 +462,7 @@ public class BattleManager : MonoBehaviour {
 			enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 			if (enemyBehaviour.AttackObject == coll.gameObject) {
 				enemyBehaviour.State = EnemyBehaviour.STATE.FROZEN;
-				//print ("Congelou");
+				print ("Congelou");
 			}
 		}
 	}

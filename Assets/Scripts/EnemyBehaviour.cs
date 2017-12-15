@@ -100,6 +100,7 @@ public class EnemyBehaviour : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//state = STATE.NOTSELECTED;
+		turnsFrozen = 0;
 		initialPosition = transform.position;
 		time = 5f;
 		battleManager = GameObject.Find ("BattleManager").GetComponent<BattleManager> ();
