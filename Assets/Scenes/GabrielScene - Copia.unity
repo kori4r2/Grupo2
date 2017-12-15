@@ -1538,6 +1538,7 @@ MonoBehaviour:
   prefabMage: {fileID: 1741925292282274, guid: 0987a9b1203efcd46b48b5deb309aa28, type: 2}
   prefabArcher: {fileID: 1337379771323384, guid: f7b3996344fa1104788bb4dae124b380,
     type: 2}
+  prefabOgre: {fileID: 0}
 --- !u!4 &2092704075
 Transform:
   m_ObjectHideFlags: 0

@@ -67,9 +67,10 @@ public class GameManager : MonoBehaviour {
 		DontDestroyOnLoad (archer);
 	}
 
-	public void InstantiateOgre(float x, float y, float z){
+	public void InstantiateOgre(float x, float y, float z, int attackType){
 		GameObject ogre = Instantiate (prefabOgre, new Vector3 (x, y, z), Quaternion.identity);
 		ogre.name = "Ogre";
+		ogre.GetComponent<EnemyBehaviour> ().AttackType = attackType;
 		enemies.Add (ogre);
 		DontDestroyOnLoad (ogre);
 	}

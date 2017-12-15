@@ -31,17 +31,20 @@ public class BattleManager : MonoBehaviour {
 	public Slider mageSpecialSlider;
 	public Slider archerLifeSlider;
 	public Slider archerSpecialSlider;
-	public Slider ogreLifeSlider;
+	public Slider ogreLifeSlider1;
+	public Slider ogreLifeSlider2;
 
 	public GameObject warriorUI;
 	public GameObject mageUI;
 	public GameObject archerUI;
-	public GameObject ogreUI;
+	public GameObject ogreUI1;
+	public GameObject ogreUI2;
 
 	public GameObject prefabWarriorUI;
 	public GameObject prefabMageUI;
 	public GameObject prefabArcherUI;
-	public GameObject prefabOgreUI;
+	public GameObject prefabOgreUI1;
+	public GameObject prefabOgreUI2;
 
 	private GameManager gameManager;
 
@@ -78,7 +81,12 @@ public class BattleManager : MonoBehaviour {
 
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 
-		gameManager.InstantiateOgre(0.12f, 2.17f, 0f);
+		if (Random.Range (1, 3) == 1)
+			gameManager.InstantiateOgre (0f, 2.17f, 0f, (int)Random.Range(1,3));
+		else {
+			gameManager.InstantiateOgre (-1f, 2.17f, 0f, 1);
+			gameManager.InstantiateOgre (1f, 2.17f, 0f, 2);
+		}
 		// Para cada player no gameManager, instancia-o na cena de batalha, bem como seus elementos de UI.
 		for (i = 0; i < gameManager.players.Count; i++) {
 			players.Add(gameManager.players[i]);
@@ -106,11 +114,19 @@ public class BattleManager : MonoBehaviour {
 			x += 2.23f;
 		}
 
+		for (i = 0; i < gameManager.enemies.Count; i++) {
+			enemies.Add (gameManager.enemies [i]);
+			if (enemies [i].GetComponent<EnemyBehaviour> ().AttackType == 1) {
+				ogreUI1 = Instantiate (prefabOgreUI1, transform.position, Quaternion.identity);
+				ogreUI1.transform.parent = enemyUI.transform;
+				ogreLifeSlider1 = GameObject.Find ("OgreLifeSlider1").GetComponent<Slider> ();
+			}else{
+				ogreUI2 = Instantiate (prefabOgreUI2, transform.position, Quaternion.identity);
+				ogreUI2.transform.parent = enemyUI.transform;
+				ogreLifeSlider2 = GameObject.Find ("OgreLifeSlider2").GetComponent<Slider> ();
+			}
 
-		enemies.Add (gameManager.enemies [0]);
-		ogreUI = Instantiate (prefabOgreUI, transform.position, Quaternion.identity);
-		ogreUI.transform.parent = enemyUI.transform;
-		ogreLifeSlider = GameObject.Find ("OgreLifeSlider").GetComponent<Slider> ();
+		}
 
 
 		// Provavelmente vai virar lixo
@@ -168,7 +184,13 @@ public class BattleManager : MonoBehaviour {
 		PlayerBehaviour playerBehaviour;
 		EnemyBehaviour enemyBehaviour;
 
-		ogreLifeSlider.value = enemies [0].GetComponent<EnemyBehaviour> ().Life;
+		for (i = 0; i < enemies.Count; i++) {
+			enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
+			if (enemyBehaviour.AttackType == 1)
+				ogreLifeSlider1.value = enemyBehaviour.Life;
+			else
+				ogreLifeSlider2.value = enemyBehaviour.Life;
+		}
 
 		if (allEnemiesFrozen)
 			timerFrozen += Time.deltaTime;
@@ -263,7 +285,10 @@ public class BattleManager : MonoBehaviour {
 					print ("Loop");
 					enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 					enemyBehaviour.State = EnemyBehaviour.STATE.ATTACKING;
-					enemyBehaviour.anim.SetInteger ("State", 2);
+					if(enemyBehaviour.AttackType == 1)
+						enemyBehaviour.anim.SetInteger ("State", 2);
+					else
+						enemyBehaviour.anim.SetInteger ("State", 3);
 					//print ("Setou estado 2");
 					//enemyBehaviour.Attack ();
 				}
