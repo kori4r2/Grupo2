@@ -29,7 +29,7 @@ public class RoomManager : MonoBehaviour {
 		initialPosition = new Vector2 (0f, 0f);
 		this.gameObject.GetComponent<SpriteRenderer> ().sprite = rooms[0];
 		dieRoom = (int) Random.Range (0f, 2.9f);
-
+		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager>();
 	}
 	
 	// Update is called once per frame
@@ -90,7 +90,7 @@ public class RoomManager : MonoBehaviour {
 			string heroName = heros [dieHero].GetComponent<PlayerBehaviour> ().Name;
 			heroText.text = "Parabéns! Você encontrou um novo aventureiro para a sua equipe da classe " + heroName;
 			if (heroName == "Arqueiro") {
-				gameManager.InstantiateArcher (-1f ,0f ,0f);
+				gameManager.InstantiateArcher (-1f, 0f, 0f);
 			} else if (heroName == "Mago") {
 				gameManager.InstantiateMage (1f, 0f, 0f);
 			} else {

@@ -16,6 +16,8 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 	protected STATE state; // determina o estado do personagem
 
 	public abstract void SpecialCommand(List<GameObject> enemies);
+	//public abstract void FinishAttack ();
+	public abstract void FinishSpecial();
 	public abstract string Name{ get; set;}
 
 	private float speed; // velocidade da movimentacao do personagem
@@ -26,6 +28,9 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 	private int level;
 	private float secondary = 100f;
 	private int actionsOnTurn = 0;
+
+	protected int stateAttack;
+	protected int stateSpecial;
 
 	/*
 	public GameObject battleUI;			// GameObject that contains all UI Battle components
@@ -38,6 +43,10 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 	private Collider2D collider;
 
 	public Animator anim;
+
+	public List<GameObject> enemiesAttacking;
+
+	public GameObject prefabAttack;
 
 	public Vector2 FinalPosition {
 		get {
@@ -101,6 +110,7 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		anim = gameObject.GetComponent<Animator> ();
 		currentPosition = gameObject.transform.position; // pega a posicao inicial do personagem
 		//anim = gameObject.GetComponent<Animator>();
 		/*battleUI = GameObject.Find ("UIBattle");
@@ -110,7 +120,7 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 		//anim = gameObject.GetComponent<Animator>();
 		state = STATE.NOTSELECTED;
 		//battleManager = GameObject.Find ("BattleManager").GetComponent<BattleManager> ();
-		anim = gameObject.GetComponent<Animator> ();
+		//anim = gameObject.GetComponent<Animator> ();
 	}
 
 	void Update () {
@@ -147,16 +157,10 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 		//}
 	}
 
-	public void Attack(EnemyBehaviour enemy){
+	public void Attack(GameObject enemy){
+		enemiesAttacking.Add (enemy);
 		state = STATE.ATTACKING;
 		anim.SetInteger ("State", 3);
-		float attack = enemy.Life - attackValue + enemy.Defense;
-		enemy.Life = attack;
-		enemy.IsSelected = false;
-		if (enemy.Life <= 0)
-			battleManager.DestroyEnemy (enemy);
-		else
-			print ("Vida enemy = " + enemy.Life);
 	}
 
 	void OnTriggerEnter2D(Collider2D coll){
@@ -170,6 +174,24 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 		state = STATE.FROZEN;
 		anim.SetInteger ("State", 0);
 		//print ("Not selected");
+	}
+
+	public void FinishAttack(){
+		GameObject attackObject;
+		int i;
+		float attack;
+		EnemyBehaviour enemy;
+		attackObject = Instantiate (prefabAttack, enemiesAttacking [0].transform.position, Quaternion.identity);
+		attackObject.GetComponent<Animator> ().SetInteger ("State", stateAttack);
+		enemy = enemiesAttacking [0].GetComponent<EnemyBehaviour> ();
+		attack = enemy.Life - attackValue + enemy.Defense;
+		enemy.Life = attack;
+		enemy.IsSelected = false;
+		if (enemy.Life <= 0)
+			battleManager.DestroyEnemy (enemy);
+		else
+			print ("Vida enemy = " + enemy.Life);
+		enemiesAttacking.Clear ();
 	}
 
 }

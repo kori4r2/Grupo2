@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4307546862412570}
   - component: {fileID: 212998464142894952}
   - component: {fileID: 61773872490109358}
-  - component: {fileID: 95510027062686914}
   - component: {fileID: 114038057714944936}
+  - component: {fileID: 95510027062686914}
   m_Layer: 0
   m_Name: Archer
   m_TagString: Player
@@ -97,7 +97,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleManager: {fileID: 0}
-  anim: {fileID: 0}
+  anim: {fileID: 95510027062686914}
+  enemiesAttacking: []
+  prefabAttack: {fileID: 1208756932953564, guid: beeb91e096850dd47a1719fd7bf63888,
+    type: 2}
 --- !u!212 &212998464142894952
 SpriteRenderer:
   m_ObjectHideFlags: 1

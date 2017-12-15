@@ -125,7 +125,7 @@ public class EnemyBehaviour : MonoBehaviour {
 	public void Move(){
 		initialPosition = transform.position;
 		finalPosition.x = Random.Range (-2.29f, 2.29f);
-		finalPosition.y = Random.Range (1.21f, 4.28f);
+		finalPosition.y = Random.Range (1.21f, 2.17f);
 		float distance = Mathf.Sqrt (Mathf.Pow (initialPosition.x - finalPosition.x, 2) + Mathf.Pow (initialPosition.y - finalPosition.y, 2));
 		speed = distance / time;
 		anim.SetInteger ("State", 1);

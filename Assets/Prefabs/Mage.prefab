@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4212236611862670}
   - component: {fileID: 212111587438128712}
   - component: {fileID: 61136301321522304}
-  - component: {fileID: 95387885278512344}
   - component: {fileID: 114294522060606476}
+  - component: {fileID: 95387885278512344}
   m_Layer: 0
   m_Name: Mage
   m_TagString: Player
@@ -97,7 +97,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleManager: {fileID: 0}
-  anim: {fileID: 0}
+  anim: {fileID: 95387885278512344}
+  enemiesAttacking: []
+  prefabAttack: {fileID: 1208756932953564, guid: beeb91e096850dd47a1719fd7bf63888,
+    type: 2}
   specialValue: 20
 --- !u!212 &212111587438128712
 SpriteRenderer:
