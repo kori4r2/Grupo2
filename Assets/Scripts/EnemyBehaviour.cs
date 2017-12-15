@@ -15,8 +15,8 @@ public class EnemyBehaviour : MonoBehaviour {
 	private STATE state; // determina o estado do personagem
 
 	private float life = 100f;
-	private float attackValue = 60f;
-	private float defense = 5f;
+	private float attackValue = 50f;
+	private float defense = 0f;
 
 	public GameObject prefabAttack1;	//-3,23
 	public GameObject prefabAttack2;

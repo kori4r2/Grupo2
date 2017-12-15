@@ -8,6 +8,9 @@ public class WarriorBehaviour : PlayerBehaviour {
 
 	void Start () {
 		stateAttack = 2;
+
+		attackValue = 20f;
+		defense = 25f;
 	}
 
 	public float SpecialValue{
@@ -36,4 +39,22 @@ public class WarriorBehaviour : PlayerBehaviour {
 		defenseObject.GetComponent<Animator> ().SetInteger ("State", 5);
 	}
 		
+
+	public void FinishAttack(){
+		GameObject attackObject;
+		int i;
+		float attack;
+		EnemyBehaviour enemy;
+		attackObject = Instantiate (prefabAttack, enemiesAttacking [0].transform.position, Quaternion.identity);
+		attackObject.GetComponent<Animator> ().SetInteger ("State", stateAttack);
+		enemy = enemiesAttacking [0].GetComponent<EnemyBehaviour> ();
+		attack = enemy.Life - attackValue + enemy.Defense;
+		enemy.Life = attack;
+		enemy.IsSelected = false;
+		if (enemy.Life <= 0)
+			battleManager.DestroyEnemy (enemy);
+		else
+			print ("Vida enemy = " + enemy.Life);
+		enemiesAttacking.Clear ();
+	}
 }

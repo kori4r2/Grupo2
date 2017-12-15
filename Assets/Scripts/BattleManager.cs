@@ -367,6 +367,9 @@ public class BattleManager : MonoBehaviour {
 	}
 
 	void EndGame(){
+		gameManager.enemies.Clear();
+		gameManager.players.Clear();
+		GameManager.potions = 0;
 		Application.LoadLevel ("MainMenu");
 	}
 

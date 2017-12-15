@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class ArcherBehaviour : PlayerBehaviour {
 
-	private float specialValue = 5f;
+	private float specialValue = 16f;
 
 	void Start () {
 		stateAttack = 4;
 		stateSpecial = 4;
+		attackValue = 16f;
+		defense = 17f;
 	}
 
 	public override void SpecialCommand(List<GameObject> enemies){

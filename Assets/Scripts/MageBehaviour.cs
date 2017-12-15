@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class MageBehaviour : PlayerBehaviour {
 		
-	public float specialValue = 20f;
+	public float specialValue = 35f;
+
 
 	void Start () {
 		stateAttack = 3;
 		stateSpecial = 1;
+		attackValue = 16f;
+		defense = 0f;
 	}
 
 	public override void SpecialCommand(List<GameObject> enemies){
@@ -36,5 +39,23 @@ public class MageBehaviour : PlayerBehaviour {
 			battleManager.DestroyEnemy (enemy);
 		else
 			print ("enemy life mage special= " + enemy.Life);
+	}
+
+	public void FinishAttack(){
+		GameObject attackObject;
+		int i;
+		float attack;
+		EnemyBehaviour enemy;
+		attackObject = Instantiate (prefabAttack, enemiesAttacking [0].transform.position, Quaternion.identity);
+		attackObject.GetComponent<Animator> ().SetInteger ("State", stateAttack);
+		enemy = enemiesAttacking [0].GetComponent<EnemyBehaviour> ();
+		attack = enemy.Life - attackValue + enemy.Defense;
+		enemy.Life = attack;
+		enemy.IsSelected = false;
+		if (enemy.Life <= 0)
+			battleManager.DestroyEnemy (enemy);
+		else
+			print ("Vida enemy = " + enemy.Life);
+		enemiesAttacking.Clear ();
 	}
 }
