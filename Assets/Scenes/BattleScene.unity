@@ -1212,18 +1212,22 @@ MonoBehaviour:
   mageSpecialSlider: {fileID: 0}
   archerLifeSlider: {fileID: 0}
   archerSpecialSlider: {fileID: 0}
-  ogreLifeSlider: {fileID: 0}
+  ogreLifeSlider1: {fileID: 0}
+  ogreLifeSlider2: {fileID: 0}
   warriorUI: {fileID: 0}
   mageUI: {fileID: 0}
   archerUI: {fileID: 0}
-  ogreUI: {fileID: 0}
+  ogreUI1: {fileID: 0}
+  ogreUI2: {fileID: 0}
   prefabWarriorUI: {fileID: 1289544786991636, guid: 3a8492761b8c93843aad24b2d777a2f7,
     type: 2}
   prefabMageUI: {fileID: 1641908882830292, guid: c76f8431a51ab2f429ae2cf81da9df82,
     type: 2}
   prefabArcherUI: {fileID: 1347361197597984, guid: 2cd9e98b7f7e362499c56eaf0377b1ff,
     type: 2}
-  prefabOgreUI: {fileID: 1173847025637642, guid: 0bd008c3c1ef56848ae8b21130a87fdf,
+  prefabOgreUI1: {fileID: 1173847025637642, guid: 0bd008c3c1ef56848ae8b21130a87fdf,
+    type: 2}
+  prefabOgreUI2: {fileID: 1136796062828588, guid: 0d3b4389e6bba0c46806565444c564c0,
     type: 2}
 --- !u!4 &1607474098
 Transform:

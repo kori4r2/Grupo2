@@ -18,13 +18,16 @@ public class EnemyBehaviour : MonoBehaviour {
 	private float attackValue = 60f;
 	private float defense = 5f;
 
-	public GameObject prefabAttack;	//-3,23
+	public GameObject prefabAttack1;	//-3,23
+	public GameObject prefabAttack2;
 	private GameObject attackObject;
 	public BattleManager battleManager;
 
 	private bool isSelected = false;
 
 	public Animator anim;
+
+	public int attackType;
 
 	private int turnsFrozen = 0;
 
@@ -85,6 +88,15 @@ public class EnemyBehaviour : MonoBehaviour {
 		}
 	}
 
+	public int AttackType{
+		get{
+			return attackType;
+		}
+		set{
+			attackType = value;
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
 		//state = STATE.NOTSELECTED;
@@ -114,10 +126,15 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	// Gera o objeto de ataque
 	public void Attack(){
-		attackObject = Instantiate (prefabAttack, new Vector3(transform.position.x, transform.position.y - 3f, transform.position.z), transform.rotation);
+		if (attackType == 1) 
+			attackObject = Instantiate (prefabAttack1, new Vector3 (transform.position.x, transform.position.y - 3f, transform.position.z), transform.rotation);
+		else
+			attackObject = Instantiate (prefabAttack2, new Vector3 (transform.position.x, transform.position.y - 5f, transform.position.z), transform.rotation);
 		attackObject.name = "StraightLineAttack";
-		print ("Instanciou");
 		anim.SetInteger ("State", 0);
+		print ("State = " + anim.GetInteger ("State"));
+		print ("Instanciou");
+		
 		state = EnemyBehaviour.STATE.NOTSELECTED;
 	}
 
