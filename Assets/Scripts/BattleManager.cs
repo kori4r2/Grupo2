@@ -75,24 +75,24 @@ public class BattleManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		int i;
-		float x = -2.23f, y = -2.64f, z = 0f;
+		float x = -2.23f, y = -3.0f, z = 0f;
 		EnemyBehaviour enemyBehaviour;
 		PlayerBehaviour playerBehaviour;
 
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 
 		if (Random.Range (1, 3) == 1)
-			gameManager.InstantiateOgre (0f, 2.17f, 0f, (int)Random.Range(1,3));
+			gameManager.InstantiateOgre (0f, 3.0f, 0f, (int)Random.Range(1,3));
 		else {
-			gameManager.InstantiateOgre (-1f, 2.17f, 0f, 1);
-			gameManager.InstantiateOgre (1f, 2.17f, 0f, 2);
+			gameManager.InstantiateOgre (-1f, 3.0f, 0f, 1);
+			gameManager.InstantiateOgre (1f, 3.0f, 0f, 2);
 		}
 		// Para cada player no gameManager, instancia-o na cena de batalha, bem como seus elementos de UI.
 		for (i = 0; i < gameManager.players.Count; i++) {
 			players.Add(gameManager.players[i]);
 			players [i].transform.position = new Vector3 (x, y, z);
 			playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
-			playerBehaviour.battleManager = GameObject.Find ("BattleManager").GetComponent<BattleManager> ();
+			playerBehaviour.battleManager = this;
 			if(playerBehaviour is WarriorBehaviour){
 				warriorUI = Instantiate (prefabWarriorUI, transform.position, Quaternion.identity);
 				warriorUI.transform.parent = playerUI.transform;
@@ -119,11 +119,13 @@ public class BattleManager : MonoBehaviour {
 			if (enemies [i].GetComponent<EnemyBehaviour> ().AttackType == 1) {
 				ogreUI1 = Instantiate (prefabOgreUI1, transform.position, Quaternion.identity);
 				ogreUI1.transform.parent = enemyUI.transform;
+                enemies[i].GetComponent<EnemyBehaviour>().UIElement = ogreUI1;
 				ogreLifeSlider1 = GameObject.Find ("OgreLifeSlider1").GetComponent<Slider> ();
 			}else{
 				ogreUI2 = Instantiate (prefabOgreUI2, transform.position, Quaternion.identity);
 				ogreUI2.transform.parent = enemyUI.transform;
-				ogreLifeSlider2 = GameObject.Find ("OgreLifeSlider2").GetComponent<Slider> ();
+                enemies[i].GetComponent<EnemyBehaviour>().UIElement = ogreUI2;
+                ogreLifeSlider2 = GameObject.Find ("OgreLifeSlider2").GetComponent<Slider> ();
 			}
 
 		}

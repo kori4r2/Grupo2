@@ -21,6 +21,7 @@ public class EnemyBehaviour : MonoBehaviour {
 	public GameObject prefabAttack1;	//-3,23
 	public GameObject prefabAttack2;
 	private GameObject attackObject;
+    public GameObject UIElement;
 	public BattleManager battleManager;
 
 	private bool isSelected = false;
@@ -137,8 +138,14 @@ public class EnemyBehaviour : MonoBehaviour {
         print("Instanciou");
     }
 
-    public void SetInactive() {
-        state = EnemyBehaviour.STATE.NOTSELECTED;
+    public void TakeDamage(float attack) {
+        life -= attack - defense;
+        if (life <= 0) {
+            Destroy(UIElement);
+            battleManager.DestroyEnemy(this);
+        }else {
+            print("Vida enemy = " + life);
+        }
     }
 
 	// Define o próximo destino do inimigo
@@ -151,4 +158,8 @@ public class EnemyBehaviour : MonoBehaviour {
 		anim.SetInteger ("State", 1);
 		state = STATE.MOVING;
 	}
+
+    public void SetInactive() {
+        state = STATE.NOTSELECTED;
+    }
 }

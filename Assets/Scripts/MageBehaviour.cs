@@ -32,33 +32,23 @@ public class MageBehaviour : PlayerBehaviour {
     }
 
 	public override void FinishSpecial(){
-		EnemyBehaviour enemy = enemiesAttacking [0].GetComponent<EnemyBehaviour> ();
-		float attack = enemy.Life - specialValue + enemy.Defense;
-		enemy.Life = attack;
+        EnemyBehaviour enemy = enemiesAttacking [0].GetComponent<EnemyBehaviour> ();
+        enemy.TakeDamage(specialValue);
 		enemy.IsSelected = false;
 		Special = Special - specialValue;
 		battleManager.mageSpecialSlider.value = Special;
-		if (enemy.Life <= 0)
-			battleManager.DestroyEnemy (enemy);
-		else
-			print ("enemy life mage special= " + enemy.Life);
-	}
+        enemiesAttacking.Clear();
+    }
 
 	public void FinishAttack(){
 		GameObject attackObject;
 		int i;
-		float attack;
 		EnemyBehaviour enemy;
 		attackObject = Instantiate (prefabAttack, enemiesAttacking [0].transform.position, Quaternion.identity);
 		attackObject.GetComponent<Animator> ().SetInteger ("State", stateAttack);
 		enemy = enemiesAttacking [0].GetComponent<EnemyBehaviour> ();
-		attack = enemy.Life - attackValue + enemy.Defense;
-		enemy.Life = attack;
+        enemy.TakeDamage(attackValue);
 		enemy.IsSelected = false;
-		if (enemy.Life <= 0)
-			battleManager.DestroyEnemy (enemy);
-		else
-			print ("Vida enemy = " + enemy.Life);
 		enemiesAttacking.Clear ();
 	}
 }
