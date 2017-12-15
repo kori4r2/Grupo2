@@ -21,7 +21,7 @@ public class RoomManager : MonoBehaviour {
 	private float totalDistanceY; // distancia percorrida total em Y
 
 	public List<Sprite> rooms;
-	public List<GameObject> heros;
+	public List<GameObject> heroes;
 	public GameManager gameManager;
 
 	public Text potionTxt;
@@ -92,8 +92,8 @@ public class RoomManager : MonoBehaviour {
 			GameManager.state = GameManager.STATE.BATTLE;
 		} else if (dieRoom == 0) { // cena de encontrar aventureiro
 			GameManager.state = GameManager.STATE.EXPLORATION;
-			dieHero = (int)Random.Range (0f, 2.9f);
-			string heroName = heros [dieHero].GetComponent<PlayerBehaviour> ().Name;
+			dieHero = Random.Range (0, 3);
+			string heroName = heroes [dieHero].GetComponent<PlayerBehaviour> ().Name;
 
 			if (heroName == "Arqueiro") {
 				for (i = 0; i < gameManager.players.Count; i++) {

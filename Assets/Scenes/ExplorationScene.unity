@@ -365,7 +365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9632353, g: 0.9632353, b: 0.9632353, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -375,7 +375,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 11
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 300
@@ -500,7 +500,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c0a5901afa467d849aea53158d772526, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 90c57dda46fb55a499dd523df26f0cb2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -958,10 +958,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 768dbf097f6cff24e9216b5ea332c8ee, type: 3}
   - {fileID: 21300000, guid: c1c79ced9bc3eb843b54298341cbb633, type: 3}
   - {fileID: 21300000, guid: 14474b81e542dcb4eb40f1b1be3abe7b, type: 3}
-  heros:
+  heroes:
   - {fileID: 1978702917511140, guid: b319b1029173bbf4095eef5f1cb28705, type: 2}
-  - {fileID: 1741925292282274, guid: 0987a9b1203efcd46b48b5deb309aa28, type: 2}
   - {fileID: 1337379771323384, guid: f7b3996344fa1104788bb4dae124b380, type: 2}
+  - {fileID: 1741925292282274, guid: 0987a9b1203efcd46b48b5deb309aa28, type: 2}
   gameManager: {fileID: 0}
   potionTxt: {fileID: 0}
 --- !u!61 &1155144688
@@ -1376,7 +1376,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9852941, g: 0.13040657, b: 0.13040657, a: 1}
+  m_Color: {r: 0.9254902, g: 0.9647059, b: 0.25490198, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
