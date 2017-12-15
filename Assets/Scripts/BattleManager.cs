@@ -95,20 +95,20 @@ public class BattleManager : MonoBehaviour {
 			playerBehaviour.battleManager = this;
 			if(playerBehaviour is WarriorBehaviour){
 				warriorUI = Instantiate (prefabWarriorUI, transform.position, Quaternion.identity);
-				warriorUI.transform.parent = playerUI.transform;
+				warriorUI.transform.SetParent (playerUI.transform, false);
 				warriorLifeSlider = GameObject.Find ("WarriorLifeSlider").GetComponent<Slider> ();
 				warriorSpecialSlider = GameObject.Find ("WarriorSpecialSlider").GetComponent<Slider> ();
 			}
 			else if(playerBehaviour is MageBehaviour){
 				mageUI = Instantiate (prefabMageUI, transform.position, Quaternion.identity);
-				mageUI.transform.parent = playerUI.transform;
-				mageLifeSlider = GameObject.Find ("MageLifeSlider").GetComponent<Slider> ();
+                mageUI.transform.SetParent(playerUI.transform, false);
+                mageLifeSlider = GameObject.Find ("MageLifeSlider").GetComponent<Slider> ();
 				mageSpecialSlider = GameObject.Find ("MageSpecialSlider").GetComponent<Slider> ();
 			}
 			else if(playerBehaviour is ArcherBehaviour){
 				archerUI = Instantiate (prefabArcherUI, transform.position, Quaternion.identity);
-				archerUI.transform.parent = playerUI.transform;
-				archerLifeSlider = GameObject.Find ("ArcherLifeSlider").GetComponent<Slider> ();
+                archerUI.transform.SetParent(playerUI.transform, false);
+                archerLifeSlider = GameObject.Find ("ArcherLifeSlider").GetComponent<Slider> ();
 				archerSpecialSlider = GameObject.Find ("ArcherSpecialSlider").GetComponent<Slider> ();
 			}
 			x += 2.23f;
