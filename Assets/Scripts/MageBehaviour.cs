@@ -26,10 +26,13 @@ public class MageBehaviour : PlayerBehaviour {
 		set{}
 	}
 
+    public void StartSpecial() {
+        GameObject attackObject = Instantiate(prefabAttack, enemiesAttacking[0].transform.position, Quaternion.identity);
+        attackObject.GetComponent<Animator>().SetInteger("State", stateSpecial);
+    }
+
 	public override void FinishSpecial(){
 		EnemyBehaviour enemy = enemiesAttacking [0].GetComponent<EnemyBehaviour> ();
-		GameObject attackObject = Instantiate (prefabAttack, enemiesAttacking [0].transform.position, Quaternion.identity);
-		attackObject.GetComponent<Animator> ().SetInteger ("State", stateSpecial);
 		float attack = enemy.Life - specialValue + enemy.Defense;
 		enemy.Life = attack;
 		enemy.IsSelected = false;

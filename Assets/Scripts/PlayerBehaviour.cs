@@ -147,7 +147,7 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 			GameManager.isPotionSelected = false;
 			GameManager.RewardPotion (-1);
 			//battleManager.potionTxt.text = GameManager.potions + "x";
-		}else if ((battleManager.Turn == BattleManager.TURN.PLAYERTURN || battleManager.AllEnemiesFrozen) && state == STATE.NOTSELECTED) {
+		}else if (battleManager != null && (battleManager.Turn == BattleManager.TURN.PLAYERTURN || battleManager.AllEnemiesFrozen) && state == STATE.NOTSELECTED) {
 			battleManager.ShowBattleUI (this.gameObject);
 			if (special <= 0)
 				battleManager.specialButton.SetActive (false);
@@ -175,5 +175,9 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 		anim.SetInteger ("State", 0);
 		//print ("Not selected");
 	}
+
+    public void SetStateIdle() {
+        anim.SetInteger("State", 0);
+    }
 		
 }

@@ -331,6 +331,7 @@ public class BattleManager : MonoBehaviour {
 				turn = TURN.PLAYERTURN;
 
 				for (i = 0; i < enemies.Count; i++) {
+                    Debug.Log("checking enemy " + i);
 					enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
 					// O inimigo inicia o turno se ele não estiver congelado ou se estiver congelado mas já tenha ficado 1 turno assim
 					if ((enemyBehaviour.State == EnemyBehaviour.STATE.FROZEN && enemyBehaviour.TurnsFrozen == 1) ||
@@ -367,14 +368,23 @@ public class BattleManager : MonoBehaviour {
 	}
 
 	void EndGame(){
-		gameManager.enemies.Clear();
+        foreach(GameObject go in enemies) {
+            Destroy(go);
+        }
+        foreach (GameObject go in players) {
+            Destroy(go);
+        }
+        gameManager.enemies.Clear();
+        enemies.Clear();
+        players.Clear();
 		gameManager.players.Clear();
 		GameManager.potions = 0;
 		Application.LoadLevel ("MainMenu");
 	}
 
 	void NextRoom(){
-		Application.LoadLevel ("ExplorationScene");
+        gameManager.enemies.Clear();
+        Application.LoadLevel ("ExplorationScene");
 	}
 		
 	// Checa se, nesse turno, algum player foi atacado

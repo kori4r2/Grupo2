@@ -125,19 +125,21 @@ public class EnemyBehaviour : MonoBehaviour {
 		battleManager.EnemySelected (this);
 	}
 
-	// Gera o objeto de ataque
-	public void Attack(){
-		if (attackType == 1) 
-			attackObject = Instantiate (prefabAttack1, new Vector3 (transform.position.x, transform.position.y - 3f, transform.position.z), transform.rotation);
-		else
-			attackObject = Instantiate (prefabAttack2, new Vector3 (transform.position.x, transform.position.y - 5f, transform.position.z), transform.rotation);
-		attackObject.name = "StraightLineAttack";
-		anim.SetInteger ("State", 0);
-		print ("State = " + anim.GetInteger ("State"));
-		print ("Instanciou");
-		
-		state = EnemyBehaviour.STATE.NOTSELECTED;
-	}
+    // Gera o objeto de ataque
+    public void Attack() {
+        if (attackType == 1)
+            attackObject = Instantiate(prefabAttack1, new Vector3(transform.position.x, transform.position.y - 3f, transform.position.z), transform.rotation);
+        else
+            attackObject = Instantiate(prefabAttack2, new Vector3(transform.position.x, transform.position.y - 5f, transform.position.z), transform.rotation);
+        attackObject.name = "StraightLineAttack";
+        anim.SetInteger("State", 0);
+        print("State = " + anim.GetInteger("State"));
+        print("Instanciou");
+    }
+
+    public void SetInactive() {
+        state = EnemyBehaviour.STATE.NOTSELECTED;
+    }
 
 	// Define o próximo destino do inimigo
 	public void Move(){

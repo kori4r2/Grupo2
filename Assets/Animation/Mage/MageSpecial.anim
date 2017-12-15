@@ -20,25 +20,25 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 21300000, guid: 4706560bcc394c34582c50558a2e2bcb, type: 3}
-    - time: 0.06666667
+    - time: 0.14285715
       value: {fileID: 21300000, guid: 80ec8b957d7a10d4ebff0841643adc43, type: 3}
-    - time: 0.13333334
+    - time: 0.2857143
       value: {fileID: 21300000, guid: d61e3e555c03d644b892097b47355560, type: 3}
-    - time: 0.2
+    - time: 0.42857143
       value: {fileID: 21300000, guid: 43b46cc2818c74246a1924d0f13e281a, type: 3}
-    - time: 0.26666668
+    - time: 0.5714286
       value: {fileID: 21300000, guid: 92c992e7c3e383e4dbfae3b3c75b99cb, type: 3}
-    - time: 0.33333334
+    - time: 0.71428573
       value: {fileID: 21300000, guid: fe806ad6f51d08346a1399575e87346a, type: 3}
-    - time: 0.4
+    - time: 0.85714287
       value: {fileID: 21300000, guid: 80fcbe4bbdba8b344a297e7ee448360a, type: 3}
-    - time: 0.46666667
+    - time: 1
       value: {fileID: 21300000, guid: 70981464f909a2b42a35ecd7b9dd4b08, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 15
+  m_SampleRate: 7
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -66,7 +66,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.53333336
+    m_StopTime: 1.1428572
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -87,14 +87,21 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_GenerateMotionCurves: 0
   m_Events:
-  - time: 0.4
+  - time: 0.5714286
+    functionName: StartSpecial
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.85714287
     functionName: FinishSpecial
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.46666667
+  - time: 1.1428572
     functionName: SetNotSelected
     data: 
     objectReferenceParameter: {fileID: 0}
