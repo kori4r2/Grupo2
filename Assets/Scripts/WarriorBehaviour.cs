@@ -30,5 +30,10 @@ public class WarriorBehaviour : PlayerBehaviour {
 
 	public override void FinishSpecial (){
 	}
+
+	public void ShieldAnim(){
+		GameObject defenseObject = Instantiate (prefabAttack, transform.position, Quaternion.identity);
+		defenseObject.GetComponent<Animator> ().SetInteger ("State", 5);
+	}
 		
 }

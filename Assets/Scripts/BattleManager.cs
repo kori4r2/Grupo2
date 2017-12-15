@@ -299,6 +299,7 @@ public class BattleManager : MonoBehaviour {
 						warrior.anim.SetInteger ("State", 2);
 						warrior.Special = warrior.Special - warrior.SpecialValue;
 						warriorSpecialSlider.value = warrior.Special;
+
 					}
 				}
 			}
