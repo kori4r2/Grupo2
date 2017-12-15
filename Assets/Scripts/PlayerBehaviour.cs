@@ -21,10 +21,10 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 	public abstract string Name{ get; set;}
 
 	private float speed; // velocidade da movimentacao do personagem
-	protected float attackValue = 10f;
+	protected float attackValue;
 	private float life = 100f;
 	private float special = 100f;
-	private float defense = 5f;
+	protected float defense;
 	private int level;
 	private float secondary = 100f;
 	private int actionsOnTurn = 0;
@@ -175,23 +175,5 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 		anim.SetInteger ("State", 0);
 		//print ("Not selected");
 	}
-
-	public void FinishAttack(){
-		GameObject attackObject;
-		int i;
-		float attack;
-		EnemyBehaviour enemy;
-		attackObject = Instantiate (prefabAttack, enemiesAttacking [0].transform.position, Quaternion.identity);
-		attackObject.GetComponent<Animator> ().SetInteger ("State", stateAttack);
-		enemy = enemiesAttacking [0].GetComponent<EnemyBehaviour> ();
-		attack = enemy.Life - attackValue + enemy.Defense;
-		enemy.Life = attack;
-		enemy.IsSelected = false;
-		if (enemy.Life <= 0)
-			battleManager.DestroyEnemy (enemy);
-		else
-			print ("Vida enemy = " + enemy.Life);
-		enemiesAttacking.Clear ();
-	}
-
+		
 }
