@@ -78,7 +78,7 @@ public class RoomManager : MonoBehaviour {
 				
 		}
 			
-		dieRoom = (int) Random.Range (0f, 2.9f);
+		dieRoom = (int) Random.Range (0.8f, 1.9f);
 		this.GetComponent<SpriteRenderer> ().sprite = rooms[dieRoom];
 
 		if (dieRoom == 1) { // cena de batalha
