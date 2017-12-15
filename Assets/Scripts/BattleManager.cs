@@ -367,11 +367,11 @@ public class BattleManager : MonoBehaviour {
 	}
 
 	void EndGame(){
-
+		Application.LoadLevel ("MainMenu");
 	}
 
 	void NextRoom(){
-
+		Application.LoadLevel ("ExplorationScene");
 	}
 		
 	// Checa se, nesse turno, algum player foi atacado

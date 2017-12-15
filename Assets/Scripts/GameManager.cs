@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -27,7 +28,7 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		DontDestroyOnLoad (this.gameObject);
-		potions = 2;	//teste
+		potions = 0;	//teste
 		state = STATE.EXPLORATION;
 	}
 
@@ -73,6 +74,12 @@ public class GameManager : MonoBehaviour {
 		ogre.GetComponent<EnemyBehaviour> ().AttackType = attackType;
 		enemies.Add (ogre);
 		DontDestroyOnLoad (ogre);
+	}
+
+	public static void RewardPotion(int n){
+		potions += n;
+		GameObject potionTxt = GameObject.Find ("TxtPotion");
+		potionTxt.GetComponent<Text> ().text = "" + potions + "x";
 	}
 
 }

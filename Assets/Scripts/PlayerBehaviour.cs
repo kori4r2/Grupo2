@@ -145,8 +145,8 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 			life += 15;
 			print("Life player after potion= " + life);
 			GameManager.isPotionSelected = false;
-			GameManager.potions--;
-			battleManager.potionTxt.text = GameManager.potions + "x";
+			GameManager.RewardPotion (-1);
+			//battleManager.potionTxt.text = GameManager.potions + "x";
 		}else if ((battleManager.Turn == BattleManager.TURN.PLAYERTURN || battleManager.AllEnemiesFrozen) && state == STATE.NOTSELECTED) {
 			battleManager.ShowBattleUI (this.gameObject);
 			if (special <= 0)

@@ -24,12 +24,15 @@ public class RoomManager : MonoBehaviour {
 	public List<GameObject> heros;
 	public GameManager gameManager;
 
+	public Text potionTxt;
+
 	// Use this for initialization
 	void Start () {
 		initialPosition = new Vector2 (0f, 0f);
 		this.gameObject.GetComponent<SpriteRenderer> ().sprite = rooms[0];
 		dieRoom = (int) Random.Range (0f, 2.9f);
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager>();
+		GameManager.RewardPotion (0);
 	}
 	
 	// Update is called once per frame
@@ -46,6 +49,7 @@ public class RoomManager : MonoBehaviour {
 	}
 
 	void OnMouseUp() {
+		int i, counter = 0;
 		distanceX = finalPosition.x - initialPosition.x;
 		distanceY = finalPosition.y - initialPosition.y;
 		totalDistanceX = Mathf.Sqrt (Mathf.Pow (initialPosition.x - finalPosition.x, 2));
@@ -85,22 +89,53 @@ public class RoomManager : MonoBehaviour {
 			heroText.text = "";
 			//gameObject.GetComponent<Collider> ().enabled = !gameObject.GetComponent<Collider> ().enabled;
 			Application.LoadLevel ("BattleScene");
+			GameManager.state = GameManager.STATE.BATTLE;
 		} else if (dieRoom == 0) { // cena de encontrar aventureiro
+			GameManager.state = GameManager.STATE.EXPLORATION;
 			dieHero = (int)Random.Range (0f, 2.9f);
 			string heroName = heros [dieHero].GetComponent<PlayerBehaviour> ().Name;
-			heroText.text = "Parabéns! Você encontrou um novo aventureiro para a sua equipe da classe " + heroName;
+
 			if (heroName == "Arqueiro") {
-				gameManager.InstantiateArcher (-1f, 0f, 0f);
+				for (i = 0; i < gameManager.players.Count; i++) {
+					if (gameManager.players [i].GetComponent<PlayerBehaviour> () is ArcherBehaviour)
+						break;
+					counter++;
+				}
+				if (counter == gameManager.players.Count) {
+					gameManager.InstantiateArcher (-1f, 0f, 0f);
+					heroText.text = "Parabéns! Você encontrou um novo aventureiro para a sua equipe da classe " + heroName;
+				}
 			} else if (heroName == "Mago") {
-				gameManager.InstantiateMage (1f, 0f, 0f);
+				for (i = 0; i < gameManager.players.Count; i++) {
+					if (gameManager.players [i].GetComponent<PlayerBehaviour> () is MageBehaviour)
+						break;
+					counter++;
+				}
+				if (counter == gameManager.players.Count) {
+					gameManager.InstantiateMage (1f, 0f, 0f);
+					heroText.text = "Parabéns! Você encontrou um novo aventureiro para a sua equipe da classe " + heroName;
+				}
 			} else {
-				gameManager.InstantiateWarrior (0f, 0f, 0f);
+				for (i = 0; i < gameManager.players.Count; i++) {
+					if (gameManager.players [i].GetComponent<PlayerBehaviour> () is WarriorBehaviour)
+						break;
+					counter++;
+				}
+				if (counter == gameManager.players.Count) {
+					gameManager.InstantiateWarrior (0f, 0f, 0f);
+					heroText.text = "Parabéns! Você encontrou um novo aventureiro para a sua equipe da classe " + heroName;
+				}
 			}
 		} else { // cena de exploração
-			heroText.text = "";
+			heroText.text = "Você ganhou mais uma poção!";
+			GameManager.RewardPotion (1);
 		}
 
 		initialPosition = new Vector2 (0f, 0f);
+	}
+
+	public void OnClickPotion(){
+		gameManager.OnClickPotion ();
 	}
 
 }
