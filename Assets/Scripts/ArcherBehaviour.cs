@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ArcherBehaviour : PlayerBehaviour {
 
-	private float specialValue = 16f;
+	private float specialValue = 24f;
 
 	void Start () {
 		stateAttack = 4;
 		stateSpecial = 4;
-		attackValue = 16f;
+		attackValue = 24f;
 		defense = 17f;
 	}
 

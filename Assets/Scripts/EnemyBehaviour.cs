@@ -131,7 +131,7 @@ public class EnemyBehaviour : MonoBehaviour {
         if (attackType == 1)
             attackObject = Instantiate(prefabAttack1, new Vector3(transform.position.x, transform.position.y - 3f, transform.position.z), transform.rotation);
         else
-            attackObject = Instantiate(prefabAttack2, new Vector3(transform.position.x, transform.position.y - 5f, transform.position.z), transform.rotation);
+            attackObject = Instantiate(prefabAttack2, new Vector3(transform.position.x, transform.position.y - 4f, transform.position.z), transform.rotation);
         attackObject.name = "StraightLineAttack";
         anim.SetInteger("State", 0);
         print("State = " + anim.GetInteger("State"));

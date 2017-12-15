@@ -88,10 +88,10 @@ public class BattleManager : MonoBehaviour {
 			gameManager.InstantiateOgre (1f, 3.0f, 0f, 2);
 		}
 		// Para cada player no gameManager, instancia-o na cena de batalha, bem como seus elementos de UI.
-		for (i = 0; i < gameManager.players.Count; i++) {
-			players.Add(gameManager.players[i]);
-			players [i].transform.position = new Vector3 (x, y, z);
-			playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+		foreach (GameObject player in gameManager.players) {
+			players.Add(player);
+			player.transform.position = new Vector3 (x, y, z);
+			playerBehaviour = player.GetComponent<PlayerBehaviour> ();
 			playerBehaviour.battleManager = this;
 			if(playerBehaviour is WarriorBehaviour){
 				warriorUI = Instantiate (prefabWarriorUI, transform.position, Quaternion.identity);
@@ -114,17 +114,17 @@ public class BattleManager : MonoBehaviour {
 			x += 2.23f;
 		}
 
-		for (i = 0; i < gameManager.enemies.Count; i++) {
-			enemies.Add (gameManager.enemies [i]);
-			if (enemies [i].GetComponent<EnemyBehaviour> ().AttackType == 1) {
+		foreach (GameObject enemy in gameManager.enemies) {
+			enemies.Add (enemy);
+			if (enemy.GetComponent<EnemyBehaviour> ().AttackType == 1) {
 				ogreUI1 = Instantiate (prefabOgreUI1, transform.position, Quaternion.identity);
 				ogreUI1.transform.parent = enemyUI.transform;
-                enemies[i].GetComponent<EnemyBehaviour>().UIElement = ogreUI1;
+                enemy.GetComponent<EnemyBehaviour>().UIElement = ogreUI1;
 				ogreLifeSlider1 = GameObject.Find ("OgreLifeSlider1").GetComponent<Slider> ();
 			}else{
 				ogreUI2 = Instantiate (prefabOgreUI2, transform.position, Quaternion.identity);
 				ogreUI2.transform.parent = enemyUI.transform;
-                enemies[i].GetComponent<EnemyBehaviour>().UIElement = ogreUI2;
+                enemy.GetComponent<EnemyBehaviour>().UIElement = ogreUI2;
                 ogreLifeSlider2 = GameObject.Find ("OgreLifeSlider2").GetComponent<Slider> ();
 			}
 
@@ -184,8 +184,8 @@ public class BattleManager : MonoBehaviour {
 		PlayerBehaviour playerBehaviour;
 		EnemyBehaviour enemyBehaviour;
 
-		for (i = 0; i < enemies.Count; i++) {
-			enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
+		foreach (GameObject enemy in enemies) {
+			enemyBehaviour = enemy.GetComponent<EnemyBehaviour> ();
 			if (enemyBehaviour.AttackType == 1)
 				ogreLifeSlider1.value = enemyBehaviour.Life;
 			else
@@ -205,8 +205,8 @@ public class BattleManager : MonoBehaviour {
 				// Verify if a character was selected BEFORE, and not exactly now. 
 				// We need to do it to obtain a good synchronization with the OnMouseDown() method from PlayerBehaviour.
 
-				for (i = 0; i < players.Count; i++) {
-					playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+				foreach (GameObject player in players) {
+					playerBehaviour = player.GetComponent<PlayerBehaviour> ();
 					// MOVIMENTAÇÃO DO PLAYER
 					if ((playerBehaviour.State == PlayerBehaviour.STATE.SELECTED) && // Se há um player selecionado e não tocou em um colisor
 					    ((!Physics2D.Raycast (new Vector2 (Camera.main.ScreenToWorldPoint (Input.mousePosition).x, 
@@ -223,18 +223,18 @@ public class BattleManager : MonoBehaviour {
 					} else {
 						initialPosition = (Vector2)Camera.main.ScreenToWorldPoint (Input.mousePosition);
 						if (playerBehaviour.State == PlayerBehaviour.STATE.WAITATTACK) {		// Se o player vai atacar
-							for (j = 0; j < enemies.Count; j++) {
-								enemyBehaviour = enemies [j].GetComponent<EnemyBehaviour> ();
+							foreach (GameObject enemy in enemies) {
+								enemyBehaviour = enemy.GetComponent<EnemyBehaviour> ();
 								//ATAQUE DO PLAYER
 								if (enemyBehaviour.IsSelected) {		// Se um inimigo foi selecionado
-									playerBehaviour.Attack (enemies[j]);
+									playerBehaviour.Attack (enemy);
 								}
 							}
 						} else if (playerBehaviour.State == PlayerBehaviour.STATE.SPECIAL && playerBehaviour is MageBehaviour) {	// Se o player está em special
 							 //else if (playerBehaviour is MageBehaviour) {	// Se é o special do mage
 							MageBehaviour mageBehaviour = (MageBehaviour) playerBehaviour;
-							for (j = 0; j < enemies.Count; j++) {
-								enemyBehaviour = enemies [j].GetComponent<EnemyBehaviour> ();
+							foreach (GameObject enemy in enemies) {
+								enemyBehaviour = enemy.GetComponent<EnemyBehaviour> ();
 								//SPECIAL DO MAGO
 								if (enemyBehaviour.IsSelected) {		// Se um inimigo foi selecionado
 									List<GameObject> list = new List<GameObject>();
@@ -247,9 +247,9 @@ public class BattleManager : MonoBehaviour {
 				}
 			}
 			// Verifica quantos enemies estão em espera para atacar
-			for (i = 0; i < enemies.Count; i++) {
+			foreach (GameObject enemy in enemies) {
 				print ("Preso aqui");
-				enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
+				enemyBehaviour = enemy.GetComponent<EnemyBehaviour> ();
 				if ((enemyBehaviour.State != EnemyBehaviour.STATE.WAITATTACK && enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN)
 					/*|| enemyBehaviour.State == EnemyBehaviour.STATE.FROZEN*/)
 					break;
@@ -257,21 +257,21 @@ public class BattleManager : MonoBehaviour {
 			}
 			if (counter == enemies.Count || (allEnemiesFrozen && timerFrozen > enemies[0].GetComponent<EnemyBehaviour>().time)) { 		// Se todos os inimigos estão esperando, entra no turno de espera
 				turn = TURN.WAITTURN;
-				for (i = 0; i < players.Count; i++) {		// Verifica se há um player prestes a agir
-					playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+				foreach (GameObject player in players) {		// Verifica se há um player prestes a agir
+					playerBehaviour = player.GetComponent<PlayerBehaviour> ();
 					if (playerBehaviour.State == PlayerBehaviour.STATE.SELECTED || playerBehaviour.State == PlayerBehaviour.STATE.WAITATTACK ||
 						playerBehaviour.State == PlayerBehaviour.STATE.FROZEN) {
 						playerBehaviour.State = PlayerBehaviour.STATE.NOTSELECTED;
 						battleUI.SetActive (false);
 					}
 				}
-				for (i = 0; i < enemies.Count; i++)
-					enemies [i].GetComponent<EnemyBehaviour> ().IsSelected = false;
+				foreach (GameObject enemy in enemies)
+					enemy.GetComponent<EnemyBehaviour> ().IsSelected = false;
 			}
 		} else if (turn == TURN.WAITTURN) { 		// Se estão no turno de espera
 			//print ("Turno de espera");
-			for (i = 0; i < players.Count; i++) {
-				playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+			foreach (GameObject player in players) {
+				playerBehaviour = player.GetComponent<PlayerBehaviour> ();
 				if (playerBehaviour.State != PlayerBehaviour.STATE.NOTSELECTED && playerBehaviour.State != PlayerBehaviour.STATE.SPECIAL &&
 				    playerBehaviour.State != PlayerBehaviour.STATE.FROZEN) {
 					break;
@@ -282,8 +282,8 @@ public class BattleManager : MonoBehaviour {
 			if (counter == players.Count) {		// Se todos os players pararam de agir, vai para o turno do inimigo
 				print("counter");
 				turn = TURN.ENEMYTURN;
-				for (i = 0; i < players.Count; i++) {
-					playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+				foreach (GameObject player in players) {
+					playerBehaviour = player.GetComponent<PlayerBehaviour> ();
 					if (playerBehaviour is WarriorBehaviour && playerBehaviour.State == PlayerBehaviour.STATE.SPECIAL) {
 						WarriorBehaviour warrior = (WarriorBehaviour)playerBehaviour;
 						warrior.anim.SetInteger ("State", 2);
@@ -291,9 +291,9 @@ public class BattleManager : MonoBehaviour {
 						warriorSpecialSlider.value = warrior.Special;
 					}
 				}
-				for (i = 0; i < enemies.Count; i++) {
+				foreach (GameObject enemy in enemies) {
 					print ("Loop");
-					enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
+					enemyBehaviour = enemy.GetComponent<EnemyBehaviour> ();
 					if (enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN) {
 						enemyBehaviour.State = EnemyBehaviour.STATE.ATTACKING;
 						if (enemyBehaviour.AttackType == 1)
@@ -308,8 +308,8 @@ public class BattleManager : MonoBehaviour {
 		} else if (turn == TURN.ENEMYTURN) {
 			timerShockwave += Time.deltaTime;
 			// Checa se todos os inimigos ainda estão atacando
-			for (i = 0; i < enemies.Count; i++) {
-				enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
+			foreach (GameObject enemy in enemies) {
+				enemyBehaviour = enemy.GetComponent<EnemyBehaviour> ();
 				//if (enemyBehaviour.State != EnemyBehaviour.STATE.NOTSELECTED && enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN)
 				if(enemyBehaviour.State == EnemyBehaviour.STATE.ATTACKING)
 					break;
@@ -332,9 +332,8 @@ public class BattleManager : MonoBehaviour {
 				int i;
 				turn = TURN.PLAYERTURN;
 
-				for (i = 0; i < enemies.Count; i++) {
-                    Debug.Log("checking enemy " + i);
-					enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
+				foreach (GameObject enemy in enemies) {
+					enemyBehaviour = enemy.GetComponent<EnemyBehaviour> ();
 					// O inimigo inicia o turno se ele não estiver congelado ou se estiver congelado mas já tenha ficado 1 turno assim
 					if ((enemyBehaviour.State == EnemyBehaviour.STATE.FROZEN && enemyBehaviour.TurnsFrozen == 1) ||
 					    enemyBehaviour.State != EnemyBehaviour.STATE.FROZEN) {
@@ -355,8 +354,8 @@ public class BattleManager : MonoBehaviour {
 				}
 				else
 					allEnemiesFrozen = false;
-				for (i = 0; i < players.Count; i++) {
-					PlayerBehaviour playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+				foreach (GameObject player in players) {
+					PlayerBehaviour playerBehaviour = player.GetComponent<PlayerBehaviour> ();
 					playerBehaviour.State = PlayerBehaviour.STATE.NOTSELECTED;
 					print ("Not selected state on check");
 					playerBehaviour.IsColliding = false;
@@ -394,8 +393,8 @@ public class BattleManager : MonoBehaviour {
 		List<PlayerBehaviour> playersColliding = new List<PlayerBehaviour>();
 		int i;
 		// Verifica quais os players que estão colidindo
-		for (i = 0; i < players.Count; i++) {
-			PlayerBehaviour playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+		foreach (GameObject player in players) {
+			PlayerBehaviour playerBehaviour = player.GetComponent<PlayerBehaviour> ();
 			if (playerBehaviour.IsColliding) {
 				playersColliding.Add (playerBehaviour);
 				print ("Colision checked");
@@ -410,25 +409,25 @@ public class BattleManager : MonoBehaviour {
 
 
 			// Verifica se há um warrior no meio do caminho usando special
-			for(i = playersColliding.Count - 1; i >= 0; i--){
-				if (playersColliding [i] is WarriorBehaviour && playersColliding [i].State == PlayerBehaviour.STATE.SPECIAL) {
-					WarriorBehaviour warrior = (WarriorBehaviour)playersColliding [i];
+			foreach(PlayerBehaviour player in playersColliding){
+				if (player is WarriorBehaviour && player.State == PlayerBehaviour.STATE.SPECIAL) {
+					WarriorBehaviour warrior = (WarriorBehaviour)player;
 					warrior.ShieldAnim ();
-					FreezeOgre (playersColliding [i].Collider);
+					FreezeOgre (player.Collider);
 					break;
 				}
 				// Se não é um warrior usando special, recebe dano
 				print ("Colide");
-				SetLifePlayer (playersColliding[i].Collider, playersColliding[i]);
-				playersColliding[i].IsColliding = false;
+				SetLifePlayer (player.Collider, player);
+				player.IsColliding = false;
 			}
 
 		}			
 
 		// Destrói todos os objetos de ataque
 
-		for (i = 0; i < enemies.Count; i++) {
-			EnemyBehaviour enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
+		foreach (GameObject enemy in enemies) {
+			EnemyBehaviour enemyBehaviour = enemy.GetComponent<EnemyBehaviour> ();
 			if(enemyBehaviour.AttackObject != null)
 				Destroy (enemyBehaviour.AttackObject);
 			print ("Destruiu");
@@ -444,8 +443,8 @@ public class BattleManager : MonoBehaviour {
 	// Diminui a vida do player baseada nos atributos de ataque do inimigo que gerou o ataque com Collider coll
 	void SetLifePlayer(Collider2D coll, PlayerBehaviour player){
 		EnemyBehaviour enemyBehaviour;
-		for (int i = 0; i < enemies.Count; i++) {
-			enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
+		foreach (GameObject enemy in enemies) {
+			enemyBehaviour = enemy.GetComponent<EnemyBehaviour> ();
 			if (enemyBehaviour.AttackObject == coll.gameObject) { 
 				player.Life -= enemyBehaviour.AttackValue - player.Defense;
 				print ("player life = " + player.Life);
@@ -473,8 +472,8 @@ public class BattleManager : MonoBehaviour {
 
 	void FreezeOgre(Collider2D coll){
 		EnemyBehaviour enemyBehaviour;
-		for (int i = 0; i < enemies.Count; i++) {
-			enemyBehaviour = enemies [i].GetComponent<EnemyBehaviour> ();
+		foreach (GameObject enemy in enemies) {
+			enemyBehaviour = enemy.GetComponent<EnemyBehaviour> ();
 			if (enemyBehaviour.AttackObject == coll.gameObject) {
 				enemyBehaviour.State = EnemyBehaviour.STATE.FROZEN;
 				print ("Congelou");
@@ -484,8 +483,8 @@ public class BattleManager : MonoBehaviour {
 
 	public void EnemySelected(EnemyBehaviour enemyBehaviour){
 		PlayerBehaviour playerBehaviour;
-		for (int i = 0; i < players.Count; i++) {
-			playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+		foreach (GameObject player in players) {
+			playerBehaviour = player.GetComponent<PlayerBehaviour> ();
 			if (playerBehaviour.State == PlayerBehaviour.STATE.WAITATTACK || playerBehaviour.State == PlayerBehaviour.STATE.SPECIAL) {
 				enemyBehaviour.IsSelected = true;
 				return;
@@ -497,11 +496,11 @@ public class BattleManager : MonoBehaviour {
 	public void ShowBattleUI(GameObject player){
 		int i;
 		PlayerBehaviour playerBehaviour;
-		for (i = 0; i < players.Count; i++) {
-			playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
-			if (!players [i].Equals (player) && (playerBehaviour.State == PlayerBehaviour.STATE.SELECTED) || 
+		foreach (GameObject otherPlayer in players) {
+			playerBehaviour = otherPlayer.GetComponent<PlayerBehaviour> ();
+			if (!otherPlayer.Equals (player) && (playerBehaviour.State == PlayerBehaviour.STATE.SELECTED) || 
 				playerBehaviour.State == PlayerBehaviour.STATE.SPECIAL)
-				players [i].GetComponent<PlayerBehaviour> ().State = PlayerBehaviour.STATE.NOTSELECTED;
+				otherPlayer.GetComponent<PlayerBehaviour> ().State = PlayerBehaviour.STATE.NOTSELECTED;
 		}
 		battleUI.transform.position = player.transform.position;
 		battleUI.SetActive (true);
@@ -511,8 +510,8 @@ public class BattleManager : MonoBehaviour {
 	public void OnClickAttack(){
 		int i;
 		PlayerBehaviour playerBehaviour;
-		for (i = 0; i < players.Count; i++) {
-			playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+		foreach (GameObject player in players) {
+			playerBehaviour = player.GetComponent<PlayerBehaviour> ();
 			if (playerBehaviour.State == PlayerBehaviour.STATE.SELECTED) {
 				playerBehaviour.State = PlayerBehaviour.STATE.WAITATTACK;
 				battleUI.SetActive (false);
@@ -525,8 +524,8 @@ public class BattleManager : MonoBehaviour {
 	public void OnClickSpecial(){
 		int i;
 		PlayerBehaviour playerBehaviour;
-		for (i = 0; i < players.Count; i++) {
-			playerBehaviour = players [i].GetComponent<PlayerBehaviour> ();
+		foreach (GameObject player in players) {
+			playerBehaviour = player.GetComponent<PlayerBehaviour> ();
 			if (playerBehaviour.State == PlayerBehaviour.STATE.SELECTED) {
 				if (playerBehaviour is ArcherBehaviour) {		// Se é o special do archer
 					ArcherBehaviour archerBehaviour = (ArcherBehaviour)playerBehaviour;

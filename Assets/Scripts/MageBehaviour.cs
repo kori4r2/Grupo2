@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class MageBehaviour : PlayerBehaviour {
 		
-	public float specialValue = 35f;
+	public float specialValue = 40f;
 
 
 	void Start () {
 		stateAttack = 3;
 		stateSpecial = 1;
-		attackValue = 16f;
+		attackValue = 18f;
 		defense = 0f;
 	}
 
