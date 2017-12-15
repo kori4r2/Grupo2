@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject prefabWarrior;
 	public GameObject prefabMage;
 	public GameObject prefabArcher;
+	public GameObject prefabOgre;
 
 	public static STATE state;
 
@@ -64,6 +65,13 @@ public class GameManager : MonoBehaviour {
 		archer.name = "Archer";
 		players.Add (archer);
 		DontDestroyOnLoad (archer);
+	}
+
+	public void InstantiateOgre(float x, float y, float z){
+		GameObject ogre = Instantiate (prefabOgre, new Vector3 (x, y, z), Quaternion.identity);
+		ogre.name = "Ogre";
+		enemies.Add (ogre);
+		DontDestroyOnLoad (ogre);
 	}
 
 }

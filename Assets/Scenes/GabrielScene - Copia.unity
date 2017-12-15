@@ -139,6 +139,7 @@ RectTransform:
   m_Children:
   - {fileID: 614826966}
   - {fileID: 332481713}
+  - {fileID: 2111338975}
   m_Father: {fileID: 1424036245}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1296,6 +1297,7 @@ MonoBehaviour:
   specialButton: {fileID: 1183013155}
   potionTxt: {fileID: 1856668427}
   playerUI: {fileID: 332481712}
+  enemyUI: {fileID: 2111338974}
   players: []
   enemies: []
   warriorLifeSlider: {fileID: 0}
@@ -1304,14 +1306,18 @@ MonoBehaviour:
   mageSpecialSlider: {fileID: 0}
   archerLifeSlider: {fileID: 0}
   archerSpecialSlider: {fileID: 0}
+  ogreLifeSlider: {fileID: 0}
   warriorUI: {fileID: 0}
   mageUI: {fileID: 0}
   archerUI: {fileID: 0}
+  ogreUI: {fileID: 0}
   prefabWarriorUI: {fileID: 1289544786991636, guid: 3a8492761b8c93843aad24b2d777a2f7,
     type: 2}
   prefabMageUI: {fileID: 1641908882830292, guid: c76f8431a51ab2f429ae2cf81da9df82,
     type: 2}
   prefabArcherUI: {fileID: 1347361197597984, guid: 2cd9e98b7f7e362499c56eaf0377b1ff,
+    type: 2}
+  prefabOgreUI: {fileID: 1173847025637642, guid: 0bd008c3c1ef56848ae8b21130a87fdf,
     type: 2}
 --- !u!4 &1607474098
 Transform:
@@ -1545,3 +1551,59 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2111338974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2111338975}
+  - component: {fileID: 2111338976}
+  m_Layer: 5
+  m_Name: Ogres
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2111338975
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2111338974}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.64999986, y: 8.6, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 112423165}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.65, y: 8.6}
+  m_SizeDelta: {x: 3.8965, y: 0.975}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2111338976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2111338974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1

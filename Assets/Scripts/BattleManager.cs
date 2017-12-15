@@ -1,17 +1,8 @@
-﻿/* Universidade de Sao Paulo - ICMC - Outubro de 2017
-   Autores: Klinsmann Hengles, Felipe Torres e Gabriel Carvalho
-   Script desenvolvido para o jogo Infinite Dungeon
-   Descrição: Script que comanda as ações principais do jogo, como quando surgem os inimigos, os personagens, distribui a experiencia, etc.*/ 
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 public class BattleManager : MonoBehaviour {
-
-	//TODO
-	//	Checar o campo de batalha, ou seja, não deixar os personagens andarem pra onde não devem
-	//
 
 	public enum TURN {CHECK, PLAYERTURN, WAITTURN, ENEMYTURN} // possiveis estados do jogo
 
@@ -23,6 +14,7 @@ public class BattleManager : MonoBehaviour {
 	public GameObject specialButton;
 	public Text potionTxt;
 	public GameObject playerUI;
+	public GameObject enemyUI;
 
 	private TURN turn; // determina o estado do turno
 
@@ -39,14 +31,17 @@ public class BattleManager : MonoBehaviour {
 	public Slider mageSpecialSlider;
 	public Slider archerLifeSlider;
 	public Slider archerSpecialSlider;
+	public Slider ogreLifeSlider;
 
 	public GameObject warriorUI;
 	public GameObject mageUI;
 	public GameObject archerUI;
+	public GameObject ogreUI;
 
 	public GameObject prefabWarriorUI;
 	public GameObject prefabMageUI;
 	public GameObject prefabArcherUI;
+	public GameObject prefabOgreUI;
 
 	private GameManager gameManager;
 
@@ -83,7 +78,7 @@ public class BattleManager : MonoBehaviour {
 
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 
-
+		gameManager.InstantiateOgre(0.12f, 2.17f, 0f);
 		// Para cada player no gameManager, instancia-o na cena de batalha, bem como seus elementos de UI.
 		for (i = 0; i < gameManager.players.Count; i++) {
 			players.Add(gameManager.players[i]);
@@ -110,6 +105,13 @@ public class BattleManager : MonoBehaviour {
 			}
 			x += 2.23f;
 		}
+
+
+		enemies.Add (gameManager.enemies [0]);
+		ogreUI = Instantiate (prefabOgreUI, transform.position, Quaternion.identity);
+		ogreUI.transform.parent = enemyUI.transform;
+		ogreLifeSlider = GameObject.Find ("OgreLifeSlider").GetComponent<Slider> ();
+
 
 		// Provavelmente vai virar lixo
 		GameObject[] playersScene = GameObject.FindGameObjectsWithTag ("Player");
@@ -148,8 +150,6 @@ public class BattleManager : MonoBehaviour {
 		
 		turn = TURN.WAITTURN;
 
-		
-
 			
 		/*
 		for (i = 0; i < enemies.Count; i++) {
@@ -167,6 +167,8 @@ public class BattleManager : MonoBehaviour {
 		int i, j, counter = 0;
 		PlayerBehaviour playerBehaviour;
 		EnemyBehaviour enemyBehaviour;
+
+		ogreLifeSlider.value = enemies [0].GetComponent<EnemyBehaviour> ().Life;
 
 		if (allEnemiesFrozen)
 			timerFrozen += Time.deltaTime;
