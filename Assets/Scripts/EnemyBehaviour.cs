@@ -46,8 +46,22 @@ public class EnemyBehaviour : MonoBehaviour {
 			return life;
 		}
 		set{
-			life = value;
-		}
+			life = (value < 0) ? 0 : (value > 100) ? 100 : value;
+            switch (AttackType) {
+                case 0:
+                    battleManager.ogreLifeSlider1.value = Life;
+                    break;
+                case 1:
+                    battleManager.ogreLifeSlider2.value = Life;
+                    break;
+                default:
+                    throw new System.Exception("This type of enemy does not exist");
+            }
+            if (Life <= 0) {
+                Destroy(UIElement);
+                battleManager.DestroyEnemy(this);
+            }
+        }
 	}
 
 	public float Defense{
@@ -145,13 +159,8 @@ public class EnemyBehaviour : MonoBehaviour {
     }
 
     public void TakeDamage(float attack) {
-        life -= attack - defense;
-        if (life <= 0) {
-            Destroy(UIElement);
-            battleManager.DestroyEnemy(this);
-        }else {
-            print("Vida enemy = " + life);
-        }
+        Life -= attack - defense;
+        print("Vida enemy = " + life);
     }
 
 	// Define o próximo destino do inimigo

@@ -136,13 +136,6 @@ public class BattleManager : MonoBehaviour {
 	void Update () {
 		int counter = 0;
 
-		foreach (EnemyBehaviour enemy in enemies) {
-			if (enemy.AttackType == 1)
-				ogreLifeSlider1.value = enemy.Life;
-			else
-				ogreLifeSlider2.value = enemy.Life;
-		}
-
 		if (allEnemiesFrozen)
 			timerFrozen += Time.deltaTime;
 		
@@ -368,7 +361,7 @@ public class BattleManager : MonoBehaviour {
 	}
 
 	public void DestroyEnemy(EnemyBehaviour enemyBehaviour){
-		// GameManager.enemies.Remove (enemyBehaviour.gameObject);	TIRA O COMENTÁRIO QUANDO TIVER AS REFERÊNCIAS PRONTAS
+		GameManager.enemies.Remove (enemyBehaviour.gameObject);
 		enemies.Remove (enemyBehaviour);
 		Destroy(enemyBehaviour.gameObject);
 	}

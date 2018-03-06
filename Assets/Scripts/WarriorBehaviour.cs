@@ -25,7 +25,6 @@ public class WarriorBehaviour : PlayerBehaviour {
         state = STATE.SPECIAL;
         anim.SetInteger("State", 2);
         Special -= SpecialValue;
-        battleManager.warriorSpecialSlider.value = Special;
 	}
 			
 	public override string Name{
@@ -44,7 +43,6 @@ public class WarriorBehaviour : PlayerBehaviour {
 
 	public void FinishAttack(){
 		GameObject attackObject;
-		int i;
 		EnemyBehaviour enemy;
         // Instantiate attack effect on top of enemy
 		attackObject = Instantiate (prefabAttack, enemiesAttacking [0].transform.position, Quaternion.identity);

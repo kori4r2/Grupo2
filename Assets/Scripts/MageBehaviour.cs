@@ -37,7 +37,6 @@ public class MageBehaviour : PlayerBehaviour {
 		enemy.IsSelected = false;
         // Decrement special bar
 		Special = Special - specialValue;
-		battleManager.mageSpecialSlider.value = Special;
         enemiesAttacking.Clear();
     }
 

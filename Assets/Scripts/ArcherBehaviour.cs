@@ -17,7 +17,6 @@ public class ArcherBehaviour : PlayerBehaviour {
 		enemiesAttacking = enemies;
 		State = STATE.ONSPECIAL;
 		Special -= specialValue;
-		battleManager.archerSpecialSlider.value = Special;
 		anim.SetInteger ("State", 2);
 	}
 

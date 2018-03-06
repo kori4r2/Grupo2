@@ -73,9 +73,37 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 			return life;
 		}
 		set{
-            // TODO: Truncate to maximum and minimum levels
-			life = value;
-		}
+            life = (value < 0)? 0 : (value > 100)? 100 : value;
+            switch (Name) {
+                case "Guerreiro":
+                    battleManager.warriorLifeSlider.value = Life;
+                    break;
+                case "Mago":
+                    battleManager.mageLifeSlider.value = Life;
+                    break;
+                case "Arqueiro":
+                    battleManager.archerLifeSlider.value = Life;
+                    break;
+                default:
+                    throw new System.Exception("Life.set(): This class doesn't exist");
+            }
+            if (Life <= 0) {
+                switch (Name) {
+                    case "Guerreiro":
+                        Destroy(battleManager.warriorUI);
+                        break;
+                    case "Mago":
+                        Destroy(battleManager.mageUI);
+                        break;
+                    case "Arqueiro":
+                        Destroy(battleManager.archerUI);
+                        break;
+                }
+                GameManager.players.Remove(gameObject);
+                battleManager.players.Remove(this);
+                Destroy(gameObject);
+            }
+        }
 	}
 
 	public float Special{
@@ -83,9 +111,21 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 			return special;
 		}
 		protected set {
-            // TODO: Truncate to maximum and minimum levels
-            special = value;
-		}
+            special = (value < 0) ? 0 : (value > 100) ? 100 : value;
+            switch (Name) {
+                case "Guerreiro":
+                    battleManager.warriorSpecialSlider.value = Special;
+                    break;
+                case "Mago":
+                    battleManager.mageSpecialSlider.value = Special;
+                    break;
+                case "Arqueiro":
+                    battleManager.archerSpecialSlider.value = Special;
+                    break;
+                default:
+                    throw new System.Exception("Special.set(): This class doesn't exist");
+            }
+        }
 	}
 
 	public float Defense{
@@ -178,18 +218,5 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 
     public void TakeDamage(float enemyAttack) {
         Life -= (enemyAttack - Defense);
-        switch (Name) {
-            case "Guerreiro":
-                battleManager.warriorLifeSlider.value = Life;
-                break;
-            case "Mago":
-                battleManager.mageLifeSlider.value = Life;
-                break;
-            case "Arqueiro":
-                battleManager.archerLifeSlider.value = Life;
-                break;
-            default:
-                throw new System.Exception("TakeDamage(): This class doesn't exist");
-        }
     }
 }
