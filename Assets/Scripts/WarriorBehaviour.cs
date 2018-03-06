@@ -7,7 +7,8 @@ public class WarriorBehaviour : PlayerBehaviour {
 
 	void Start () {
 		stateAttack = 2;
-        specialValue = 10f;
+        specialValue = 0f;
+        specialCost = 10f;
         attackValue = 20f;
 		defense = 25f;
 	}
@@ -24,7 +25,7 @@ public class WarriorBehaviour : PlayerBehaviour {
 	public override void SpecialCommand (List<GameObject> enemies){
         state = STATE.SPECIAL;
         anim.SetInteger("State", 2);
-        Special -= SpecialValue;
+        Special -= specialCost;
 	}
 			
 	public override string Name{
@@ -32,13 +33,10 @@ public class WarriorBehaviour : PlayerBehaviour {
 		set{}
 	}
 
-	public override void FinishSpecial (){
-	}
-
-	public void ShieldAnim(){
-		GameObject defenseObject = Instantiate (prefabAttack, transform.position, Quaternion.identity);
-		defenseObject.GetComponent<Animator> ().SetInteger ("State", 5);
-	}
+	public override void FinishSpecial () {
+        GameObject defenseObject = Instantiate(prefabAttack, transform.position, Quaternion.identity);
+        defenseObject.GetComponent<Animator>().SetInteger("State", 5);
+    }
 		
 
 	public void FinishAttack(){

@@ -48,10 +48,10 @@ public class EnemyBehaviour : MonoBehaviour {
 		set{
 			life = (value < 0) ? 0 : (value > 100) ? 100 : value;
             switch (AttackType) {
-                case 0:
+                case 1:
                     battleManager.ogreLifeSlider1.value = Life;
                     break;
-                case 1:
+                case 2:
                     battleManager.ogreLifeSlider2.value = Life;
                     break;
                 default:
@@ -145,7 +145,7 @@ public class EnemyBehaviour : MonoBehaviour {
     // Gera o objeto de ataque
     public void Attack() {
         if (attackType == 1) {
-            attackObject = Instantiate(prefabAttack1, new Vector3(transform.position.x, transform.position.y - 3f, transform.position.z), transform.rotation);
+            attackObject = Instantiate(prefabAttack1, new Vector3(transform.position.x, transform.position.y - 2f, transform.position.z), transform.rotation);
             attackObject.GetComponent<LineAttack>().owner = this;
         } else {
             attackObject = Instantiate(prefabAttack2, new Vector3(transform.position.x, transform.position.y - 4f, transform.position.z), transform.rotation);

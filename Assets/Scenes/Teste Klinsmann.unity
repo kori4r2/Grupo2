@@ -332,7 +332,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 665806fb51e439f4390cf09d19ff17c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  personagem: {fileID: 982002779}
+  battleUI: {fileID: 0}
+  specialButton: {fileID: 0}
+  potionTxt: {fileID: 0}
+  playerUI: {fileID: 0}
+  enemyUI: {fileID: 0}
+  players: []
+  enemies: []
+  warriorLifeSlider: {fileID: 0}
+  warriorSpecialSlider: {fileID: 0}
+  mageLifeSlider: {fileID: 0}
+  mageSpecialSlider: {fileID: 0}
+  archerLifeSlider: {fileID: 0}
+  archerSpecialSlider: {fileID: 0}
+  ogreLifeSlider1: {fileID: 0}
+  ogreLifeSlider2: {fileID: 0}
+  warriorUI: {fileID: 0}
+  mageUI: {fileID: 0}
+  archerUI: {fileID: 0}
+  ogreUI1: {fileID: 0}
+  ogreUI2: {fileID: 0}
+  prefabWarriorUI: {fileID: 0}
+  prefabMageUI: {fileID: 0}
+  prefabArcherUI: {fileID: 0}
+  prefabOgreUI1: {fileID: 0}
+  prefabOgreUI2: {fileID: 0}
 --- !u!4 &1638114922
 Transform:
   m_ObjectHideFlags: 0

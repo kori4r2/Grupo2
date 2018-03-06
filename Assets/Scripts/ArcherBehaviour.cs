@@ -6,6 +6,7 @@ public class ArcherBehaviour : PlayerBehaviour {
 
 	void Start () {
         specialValue = 24f;
+        specialCost = 10f;
         stateAttack = 4;
 		stateSpecial = 4;
 		attackValue = 24f;
@@ -16,7 +17,6 @@ public class ArcherBehaviour : PlayerBehaviour {
 	public override void SpecialCommand(List<GameObject> enemies){
 		enemiesAttacking = enemies;
 		State = STATE.ONSPECIAL;
-		Special -= specialValue;
 		anim.SetInteger ("State", 2);
 	}
 
@@ -46,16 +46,17 @@ public class ArcherBehaviour : PlayerBehaviour {
 		EnemyBehaviour enemy;
 		GameObject attackObject;
         // For every enemy on the field
-		for (i = 0; i < enemiesAttacking.Count; i++) {
-			enemy = enemiesAttacking [i].GetComponent<EnemyBehaviour> ();
+		foreach (GameObject enemyObject in enemiesAttacking) {
+			enemy = enemyObject.GetComponent<EnemyBehaviour> ();
             // Instantiate arrow on the enemy being hit
-			Vector3 vec = new Vector3 (enemiesAttacking [i].transform.position.x, enemiesAttacking [i].transform.position.y + 0.5f, enemiesAttacking [i].transform.position.z - 1f);
+			Vector3 vec = new Vector3 (enemyObject.transform.position.x, enemyObject.transform.position.y + 0.4f, enemyObject.transform.position.z - 1f);
 			attackObject = Instantiate (prefabAttack, vec, Quaternion.identity);
 			attackObject.GetComponent<Animator> ().SetInteger ("State", stateSpecial);
             // Deal damage
             enemy.TakeDamage(specialValue);
             enemy.IsSelected = false;
-		}
+        }
+        Special -= specialCost;
         enemiesAttacking.Clear();
 	}
 }

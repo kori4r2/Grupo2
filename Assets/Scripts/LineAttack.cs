@@ -21,7 +21,8 @@ public class LineAttack : MonoBehaviour {
 
     private void Update() {
         if (owner != null) {
-            rigid.velocity = new Vector2(0f, (-1) * speed);
+            if(rigid.velocity.y == 0)
+                rigid.velocity = new Vector2(0f, (-1) * speed);
             if (gameObject.transform.position.y <= (startingPosition.y - range)) {
                 owner.AttackObject = null;
                 Destroy(gameObject);
@@ -31,21 +32,14 @@ public class LineAttack : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D coll) {
         if (coll.gameObject.tag == "Player") {
-            print("collision detected!!");
             PlayerBehaviour player = coll.GetComponent<PlayerBehaviour>();
-            if (player.Name == "Warrior" && player.State == PlayerBehaviour.STATE.SPECIAL) {
+            if (player.Name == "Guerreiro" && player.State == PlayerBehaviour.STATE.SPECIAL) {
                 WarriorBehaviour warrior = (WarriorBehaviour)player;
-                warrior.ShieldAnim();
-                foreach (EnemyBehaviour enemy in battleManager.enemies) {
-                    if(enemy.AttackObject == gameObject) {
-                        enemy.State = EnemyBehaviour.STATE.FROZEN;
-                        if (!piercing) {
-                            owner.AttackObject = null;
-                            GameObject.Destroy(gameObject);
-                            return;
-                        }
-                        return;
-                    }
+                warrior.FinishSpecial();
+                owner.State = EnemyBehaviour.STATE.FROZEN;
+                if (!piercing) {
+                    owner.AttackObject = null;
+                    GameObject.Destroy(gameObject);
                 }
             }else {
                 player.TakeDamage(owner.AttackValue);

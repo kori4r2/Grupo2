@@ -30,7 +30,7 @@ public class ThrowAttack : MonoBehaviour {
                     }
                     break;
                 case 1:
-                    if (time >= fallTime) {
+                    if (time >= 0.9 * fallTime) {
                         time = fallTime;
                         DealDamage();
                     }
@@ -44,8 +44,7 @@ public class ThrowAttack : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D coll) {
-        if (coll.gameObject.tag == "Player") {
-            print("collision detected!!");
+        if (coll.gameObject.tag == "Player" && !targets.Contains(coll.gameObject.GetComponent<PlayerBehaviour>())) {
             targets.Add(coll.GetComponent<PlayerBehaviour>());
         }
     }
@@ -55,7 +54,7 @@ public class ThrowAttack : MonoBehaviour {
         foreach (PlayerBehaviour player in targets) {
             if(player.Name == "Guerreiro" && player.State == PlayerBehaviour.STATE.SPECIAL) {
                 WarriorBehaviour warrior = (WarriorBehaviour)player;
-                warrior.ShieldAnim();
+                warrior.FinishSpecial();
                 success = false;
                 break;
             }

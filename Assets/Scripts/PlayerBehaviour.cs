@@ -23,14 +23,16 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 	private float speed = 2f; // velocidade da movimentacao do personagem
 	protected float attackValue;
     protected float specialValue;
+    protected float specialCost;
 	private float life = 100f;
 	private float special = 100f;
 	protected float defense;
-	private int level;
-	private float secondary = 100f;
-	private int actionsOnTurn = 0;
+	protected int level;
+	protected int actionsOnTurn = 0;
+    private Vector2 upperLeftLimit = new Vector2(-2.5f, -0.2f);
+    private Vector2 lowerRightLimit = new Vector2(2.50f, -3.35f);
 
-	protected int stateAttack;
+    protected int stateAttack;
 	protected int stateSpecial;
 
 	/*
@@ -54,8 +56,16 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 			return finalPosition;
 		}
 		set {
-            // TODO: Check if position is within boundaries maybe?
-			finalPosition = value; 
+            float x = value.x;
+            float y = value.y;
+
+            print("Moving towards: (" + x + ", " + y + ")");
+
+            x = (x < upperLeftLimit.x) ? upperLeftLimit.x : (x > lowerRightLimit.x) ? lowerRightLimit.x : x;
+            y = (y > upperLeftLimit.y) ? upperLeftLimit.y : (y < lowerRightLimit.y) ? lowerRightLimit.y : y;
+
+			finalPosition.x = x;
+            finalPosition.y = y;
 		}
 	}
 
@@ -180,8 +190,10 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 			GameManager.RewardPotion (-1);
 		}else if (battleManager != null && battleManager.Turn == BattleManager.TURN.PLAYERTURN && state == STATE.NOTSELECTED) {
 			battleManager.ShowBattleUI (this.gameObject);
-			if (special <= 0)
-				battleManager.specialButton.SetActive (false);
+            if (Special <= 0)
+                battleManager.specialButton.SetActive(false);
+            else
+                battleManager.specialButton.SetActive(true);
 			state = STATE.SELECTED;
 			currentPosition = transform.position;
 		}
@@ -205,6 +217,11 @@ public abstract class PlayerBehaviour : MonoBehaviour {
             isColliding = false;
             col2D = null;
         }
+    }
+
+    public void SetFrozen() {
+        state = STATE.FROZEN;
+        anim.SetInteger("State", 0);
     }
 
     public void SetNotSelected(){

@@ -95,19 +95,25 @@ public class BattleManager : MonoBehaviour {
 				warriorUI.transform.SetParent (playerUI.transform, false);
 				warriorLifeSlider = GameObject.Find ("WarriorLifeSlider").GetComponent<Slider> ();
 				warriorSpecialSlider = GameObject.Find ("WarriorSpecialSlider").GetComponent<Slider> ();
+                warriorLifeSlider.value = playerBehaviour.Life;
+                warriorSpecialSlider.value = playerBehaviour.Special;
 			}
 			else if(playerBehaviour is MageBehaviour){
 				mageUI = Instantiate (prefabMageUI, transform.position, Quaternion.identity);
                 mageUI.transform.SetParent(playerUI.transform, false);
                 mageLifeSlider = GameObject.Find ("MageLifeSlider").GetComponent<Slider> ();
 				mageSpecialSlider = GameObject.Find ("MageSpecialSlider").GetComponent<Slider> ();
-			}
+                mageLifeSlider.value = playerBehaviour.Life;
+                mageSpecialSlider.value = playerBehaviour.Special;
+            }
 			else if(playerBehaviour is ArcherBehaviour){
 				archerUI = Instantiate (prefabArcherUI, transform.position, Quaternion.identity);
                 archerUI.transform.SetParent(playerUI.transform, false);
                 archerLifeSlider = GameObject.Find ("ArcherLifeSlider").GetComponent<Slider> ();
 				archerSpecialSlider = GameObject.Find ("ArcherSpecialSlider").GetComponent<Slider> ();
-			}
+                archerLifeSlider.value = playerBehaviour.Life;
+                archerSpecialSlider.value = playerBehaviour.Special;
+            }
 			x += 2.23f;
 		}
         int i = 0;
@@ -348,10 +354,15 @@ public class BattleManager : MonoBehaviour {
 			if (player.State == PlayerBehaviour.STATE.SELECTED) {
 				if (player is ArcherBehaviour) {		// Se é o special do archer
 					ArcherBehaviour archerBehaviour = (ArcherBehaviour)player;
-					archerBehaviour.SpecialCommand (GameManager.enemies);
+                    // We need to make a copy of the list and pass it as reference,
+                    // or else when the clear function is called the original list is cleared
+                    GameObject[] array = new GameObject[GameManager.enemies.Count] ;
+                    GameManager.enemies.CopyTo(array);
+					archerBehaviour.SpecialCommand (new List<GameObject>(array));
 				} else if (player is WarriorBehaviour) {
                     WarriorBehaviour warriorBehaviour = (WarriorBehaviour)player;
                     warriorBehaviour.SpecialCommand(new List<GameObject>());
+                // Mage only enables selecting target
                 }else
 					player.State = PlayerBehaviour.STATE.SPECIAL;
 				battleUI.SetActive (false);

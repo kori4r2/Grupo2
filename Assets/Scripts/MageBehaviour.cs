@@ -7,6 +7,7 @@ public class MageBehaviour : PlayerBehaviour {
     
 	void Start () {
         specialValue = 40f;
+        specialCost = 15f;
         stateAttack = 3;
 		stateSpecial = 1;
 		attackValue = 18f;
@@ -36,7 +37,7 @@ public class MageBehaviour : PlayerBehaviour {
         enemy.TakeDamage(specialValue);
 		enemy.IsSelected = false;
         // Decrement special bar
-		Special = Special - specialValue;
+		Special -= specialCost;
         enemiesAttacking.Clear();
     }
 

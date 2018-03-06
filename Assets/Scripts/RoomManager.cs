@@ -31,11 +31,22 @@ public class RoomManager : MonoBehaviour {
 		initialPosition = new Vector2 (0f, 0f);
 		this.gameObject.GetComponent<SpriteRenderer> ().sprite = rooms[0];
 		dieRoom = (int) Random.Range (0f, 2.9f);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+        heroes = new List<GameObject>(GameManager.players);
+        foreach (GameObject playerObject in heroes) {
+            switch (playerObject.GetComponent<PlayerBehaviour>().Name) {
+                case "Guerreiro":
+                    playerObject.transform.position = new Vector3(0f, 0f, 0f);
+                    break;
+                case "Arqueiro":
+                    playerObject.transform.position = new Vector3(-1f, 0f, 0f);
+                    break;
+                case "Mago":
+                    playerObject.transform.position = new Vector3(1f, 0f, 0f);
+                    break;
+                default:
+                    throw new System.Exception("This class does not exist");
+            }
+        }
 	}
 
 	void OnMouseDrag() {
@@ -78,7 +89,7 @@ public class RoomManager : MonoBehaviour {
 		}
 			
 		dieRoom = Random.Range (0.0f, 100.0f);
-        newPlayerThreshold = 50.0f - (25 - (GameManager.players.Count));
+        newPlayerThreshold = 60.0f - (25 * (GameManager.players.Count));
 
         if (dieRoom < newPlayerThreshold) { // cena de encontrar aventureiro
             GameManager.state = GameManager.STATE.EXPLORATION;
@@ -113,7 +124,7 @@ public class RoomManager : MonoBehaviour {
                     }
                 }
             } while (!success);
-        } else if (dieRoom < 85.0f) { // cena de batalha
+        } else if (dieRoom < 90.0f) { // cena de batalha
             heroText.text = "";
             UnityEngine.SceneManagement.SceneManager.LoadScene("BattleScene");
             GameManager.state = GameManager.STATE.BATTLE;
