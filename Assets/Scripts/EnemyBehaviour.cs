@@ -163,10 +163,10 @@ public class EnemyBehaviour : MonoBehaviour {
             finalPosition.y = Random.Range(1.21f, 2.17f);
             distance = Mathf.Sqrt(Mathf.Pow(initialPosition.x - finalPosition.x, 2) + Mathf.Pow(initialPosition.y - finalPosition.y, 2));
         }
-        print("found new target position");
 		speed = distance / time;
 		anim.SetInteger ("State", 1);
-		state = STATE.MOVING;
+        print("found new target position, speed = " + speed + ", time = " + time + ", distance = " + distance);
+        state = STATE.MOVING;
 	}
 
     public void SetInactive() {

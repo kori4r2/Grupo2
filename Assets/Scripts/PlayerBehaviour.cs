@@ -13,7 +13,7 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 
 	private Vector2 currentPosition; // posicao inicial do personagem
 	private Vector2 finalPosition; // posicao para a qual o personagem vai se mover
-	protected STATE state; // determina o estado do personagem
+	public STATE state; // determina o estado do personagem
 
 	public abstract void SpecialCommand(List<GameObject> enemies);
 	//public abstract void FinishAttack ();
@@ -178,5 +178,18 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 
     public void TakeDamage(float enemyAttack) {
         Life -= (enemyAttack - Defense);
+        switch (Name) {
+            case "Guerreiro":
+                battleManager.warriorLifeSlider.value = Life;
+                break;
+            case "Mago":
+                battleManager.mageLifeSlider.value = Life;
+                break;
+            case "Arqueiro":
+                battleManager.archerLifeSlider.value = Life;
+                break;
+            default:
+                throw new System.Exception("TakeDamage(): This class doesn't exist");
+        }
     }
 }

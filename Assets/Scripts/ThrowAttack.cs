@@ -45,6 +45,7 @@ public class ThrowAttack : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D coll) {
         if (coll.gameObject.tag == "Player") {
+            print("collision detected!!");
             targets.Add(coll.GetComponent<PlayerBehaviour>());
         }
     }
@@ -53,6 +54,8 @@ public class ThrowAttack : MonoBehaviour {
         bool success = true;
         foreach (PlayerBehaviour player in targets) {
             if(player.Name == "Guerreiro" && player.State == PlayerBehaviour.STATE.SPECIAL) {
+                WarriorBehaviour warrior = (WarriorBehaviour)player;
+                warrior.ShieldAnim();
                 success = false;
                 break;
             }

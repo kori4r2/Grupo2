@@ -216,7 +216,8 @@ public class BattleManager : MonoBehaviour {
 		} else if (turn == TURN.WAITTURN) { 		// Se estão no turno de espera
 			//print ("Turno de espera");
 			foreach (PlayerBehaviour player in players) {
-				if (player.State != PlayerBehaviour.STATE.NOTSELECTED && player.State != PlayerBehaviour.STATE.SPECIAL &&
+				if (player.State != PlayerBehaviour.STATE.NOTSELECTED &&
+                    (player.State != PlayerBehaviour.STATE.SPECIAL || player.Name != "Guerreiro") &&
 				    player.State != PlayerBehaviour.STATE.FROZEN) {
                     print("Wait turn");
                     break;
@@ -224,7 +225,7 @@ public class BattleManager : MonoBehaviour {
 				counter++;
 			}
 			if (counter == players.Count) {		// Se todos os players pararam de agir, vai para o turno do inimigo
-				print("counter");
+				print("player turn ended");
 				turn = TURN.ENEMYTURN;
 
 				foreach (EnemyBehaviour enemy in enemies) {
@@ -355,7 +356,10 @@ public class BattleManager : MonoBehaviour {
 				if (player is ArcherBehaviour) {		// Se é o special do archer
 					ArcherBehaviour archerBehaviour = (ArcherBehaviour)player;
 					archerBehaviour.SpecialCommand (GameManager.enemies);
-				} else 
+				} else if (player is WarriorBehaviour) {
+                    WarriorBehaviour warriorBehaviour = (WarriorBehaviour)player;
+                    warriorBehaviour.SpecialCommand(new List<GameObject>());
+                }else
 					player.State = PlayerBehaviour.STATE.SPECIAL;
 				battleUI.SetActive (false);
 				return;

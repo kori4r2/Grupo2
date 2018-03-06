@@ -31,7 +31,8 @@ public class LineAttack : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D coll) {
         if (coll.gameObject.tag == "Player") {
-            PlayerBehaviour player = coll.gameObject.GetComponent<PlayerBehaviour>();
+            print("collision detected!!");
+            PlayerBehaviour player = coll.GetComponent<PlayerBehaviour>();
             if (player.Name == "Warrior" && player.State == PlayerBehaviour.STATE.SPECIAL) {
                 WarriorBehaviour warrior = (WarriorBehaviour)player;
                 warrior.ShieldAnim();

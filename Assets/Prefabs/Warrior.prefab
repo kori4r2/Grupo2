@@ -96,6 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 370dfd7b7e4f4184e8e6f9022118ed0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 0
   battleManager: {fileID: 0}
   anim: {fileID: 95577010146502424}
   enemiesAttacking: []
