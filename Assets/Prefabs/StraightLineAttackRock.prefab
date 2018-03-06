@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 61813383737931536}
   - component: {fileID: 50555546596826380}
   - component: {fileID: 212584999523565232}
+  - component: {fileID: 114144287486249708}
   m_Layer: 0
   m_Name: StraightLineAttackRock
   m_TagString: EnemyAttack
@@ -87,6 +88,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.230845, y: 2.0067794}
   m_EdgeRadius: 0
+--- !u!114 &114144287486249708
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1399498802931248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1d9039eba452204a9ea7fc657993f6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 0}
+  fallTime: 1.5
 --- !u!212 &212584999523565232
 SpriteRenderer:
   m_ObjectHideFlags: 1

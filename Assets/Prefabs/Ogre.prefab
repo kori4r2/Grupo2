@@ -96,12 +96,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91f68489b1e35f14a969dcdfa84bc800, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
+  speed: 1
   time: 0
   prefabAttack1: {fileID: 1138591773508862, guid: 8e0c03cfc6ce0f642b7785d75ede7fba,
     type: 2}
   prefabAttack2: {fileID: 1399498802931248, guid: bfdaa9e6a1cee254d8f6f9b7a40e3f1d,
     type: 2}
+  UIElement: {fileID: 0}
   battleManager: {fileID: 0}
   anim: {fileID: 95866887731196534}
   attackType: 0

@@ -13,8 +13,6 @@ public class MainMenuBehaviour : MonoBehaviour {
 	public Button btnMage;
 	public Button btnArcher;
 
-	public GameManager gameManager;
-
 	// Use this for initialization
 	void Start () {
 		mainMenu.SetActive (true);
@@ -35,17 +33,17 @@ public class MainMenuBehaviour : MonoBehaviour {
 	// Instancia o personagem selecionado e chama a cena de batalha
 
 	public void OnClickWarrior(){
-		gameManager.InstantiateWarrior (0f, 0f, 0f);
-		Application.LoadLevel ("ExplorationScene");
+		GameManager.InstantiateWarrior (0f, 0f, 0f);
+		SceneManager.LoadScene("ExplorationScene");
 	}
 
 	public void OnClickMage(){
-		gameManager.InstantiateMage (1f, 0f, 0f);
-		Application.LoadLevel ("ExplorationScene");
+		GameManager.InstantiateMage (1f, 0f, 0f);
+		SceneManager.LoadScene("ExplorationScene");
 	}
 
 	public void OnClickArcher(){
-		gameManager.InstantiateArcher (-1f, 0f, 0f);
-		Application.LoadLevel ("ExplorationScene");
+		GameManager.InstantiateArcher (-1f, 0f, 0f);
+		SceneManager.LoadScene("ExplorationScene");
 	}
 }

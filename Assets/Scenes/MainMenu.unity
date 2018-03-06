@@ -242,7 +242,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 43044065}
-  - component: {fileID: 43044064}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -250,25 +249,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &43044064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 43044063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb555cf72ec92e94db718c93ecdd8d18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  players: []
-  enemies: []
-  prefabWarrior: {fileID: 1978702917511140, guid: b319b1029173bbf4095eef5f1cb28705,
-    type: 2}
-  prefabMage: {fileID: 1741925292282274, guid: 0987a9b1203efcd46b48b5deb309aa28, type: 2}
-  prefabArcher: {fileID: 1337379771323384, guid: f7b3996344fa1104788bb4dae124b380,
-    type: 2}
-  prefabOgre: {fileID: 1678265767747046, guid: 10906e6654b3c174482405d0b71ef0a8, type: 2}
 --- !u!4 &43044065
 Transform:
   m_ObjectHideFlags: 0
@@ -1250,7 +1230,6 @@ MonoBehaviour:
   btnWarrior: {fileID: 23388225}
   btnMage: {fileID: 1600088158}
   btnArcher: {fileID: 1755060542}
-  gameManager: {fileID: 43044064}
 --- !u!1 &2081140122
 GameObject:
   m_ObjectHideFlags: 0

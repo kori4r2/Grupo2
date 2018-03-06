@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class MageBehaviour : PlayerBehaviour {
 		
-	public float specialValue = 40f;
-
-
+    
 	void Start () {
-		stateAttack = 3;
+        specialValue = 40f;
+        stateAttack = 3;
 		stateSpecial = 1;
 		attackValue = 18f;
 		defense = 0f;
 	}
 
 	public override void SpecialCommand(List<GameObject> enemies){
-		EnemyBehaviour enemy = enemies [0].GetComponent<EnemyBehaviour> ();
 		enemiesAttacking = enemies;
 		state = STATE.ONSPECIAL;
 		anim.SetInteger ("State", 2);
@@ -27,14 +25,17 @@ public class MageBehaviour : PlayerBehaviour {
 	}
 
     public void StartSpecial() {
+        // Instantiate magic cast on top of enemy
         GameObject attackObject = Instantiate(prefabAttack, enemiesAttacking[0].transform.position, Quaternion.identity);
         attackObject.GetComponent<Animator>().SetInteger("State", stateSpecial);
     }
 
 	public override void FinishSpecial(){
         EnemyBehaviour enemy = enemiesAttacking [0].GetComponent<EnemyBehaviour> ();
+        // Deal damage
         enemy.TakeDamage(specialValue);
 		enemy.IsSelected = false;
+        // Decrement special bar
 		Special = Special - specialValue;
 		battleManager.mageSpecialSlider.value = Special;
         enemiesAttacking.Clear();
@@ -42,11 +43,12 @@ public class MageBehaviour : PlayerBehaviour {
 
 	public void FinishAttack(){
 		GameObject attackObject;
-		int i;
 		EnemyBehaviour enemy;
+        // Instantiate attack effect on top of enemy
 		attackObject = Instantiate (prefabAttack, enemiesAttacking [0].transform.position, Quaternion.identity);
 		attackObject.GetComponent<Animator> ().SetInteger ("State", stateAttack);
 		enemy = enemiesAttacking [0].GetComponent<EnemyBehaviour> ();
+        // Deal damage to enemy
         enemy.TakeDamage(attackValue);
 		enemy.IsSelected = false;
 		enemiesAttacking.Clear ();

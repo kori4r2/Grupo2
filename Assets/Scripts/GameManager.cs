@@ -2,37 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
-public class GameManager : MonoBehaviour {
+public static class GameManager {
 
 	public enum STATE {BATTLE, EXPLORATION} // possiveis estados do jogo
 
-	public List<GameObject> players;
-	public List<GameObject> enemies;
-
-	public static GameObject warriorPrefab;
-	public static GameObject archerPrefab;
-	public static GameObject magePrefab;
-	public static GameObject ogrePrefab;
-
-	public static int potions;
+	public static List<GameObject> players = new List<GameObject>();
+	public static List<GameObject> enemies = new List<GameObject>();
+    
+	public static int potions = 0;
 	public static bool isPotionSelected = false;
 
-	public GameObject prefabWarrior;
-	public GameObject prefabMage;
-	public GameObject prefabArcher;
-	public GameObject prefabOgre;
+	public static GameObject prefabWarrior = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Warrior.prefab");
+	public static GameObject prefabMage = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Mage.prefab");
+	public static GameObject prefabArcher = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Archer.prefab");
+	public static GameObject prefabOgre = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Ogre.prefab");
 
-	public static STATE state;
+	public static STATE state = STATE.EXPLORATION;
+    
+    public static string saveFileLocation = "./SaveFiles/savefile.json";
 
-	// Use this for initialization
-	void Awake () {
-		DontDestroyOnLoad (this.gameObject);
-		potions = 0;	//teste
-		state = STATE.EXPLORATION;
-	}
-
-	public void OnClickPotion(){
+	public static void OnClickPotion(){
 		if (potions > 0) {
 			if (!isPotionSelected)
 				isPotionSelected = true;
@@ -42,38 +33,34 @@ public class GameManager : MonoBehaviour {
 	}
 
 	// Instancia um warrior, com DontDestroyOnLoad
-	public void InstantiateWarrior(float x, float y, float z){
-		//float x = x1, y = y1, z = z1;
-		GameObject warrior = Instantiate (prefabWarrior, new Vector3 (x, y, z), Quaternion.identity);
+	public static void InstantiateWarrior(float x, float y, float z){
+		GameObject warrior = GameObject.Instantiate (prefabWarrior, new Vector3 (x, y, z), Quaternion.identity);
 		warrior.name = "Warrior";
 		players.Add (warrior);
-		DontDestroyOnLoad (warrior);
+		GameObject.DontDestroyOnLoad (warrior);
 	}
 
 	// Instancia um mage, com DontDestroyOnLoad
-	public void InstantiateMage(float x, float y, float z){
-		//float x = -2.23f, y = -2.64f, z = 0f;
-		GameObject mage = Instantiate (prefabMage, new Vector3 (x, y, z), Quaternion.identity);
+	public static void InstantiateMage(float x, float y, float z){
+		GameObject mage = GameObject.Instantiate (prefabMage, new Vector3 (x, y, z), Quaternion.identity);
 		mage.name = "Mage";
 		players.Add (mage);
-		DontDestroyOnLoad (mage);
+        GameObject.DontDestroyOnLoad (mage);
 	}
 
 	// Instancia um archer, com DontDestroyOnLoad
-	public void InstantiateArcher(float x, float y, float z){
-		//float x = -2.23f, y = -2.64f, z = 0f;
-		GameObject archer = Instantiate (prefabArcher, new Vector3 (x, y, z), Quaternion.identity);
+	public static void InstantiateArcher(float x, float y, float z){
+		GameObject archer = GameObject.Instantiate (prefabArcher, new Vector3 (x, y, z), Quaternion.identity);
 		archer.name = "Archer";
 		players.Add (archer);
-		DontDestroyOnLoad (archer);
+        GameObject.DontDestroyOnLoad (archer);
 	}
 
-	public void InstantiateOgre(float x, float y, float z, int attackType){
-		GameObject ogre = Instantiate (prefabOgre, new Vector3 (x, y, z), Quaternion.identity);
+	public static void InstantiateOgre(float x, float y, float z, int attackType){
+		GameObject ogre = GameObject.Instantiate (prefabOgre, new Vector3 (x, y, z), Quaternion.identity);
 		ogre.name = "Ogre";
 		ogre.GetComponent<EnemyBehaviour> ().AttackType = attackType;
 		enemies.Add (ogre);
-		DontDestroyOnLoad (ogre);
 	}
 
 	public static void RewardPotion(int n){
@@ -82,4 +69,11 @@ public class GameManager : MonoBehaviour {
 		potionTxt.GetComponent<Text> ().text = "" + potions + "x";
 	}
 
+    public static void SaveGame() {
+        // Save info to .json file
+    }
+
+    public static void LoadGame() {
+        // Load info from .json file
+    }
 }

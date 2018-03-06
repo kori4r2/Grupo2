@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class WarriorBehaviour : PlayerBehaviour {
 
-	private float specialValue = 10f;
 
 	void Start () {
 		stateAttack = 2;
-
-		attackValue = 20f;
+        specialValue = 10f;
+        attackValue = 20f;
 		defense = 25f;
 	}
 
@@ -21,9 +20,12 @@ public class WarriorBehaviour : PlayerBehaviour {
 			specialValue = value;
 		}
 	}
-	// Use this for initialization
 
 	public override void SpecialCommand (List<GameObject> enemies){
+        state = STATE.SPECIAL;
+        anim.SetInteger("State", 2);
+        Special -= SpecialValue;
+        battleManager.warriorSpecialSlider.value = Special;
 	}
 			
 	public override string Name{
@@ -44,9 +46,11 @@ public class WarriorBehaviour : PlayerBehaviour {
 		GameObject attackObject;
 		int i;
 		EnemyBehaviour enemy;
+        // Instantiate attack effect on top of enemy
 		attackObject = Instantiate (prefabAttack, enemiesAttacking [0].transform.position, Quaternion.identity);
 		attackObject.GetComponent<Animator> ().SetInteger ("State", stateAttack);
         enemy = enemiesAttacking[0].GetComponent<EnemyBehaviour>();
+        // Deal damage
         enemy.TakeDamage(attackValue);
         enemy.IsSelected = false;
         enemiesAttacking.Clear();

@@ -8,14 +8,14 @@ public class EnemyBehaviour : MonoBehaviour {
 
 
 	public float speed; // velocidade da movimentacao do personagem
-	public float time;	// tempo esperado para se mover
+	public float time = 5f;	// tempo esperado para se mover
 
 	private Vector2 initialPosition; // posicao inicial do personagem
 	private Vector2 finalPosition; // posicao para a qual o personagem vai se mover
 	private STATE state; // determina o estado do personagem
 
 	private float life = 100f;
-	private float attackValue = 50f;
+	private float attackValue = 30f;
 	private float defense = 0f;
 
 	public GameObject prefabAttack1;	//-3,23
@@ -63,6 +63,9 @@ public class EnemyBehaviour : MonoBehaviour {
 		get{
 			return attackObject;
 		}
+        set {
+            attackObject = value;
+        }
 	}
 
 	public float AttackValue{
@@ -100,24 +103,23 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		//state = STATE.NOTSELECTED;
 		turnsFrozen = 0;
 		initialPosition = transform.position;
-		time = 5f;
 		battleManager = GameObject.Find ("BattleManager").GetComponent<BattleManager> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (state == STATE.MOVING) { 
-			if (finalPosition.x != transform.position.x || finalPosition.y != transform.position.y)
-				transform.position = Vector3.MoveTowards (transform.position, finalPosition, speed * Time.deltaTime);
-			else {
-				//print ("Wait attack");
-				state = STATE.WAITATTACK;
-				anim.SetInteger ("State", 0);
-				//print ("Setou estado 0");
-			}
+		if (state == STATE.MOVING) {
+            if (finalPosition.x != transform.position.x || finalPosition.y != transform.position.y) {
+                print("moving towards destination");
+                transform.position = Vector3.MoveTowards(transform.position, finalPosition, speed * Time.deltaTime);
+            } else {
+                print ("Wait attack");
+                state = STATE.WAITATTACK;
+                anim.SetInteger("State", 0);
+                //print ("Setou estado 0");
+            }
 		}
 	}
 
@@ -128,14 +130,18 @@ public class EnemyBehaviour : MonoBehaviour {
 
     // Gera o objeto de ataque
     public void Attack() {
-        if (attackType == 1)
+        if (attackType == 1) {
             attackObject = Instantiate(prefabAttack1, new Vector3(transform.position.x, transform.position.y - 3f, transform.position.z), transform.rotation);
-        else
+            attackObject.GetComponent<LineAttack>().owner = this;
+        } else {
             attackObject = Instantiate(prefabAttack2, new Vector3(transform.position.x, transform.position.y - 4f, transform.position.z), transform.rotation);
+            attackObject.GetComponent<ThrowAttack>().owner = this;
+        }
         attackObject.name = "StraightLineAttack";
         anim.SetInteger("State", 0);
+        //DEBUG
         print("State = " + anim.GetInteger("State"));
-        print("Instanciou");
+        print("Instanciou ataque");
     }
 
     public void TakeDamage(float attack) {
@@ -151,9 +157,13 @@ public class EnemyBehaviour : MonoBehaviour {
 	// Define o próximo destino do inimigo
 	public void Move(){
 		initialPosition = transform.position;
-		finalPosition.x = Random.Range (-2.29f, 2.29f);
-		finalPosition.y = Random.Range (1.21f, 2.17f);
-		float distance = Mathf.Sqrt (Mathf.Pow (initialPosition.x - finalPosition.x, 2) + Mathf.Pow (initialPosition.y - finalPosition.y, 2));
+        float distance = 0f;
+        while (distance <= 0.3) {
+            finalPosition.x = Random.Range(-2.29f, 2.29f);
+            finalPosition.y = Random.Range(1.21f, 2.17f);
+            distance = Mathf.Sqrt(Mathf.Pow(initialPosition.x - finalPosition.x, 2) + Mathf.Pow(initialPosition.y - finalPosition.y, 2));
+        }
+        print("found new target position");
 		speed = distance / time;
 		anim.SetInteger ("State", 1);
 		state = STATE.MOVING;
