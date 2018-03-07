@@ -98,7 +98,7 @@ public class RoomManager : MonoBehaviour {
             do {
                 dieHero = Random.Range(0, 3);
                 success = true;
-                string heroName = heroes[dieHero].GetComponent<PlayerBehaviour>().Name;
+                string heroName = (dieHero == 0)? "Guerreiro" : (dieHero == 1)? "Arqueiro" : "Mago";
 
                 foreach (GameObject player in GameManager.players) {
                     if(heroName == player.GetComponent<PlayerBehaviour>().Name) {

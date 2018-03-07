@@ -55,6 +55,8 @@ public class ThrowAttack : MonoBehaviour {
             if(player.Name == "Guerreiro" && player.State == PlayerBehaviour.STATE.SPECIAL) {
                 WarriorBehaviour warrior = (WarriorBehaviour)player;
                 warrior.FinishSpecial();
+                // Stunning ogres is currently disabled
+                //owner.State = EnemyBehaviour.STATE.FROZEN;
                 success = false;
                 break;
             }

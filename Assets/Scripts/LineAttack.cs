@@ -36,7 +36,8 @@ public class LineAttack : MonoBehaviour {
             if (player.Name == "Guerreiro" && player.State == PlayerBehaviour.STATE.SPECIAL) {
                 WarriorBehaviour warrior = (WarriorBehaviour)player;
                 warrior.FinishSpecial();
-                owner.State = EnemyBehaviour.STATE.FROZEN;
+                // Stunning ogres is currently disabled
+                //owner.State = EnemyBehaviour.STATE.FROZEN;
                 if (!piercing) {
                     owner.AttackObject = null;
                     GameObject.Destroy(gameObject);

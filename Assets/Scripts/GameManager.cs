@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
 
-public static class GameManager {
+public class GameManager : MonoBehaviour{
+
+    public static GameManager instance = null;
 
 	public enum STATE {BATTLE, EXPLORATION} // possiveis estados do jogo
 
@@ -14,16 +15,33 @@ public static class GameManager {
 	public static int potions = 0;
 	public static bool isPotionSelected = false;
 
-	public static GameObject prefabWarrior = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Warrior.prefab");
-	public static GameObject prefabMage = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Mage.prefab");
-	public static GameObject prefabArcher = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Archer.prefab");
-	public static GameObject prefabOgre = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Ogre.prefab");
+	public static GameObject prefabWarrior;
+	public static GameObject prefabMage;
+	public static GameObject prefabArcher;
+	public static GameObject prefabOgre;
 
-	public static STATE state = STATE.EXPLORATION;
+    public GameObject prefabWarriorReference;
+    public GameObject prefabMageReference;
+    public GameObject prefabArcherReference;
+    public GameObject prefabOgreReference;
+
+    public static STATE state = STATE.EXPLORATION;
     
     public static string saveFileLocation = "./SaveFiles/savefile.json";
 
-	public static void OnClickPotion(){
+    private void Awake() {
+        if (instance == null) {
+            instance = this;
+            prefabArcher = prefabArcherReference;
+            prefabMage = prefabMageReference;
+            prefabWarrior = prefabWarriorReference;
+            prefabOgre = prefabOgreReference;
+        } else if (instance != this)
+            Destroy(this);
+        DontDestroyOnLoad(gameObject);
+    }
+
+    public static void OnClickPotion(){
 		if (potions > 0) {
 			if (!isPotionSelected)
 				isPotionSelected = true;
