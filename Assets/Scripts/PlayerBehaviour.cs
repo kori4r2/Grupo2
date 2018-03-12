@@ -84,18 +84,20 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 		}
 		set{
             life = (value < 0)? 0 : (value > 100)? 100 : value;
-            switch (Name) {
-                case "Guerreiro":
-                    battleManager.warriorLifeSlider.value = Life;
-                    break;
-                case "Mago":
-                    battleManager.mageLifeSlider.value = Life;
-                    break;
-                case "Arqueiro":
-                    battleManager.archerLifeSlider.value = Life;
-                    break;
-                default:
-                    throw new System.Exception("Life.set(): This class doesn't exist");
+            if (battleManager != null) {
+                switch (Name) {
+                    case "Guerreiro":
+                        battleManager.warriorLifeSlider.value = Life;
+                        break;
+                    case "Mago":
+                        battleManager.mageLifeSlider.value = Life;
+                        break;
+                    case "Arqueiro":
+                        battleManager.archerLifeSlider.value = Life;
+                        break;
+                    default:
+                        throw new System.Exception("Life.set(): This class doesn't exist");
+                }
             }
             if (Life <= 0) {
                 switch (Name) {
@@ -110,7 +112,8 @@ public abstract class PlayerBehaviour : MonoBehaviour {
                         break;
                 }
                 GameManager.players.Remove(gameObject);
-                battleManager.players.Remove(this);
+                if (battleManager != null)
+                    battleManager.players.Remove(this);
                 Destroy(gameObject);
             }
         }
@@ -120,20 +123,22 @@ public abstract class PlayerBehaviour : MonoBehaviour {
 		get{
 			return special;
 		}
-		protected set {
+		set {
             special = (value < 0) ? 0 : (value > 100) ? 100 : value;
-            switch (Name) {
-                case "Guerreiro":
-                    battleManager.warriorSpecialSlider.value = Special;
-                    break;
-                case "Mago":
-                    battleManager.mageSpecialSlider.value = Special;
-                    break;
-                case "Arqueiro":
-                    battleManager.archerSpecialSlider.value = Special;
-                    break;
-                default:
-                    throw new System.Exception("Special.set(): This class doesn't exist");
+            if (battleManager != null) {
+                switch (Name) {
+                    case "Guerreiro":
+                        battleManager.warriorSpecialSlider.value = Special;
+                        break;
+                    case "Mago":
+                        battleManager.mageSpecialSlider.value = Special;
+                        break;
+                    case "Arqueiro":
+                        battleManager.archerSpecialSlider.value = Special;
+                        break;
+                    default:
+                        throw new System.Exception("Special.set(): This class doesn't exist");
+                }
             }
         }
 	}

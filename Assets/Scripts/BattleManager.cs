@@ -308,11 +308,17 @@ public class BattleManager : MonoBehaviour {
         players.Clear();
 		GameManager.players.Clear();
 		GameManager.potions = 0;
-	    SceneManager.LoadScene ("MainMenu");
+#if !UNITY_WEBGL
+        GameManager.SaveGame();
+#endif
+        SceneManager.LoadScene ("MainMenu");
 	}
 
 	void NextRoom(){
         GameManager.enemies.Clear();
+#if !UNITY_WEBGL
+        GameManager.SaveGame();
+#endif
         SceneManager.LoadScene ("ExplorationScene");
 	}
     

@@ -33,7 +33,10 @@ public class ThrowAttack : MonoBehaviour {
                     if (time >= 0.9 * fallTime) {
                         time = fallTime;
                         DealDamage();
+                        animStage = 2;
                     }
+                    break;
+                case 2:
                     break;
             }
         }

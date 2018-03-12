@@ -8,16 +8,20 @@ public class MainMenuBehaviour : MonoBehaviour {
 
 	public GameObject mainMenu;
 	public GameObject newGameMenu;
+    public GameObject loadGameButton;
+    /*
 	public Button btnNewGame;
 	public Button btnWarrior;
 	public Button btnMage;
 	public Button btnArcher;
+    */
 
 	// Use this for initialization
 	void Start () {
 		mainMenu.SetActive (true);
 		newGameMenu.SetActive (false);
-	}
+        loadGameButton.SetActive(GameManager.hasSaveFile());
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -28,6 +32,10 @@ public class MainMenuBehaviour : MonoBehaviour {
 		mainMenu.SetActive (false);
 		newGameMenu.SetActive (true);
 	}
+
+    public void OnClickLoadGame() {
+        GameManager.LoadGame();
+    }
 
 
 	// Instancia o personagem selecionado e chama a cena de batalha

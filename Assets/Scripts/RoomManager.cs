@@ -89,7 +89,7 @@ public class RoomManager : MonoBehaviour {
 		}
 			
 		dieRoom = Random.Range (0.0f, 100.0f);
-        newPlayerThreshold = 60.0f - (25 * (GameManager.players.Count));
+        newPlayerThreshold = 60.0f - (25 * Mathf.Pow(1.4f, (GameManager.players.Count)) );
 
         if (dieRoom < newPlayerThreshold) { // cena de encontrar aventureiro
             GameManager.state = GameManager.STATE.EXPLORATION;
@@ -124,13 +124,19 @@ public class RoomManager : MonoBehaviour {
                     }
                 }
             } while (!success);
-        } else if (dieRoom < 90.0f) { // cena de batalha
+#if !UNITY_WEBGL
+            GameManager.SaveGame();
+#endif
+        } else if (dieRoom < 95.0f) { // cena de batalha
             heroText.text = "";
             UnityEngine.SceneManagement.SceneManager.LoadScene("BattleScene");
             GameManager.state = GameManager.STATE.BATTLE;
         } else { // cena de exploração
             heroText.text = "Você ganhou mais uma poção!";
             GameManager.RewardPotion(1);
+#if !UNITY_WEBGL
+            GameManager.SaveGame();
+#endif
         }
 
 		initialPosition = new Vector2 (0f, 0f);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
 public class GameManager : MonoBehaviour{
 
@@ -26,8 +27,9 @@ public class GameManager : MonoBehaviour{
     public GameObject prefabOgreReference;
 
     public static STATE state = STATE.EXPLORATION;
-    
-    public static string saveFileLocation = "./SaveFiles/savefile.json";
+
+    private static SaveFile saveFile;
+    private static string saveFileLocation;
 
     private void Awake() {
         if (instance == null) {
@@ -36,6 +38,20 @@ public class GameManager : MonoBehaviour{
             prefabMage = prefabMageReference;
             prefabWarrior = prefabWarriorReference;
             prefabOgre = prefabOgreReference;
+#if UNITY_WEBGL
+            savefileLocation = null;
+#else
+            saveFileLocation = Path.Combine(Application.persistentDataPath, "SaveFiles");
+            DirectoryInfo dirInfo = new DirectoryInfo(saveFileLocation);
+            if (!dirInfo.Exists)
+                dirInfo.Create();
+            saveFileLocation = Path.Combine(saveFileLocation, "savefile.json");
+            if (File.Exists(saveFileLocation)) {
+                string serialized = File.ReadAllText(saveFileLocation);
+                saveFile = JsonUtility.FromJson<SaveFile>(serialized);
+            } else
+                saveFile = new SaveFile();
+#endif
         } else if (instance != this)
             Destroy(this);
         DontDestroyOnLoad(gameObject);
@@ -88,10 +104,66 @@ public class GameManager : MonoBehaviour{
 	}
 
     public static void SaveGame() {
-        // Save info to .json file
+        saveFile.Reset();
+        foreach (GameObject obj in players) {
+            PlayerBehaviour player = obj.GetComponent<PlayerBehaviour>();
+            switch (player.Name) {
+                case "Guerreiro":
+                    saveFile.warriorHP = player.Life;
+                    saveFile.warriorSpecial = player.Special;
+                    break;
+                case "Mago":
+                    saveFile.mageHP = player.Life;
+                    saveFile.mageSpecial = player.Special;
+                    break;
+                case "Arqueiro":
+                    saveFile.archerHP = player.Life;
+                    saveFile.archerSpecial = player.Special;
+                    break;
+            }
+        }
+        saveFile.Exists = true; // The property setter is actually an update function, any value will do
+        saveFile.nPotions = potions;
+        File.WriteAllText(saveFileLocation, JsonUtility.ToJson(saveFile));
     }
 
     public static void LoadGame() {
-        // Load info from .json file
+        if(saveFile.warriorHP > -1) {
+            GameObject warrior = GameObject.Instantiate(prefabWarrior, new Vector3(), Quaternion.identity);
+            warrior.name = "Warrior";
+            players.Add(warrior);
+            GameObject.DontDestroyOnLoad(warrior);
+            PlayerBehaviour behaviour = warrior.GetComponent<PlayerBehaviour>();
+            behaviour.Life = saveFile.warriorHP;
+            behaviour.Special = saveFile.warriorSpecial;
+        }
+        if (saveFile.archerHP > -1) {
+            GameObject archer = GameObject.Instantiate(prefabArcher, new Vector3(), Quaternion.identity);
+            archer.name = "Archer";
+            players.Add(archer);
+            GameObject.DontDestroyOnLoad(archer);
+            PlayerBehaviour behaviour = archer.GetComponent<PlayerBehaviour>();
+            behaviour.Life = saveFile.archerHP;
+            behaviour.Special = saveFile.archerSpecial;
+        }
+        if(saveFile.mageHP > -1) {
+            GameObject mage = GameObject.Instantiate(prefabMage, new Vector3(), Quaternion.identity);
+            mage.name = "Mage";
+            players.Add(mage);
+            GameObject.DontDestroyOnLoad(mage);
+            PlayerBehaviour behaviour = mage.GetComponent<PlayerBehaviour>();
+            behaviour.Life = saveFile.mageHP;
+            behaviour.Special = saveFile.mageSpecial;
+        }
+        potions = saveFile.nPotions;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("ExplorationScene");
+    }
+
+    public static bool hasSaveFile() {
+#if UNITY_WEBGL
+        return false;
+#else
+        return saveFile.Exists;
+#endif
     }
 }
