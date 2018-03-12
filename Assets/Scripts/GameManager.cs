@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class GameManager : MonoBehaviour{
 
@@ -38,17 +39,17 @@ public class GameManager : MonoBehaviour{
             prefabMage = prefabMageReference;
             prefabWarrior = prefabWarriorReference;
             prefabOgre = prefabOgreReference;
-#if UNITY_WEBGL
-            savefileLocation = null;
-#else
+#if !UNITY_WEBGL
             saveFileLocation = Path.Combine(Application.persistentDataPath, "SaveFiles");
             DirectoryInfo dirInfo = new DirectoryInfo(saveFileLocation);
             if (!dirInfo.Exists)
                 dirInfo.Create();
-            saveFileLocation = Path.Combine(saveFileLocation, "savefile.json");
+            saveFileLocation = Path.Combine(saveFileLocation, "savefile.data");
             if (File.Exists(saveFileLocation)) {
-                string serialized = File.ReadAllText(saveFileLocation);
-                saveFile = JsonUtility.FromJson<SaveFile>(serialized);
+                FileStream fs = new FileStream(saveFileLocation, FileMode.Open);
+                BinaryFormatter bf = new BinaryFormatter();
+                saveFile = (SaveFile)bf.Deserialize(fs);
+                fs.Close();
             } else
                 saveFile = new SaveFile();
 #endif
@@ -124,7 +125,10 @@ public class GameManager : MonoBehaviour{
         }
         saveFile.Exists = true; // The property setter is actually an update function, any value will do
         saveFile.nPotions = potions;
-        File.WriteAllText(saveFileLocation, JsonUtility.ToJson(saveFile));
+        FileStream fs = new FileStream(saveFileLocation, FileMode.Create);
+        BinaryFormatter bf = new BinaryFormatter();
+        bf.Serialize(fs, saveFile);
+        fs.Close();
     }
 
     public static void LoadGame() {
